@@ -17,6 +17,7 @@ export const Auth0Provider = ({
   const [auth0Client, setAuth0] = useState();
   const [loading, setLoading] = useState(true);
   const [popupOpen, setPopupOpen] = useState(false);
+  const [idToken, setIdToken] = useState("");
 
   useEffect(() => {
     const initAuth0 = async () => {
@@ -36,6 +37,8 @@ export const Auth0Provider = ({
       if (isAuthenticated) {
         const user = await auth0FromHook.getUser();
         setUser(user);
+        const idTokenClaims = await auth0FromHook.getIdTokenClaims();
+        setIdToken(idTokenClaims.__raw);
       }
 
       setLoading(false);
@@ -62,6 +65,9 @@ export const Auth0Provider = ({
     setLoading(true);
     await auth0Client.handleRedirectCallback();
     const user = await auth0Client.getUser();
+    const idTokenClaims = await auth0Client.getIdTokenClaims();
+
+    setIdToken(idTokenClaims.__raw);
     setLoading(false);
     setIsAuthenticated(true);
     setUser(user);
@@ -83,7 +89,7 @@ export const Auth0Provider = ({
       }}
     >
       {children}
-      <App />
+      <App idToken={idToken} />
     </Auth0Context.Provider>
   );
 };
