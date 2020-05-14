@@ -5,22 +5,54 @@ import defs from './defs'
 import history from './history';
 import TodoFooter from './TodoFooter'
 import TodoItem from './TodoItem'
-import { GET_TODOS, ADD_TODO, DELETE_TODO, TOGGLE_TODO, UPDATE_TODO, CLEAR_COMPLETED_TODO, TOGGLE_ALL_TODO } from "./GraphQLData";
+import { GET_USER, GET_TODOS, ADD_USER, ADD_TODO, DELETE_TODO, TOGGLE_TODO, UPDATE_TODO, CLEAR_COMPLETED_TODO, TOGGLE_ALL_TODO } from "./GraphQLData";
+import { useAuth0 } from "./react-auth0-spa";
 
 const ENTER_KEY = 13
 
+const useImperativeQuery = (query) => {
+  const { refetch } = useQuery(query, { skip: true });
+  const imperativelyCallQuery = (variables) => {
+    return refetch(variables);
+  };
+  return imperativelyCallQuery;
+};
 const TodoApp = () => {
   const [nowShowing, setNowShowing] = useState(defs.ALL_TODOS);
   const [getEditing, setEditing] = useState(null);
   const [newTodo, setNewTodo] = useState("");
   const [shownTodos, setShownTodos] = useState([]);
 
+  const [addUser] = useMutation(ADD_USER);
   const [addTodo] = useMutation(ADD_TODO);
   const [toggleTodo] = useMutation(TOGGLE_TODO);
   const [toggleAllTodo] = useMutation(TOGGLE_ALL_TODO);
   const [deleteTodo] = useMutation(DELETE_TODO);
   const [updateTodo] = useMutation(UPDATE_TODO);
   const [clearCompletedTodo] = useMutation(CLEAR_COMPLETED_TODO);
+  const getUsers = useImperativeQuery(GET_USER)
+
+  const { user } = useAuth0();
+
+  const createUser = () => {
+    if (user === undefined) {
+      return null;
+    }
+    const { data: getUser } = getUsers({
+      username: user.email
+    });
+    if (getUser && getUser.getUser === null) {
+      const newUser = {
+        username: user.email,
+        name: user.nickname,
+      };
+      addUser({
+        variables: {
+          user: newUser
+        }
+      })
+    }
+  }
 
   const { loading, error, data } = useQuery(GET_TODOS);
   const getData = () => {
@@ -54,8 +86,9 @@ const TodoApp = () => {
     history.listen((location, action) =>
       processLocationHash(location.hash)
     )
+    createUser()
     getData()
-  }, [data]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [user, data]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleChange = event => {
     setNewTodo(event.target.value)
@@ -76,7 +109,7 @@ const TodoApp = () => {
   const add = (title) =>
     addTodo({
       variables: { task: [
-        { title: title, completed: false, user: { username: "email@example.com" } }
+        { title: title, completed: false, user: { username: user.email } }
       ]},
       refetchQueries: [{
         query: GET_TODOS
