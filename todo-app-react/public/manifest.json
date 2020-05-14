@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "React Todo App",
+  "name": "React Todo GraphQL App powered by Dgraph",
   "icons": [
     {
       "src": "favicon.ico",
