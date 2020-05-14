@@ -1,0 +1,13 @@
+type Task {
+    id: ID!
+    title: String! @search(by: [fulltext])
+    completed: Boolean! @search
+    user: User!
+}
+
+type User {
+  username: String! @id @search(by: [hash])
+  name: String
+  tasks: [Task] @hasInverse(field: user)
+}
+
