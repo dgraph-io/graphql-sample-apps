@@ -1,0 +1,5 @@
+{
+    "domain": "<auth0-domain>",
+    "clientId": "<auth0-client-id>",
+    "graphqlUrl": "http://localhost:8080/graphql"
+}

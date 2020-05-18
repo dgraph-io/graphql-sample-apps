@@ -212,6 +212,10 @@ Install the dependencies needed to bring up the application.
 
 ### `yarn start`
 
+If you are not running Dgraph locally, then be sure to modify *graphqlUrl*
+in `src/config.json`  to point at accurate GraphQL endpoint before starting
+the application.
+
 Runs the Todo application.<br />
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
