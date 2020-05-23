@@ -22,7 +22,7 @@ const TodoApp = () => {
   const [getEditing, setEditing] = useState(null);
   const [newTodo, setNewTodo] = useState("");
   const [shownTodos, setShownTodos] = useState([]);
-  
+
   const [addUser] = useMutation(ADD_USER);
   const [addTodo] = useMutation(ADD_TODO);
   const [toggleTodo] = useMutation(TOGGLE_TODO);

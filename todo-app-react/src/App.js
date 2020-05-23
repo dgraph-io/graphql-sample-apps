@@ -7,18 +7,18 @@ import { ApolloProvider } from "@apollo/react-hooks";
 import { createHttpLink } from "apollo-link-http";
 import { useAuth0 } from "./react-auth0-spa";
 import { setContext } from "apollo-link-context";
+import { getSlashGraphQLEndpoint } from './slash_endpoint'
 
 import TodoApp from './TodoApp';
 import NavBar from "./NavBar";
 import Profile from "./Profile";
 import history from "./history";
 import PrivateRoute from "./PrivateRoute";
-import config from "./config.json";
 import './App.css';
 
 const createApolloClient = token => {
   const httpLink = createHttpLink({
-    uri: config.graphqlUrl,
+    uri: getSlashGraphQLEndpoint(),
     options: {
       reconnect: true,
     },

@@ -1,5 +1,5 @@
 {
-    "domain": "<auth0-domain>",
-    "clientId": "<auth0-client-id>",
+    "domain": "dev-nus7dz9x.auth0.com",
+    "clientId": "Q1nC2kLsN6KQTX1UPdiBS6AhXRx9KwKl",
     "graphqlUrl": "http://localhost:8080/graphql"
 }
