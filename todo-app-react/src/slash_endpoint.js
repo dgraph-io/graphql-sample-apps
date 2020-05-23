@@ -18,3 +18,4 @@ export function changeSlashGraphQLEndpoint() {
   global.localStorage && global.localStorage.removeItem(STORAGE_KEY)
   window.location.reload()
 }
+global.changeSlashGraphQLEndpoint = changeSlashGraphQLEndpoint;
