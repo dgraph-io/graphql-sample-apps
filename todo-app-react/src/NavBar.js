@@ -27,7 +27,7 @@ const NavBar = () => {
               <Link onClick={changeSlashGraphQLEndpoint}>Endpoint</Link>
             </li>
             <li style={{ float: "right"}}>
-              <Link onClick={() => logout()}>
+              <Link onClick={() => logout({returnTo: global.window.location.href})}>
                 Log out
               </Link>
             </li>
