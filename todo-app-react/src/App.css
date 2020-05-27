@@ -5,10 +5,16 @@
 }
 
 .token {
-    word-wrap: break-word;
-    border: solid;
+    line-height: 24px;
+    height: 24px;
 }
 
-.query {
-    border: solid;
+.token input {
+    width: 80%;
+    margin-right: 5px;
+}
+
+.token img {
+    cursor: pointer;
+    height: 16px;
 }

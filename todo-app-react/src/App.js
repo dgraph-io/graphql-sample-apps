@@ -7,7 +7,6 @@ import { createHttpLink } from "apollo-link-http";
 import { useAuth0 } from "./react-auth0-spa";
 import { setContext } from "apollo-link-context";
 import { getSlashGraphQLEndpoint } from './slash_endpoint'
-import QueryHistory from "./QueryHistory";
 import AuthToken from "./AuthToken";
 import TodoApp from './TodoApp';
 import NavBar from "./NavBar";
@@ -67,7 +66,6 @@ const App = ({ idToken }) => {
         </Router>
       </div>
 
-      <QueryHistory />
       <AuthToken token={idToken} />
     </ApolloProvider>
   );
