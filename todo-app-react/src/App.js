@@ -14,7 +14,6 @@ import Profile from "./Profile";
 import history from "./history";
 import PrivateRoute from "./PrivateRoute";
 import './App.css';
-import QueryStore from './QueryStore';
 
 const createApolloClient = token => {
   const httpLink = createHttpLink({
@@ -25,8 +24,6 @@ const createApolloClient = token => {
   });
 
   const authLink = setContext((request, { headers }) => {
-    QueryStore.setQuery(request.query.loc.source.body);
-
     // return the header to the context so httpLink can read them
     return {
       headers: {
