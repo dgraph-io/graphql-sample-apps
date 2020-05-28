@@ -254,11 +254,11 @@ query {
 
 ## Bring up ToDo App
 
-### `yarn install`
+### `npm install`
 
 Install the dependencies needed to bring up the application.
 
-### `yarn start`
+### `npm start`
 
 Before you start, you should [create an Auth0 single-page application](https://auth0.com/docs/dashboard/guides/applications/register-app-spa)
 and set the *auth0-domain* and *auth0-client-id* in `src/config.json`.
@@ -268,7 +268,7 @@ Also, if you are not running Dgraph locally, be sure to modify
 Runs the Todo application.<br />
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-### `yarn build`
+### `npm run build`
 
 Compiles the Todo application and minifies to generate the production build.
 

@@ -219,7 +219,7 @@ the application.
 Runs the Todo application.<br />
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-### `npm build`
+### `npm run build`
 
 Compiles the Todo application and minifies to generate the production build.
 
