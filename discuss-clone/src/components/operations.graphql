@@ -1,0 +1,10 @@
+query allPosts {
+    queryPost {
+        id
+        title
+        text
+        category {
+            name
+        }  
+    }
+}

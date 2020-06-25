@@ -4,12 +4,22 @@ This app is intended to show off Dgraph quick start, and integration with Auth0.
 
 # Running 
 
-To run, you just need to 
+To run, you just need to get the Dgraph GraphQL backend running with
+
+```sh
+./deploy/dev-setup/run.sh up
+```
+
+That brings up Dgraph in a docker container and adds the seed data.
+
+Then
 
 ```
 yarn install
 yarn start
 ```
+
+Brings up the React app.
 
 # How it was built
 

@@ -1,0 +1,16 @@
+mutation InitCategories($categories: [AddCategoryInput!]!) {
+    addCategory(input: $categories) {
+        category {
+            id
+            name
+        }
+    }
+}
+
+mutation InitPosts($posts: [AddPostInput!]!) {
+    addPost(input: $posts) {
+        post {
+            id
+        }
+    }
+}
