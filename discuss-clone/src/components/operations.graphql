@@ -1,10 +1,17 @@
 query allPosts {
-    queryPost {
-        id
-        title
-        text
-        category {
-            name
-        }  
+  queryPost(order: { desc: datePublished }) {
+    id
+    title
+    text
+    datePublished
+    likes
+    category {
+      name
     }
+    author {
+      username
+      displayName
+      avatarImg
+    }
+  }
 }

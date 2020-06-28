@@ -11,10 +11,13 @@ export type AllPostsQuery = (
   { __typename?: 'Query' }
   & { queryPost?: Types.Maybe<Array<Types.Maybe<(
     { __typename?: 'Post' }
-    & Pick<Types.Post, 'id' | 'title' | 'text'>
+    & Pick<Types.Post, 'id' | 'title' | 'text' | 'datePublished' | 'likes'>
     & { category: (
       { __typename?: 'Category' }
       & Pick<Types.Category, 'name'>
+    ), author: (
+      { __typename?: 'User' }
+      & Pick<Types.User, 'username' | 'displayName' | 'avatarImg'>
     ) }
   )>>> }
 );
@@ -22,12 +25,19 @@ export type AllPostsQuery = (
 
 export const AllPostsDocument = gql`
     query allPosts {
-  queryPost {
+  queryPost(order: {desc: datePublished}) {
     id
     title
     text
+    datePublished
+    likes
     category {
       name
+    }
+    author {
+      username
+      displayName
+      avatarImg
     }
   }
 }

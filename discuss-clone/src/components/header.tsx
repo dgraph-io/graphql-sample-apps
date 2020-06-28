@@ -8,7 +8,7 @@ export function AppHeader() {
         <Menu.Item as="a" header>
           <Image
             size="tiny"
-            src="/diggy.png"
+            src="/diggy-graphql.png"
             style={{ marginRight: "1.5em" }}
           />
           Dgraph Discuss
