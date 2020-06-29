@@ -28,6 +28,7 @@ const categories: Array<AddCategoryInput> = [
   { name: "GraphQL" },
   { name: "Dgraph" },
   { name: "React" },
+  { name: "Movies" },
 ]
 
 const diggy: AddUserInput = {
@@ -46,6 +47,12 @@ const virat: AddUserInput = {
   username: "virat",
   displayName: "Virat",
 }
+
+const anushka: AddUserInput = {
+  username: "anushka",
+  displayName: "Anushka",
+}
+
 
 const qsQuote = `
 With Dgraph you design your application in GraphQL. 
@@ -117,8 +124,19 @@ function makePosts(): Array<AddPostInput> {
       category: { name: "React" },
       author: virat,
     },
+    {
+      title: "I want to make an app for people's favorite movies",
+      text: lorem.paragraphs(7),
+      datePublished: lastWeek,
+      likes: 1000000,
+      category: { name: "Movies" },
+      author: anushka,
+    },
   ]
 }
+
+
+
 
 async function installData(): Promise<Readonly<GraphQLError[]> | undefined> {
   const { data: categoryData, errors: categoryErrors } = await client.mutate<
