@@ -14,6 +14,7 @@ import {
   InitPostsMutationVariables,
   InitPostsDocument,
 } from "./types/operations"
+import { lorem } from 'faker';
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
@@ -95,7 +96,7 @@ function makePosts(): Array<AddPostInput> {
     },
     {
       title: "I know some things about Dgraph",
-      text: "It's a GraphQL native DB written from the disk up in Go.",
+      text: "It's a GraphQL native DB written from the disk up in Go.\nIn fact, I know so much, I can tell you in latin.\n"+lorem.paragraphs(6),
       datePublished: anHourAgo,
       likes: 50,
       category: { name: "Dgraph" },
@@ -110,7 +111,7 @@ function makePosts(): Array<AddPostInput> {
     },
     {
       title: "Where should I deploy my frontend app?",
-      text: "I'm developing some new skills in development",
+      text: "I'm developing some new skills in development.  I'm writing a cricket scores app in Dgraph+React, but where should I deploy this?\n"+lorem.paragraphs(4),
       datePublished: lastWeek,
       likes: 1000000,
       category: { name: "React" },
