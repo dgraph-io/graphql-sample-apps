@@ -1,5 +1,6 @@
 import React from "react"
 import { Container, Image, Menu, Icon } from "semantic-ui-react"
+import { Link } from "react-router-dom"
 
 export function AppHeader() {
   return (
@@ -13,7 +14,7 @@ export function AppHeader() {
           />
           Dgraph Discuss
         </Menu.Item>
-        <Menu.Item as="a">
+        <Menu.Item as={Link} to="/">
           <Icon name="home" />
           Home
         </Menu.Item>

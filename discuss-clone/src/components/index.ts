@@ -1,3 +1,5 @@
 import { Home } from "./home"
+import { AppHeader } from "./header"
+import { Post } from "./post"
 
-export { Home }
+export { AppHeader, Home, Post }

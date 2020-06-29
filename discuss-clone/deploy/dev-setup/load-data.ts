@@ -47,9 +47,13 @@ const virat: AddUserInput = {
 }
 
 const qsQuote = `
-With Dgraph you design your application in GraphQL. You design a set of GraphQL types that describes your requirements. Dgraph takes those types, prepares graph storage for them and generates a GraphQL API with queries and mutations.
+With Dgraph you design your application in GraphQL. 
 
-You design a graph, store a graph and query a graph. You think and design in terms of the graph that your app is based around.
+You start by designing a set of GraphQL types that describes your app. When you load that data model into Dgraph, it takes those types, prepares graph storage for them and generates a GraphQL API with queries and mutations.
+
+With that you can iterate quickly.  Thanks to Dgraph and all the tools in the GraphQL ecosystem, you can iterate on your data model and app without leaving your editor.  There's so many great tools in GraphQL to help you develop, you should set those up early so you get a great development experience.
+
+With Dgraph, you design the graph of your, store a graph and query a graph. You think and design in terms of the graph that your app is based around.  And, best of all, you do all that inside the GraphQL ecosystem.
 `
 
 const docsQuote = `
@@ -74,12 +78,12 @@ function makePosts(): Array<AddPostInput> {
 
   return [
     {
-      title: "My first post about GraphQL",
+      title: "My first post about Dgraph GraphQL",
       text: qsQuote,
       datePublished: now,
       likes: 1,
       category: { name: "GraphQL" },
-      author: michael,
+      author: diggy,
     },
     {
       title: "Let me quote from the docs",
@@ -87,7 +91,7 @@ function makePosts(): Array<AddPostInput> {
       datePublished: tenMinsAgo,
       likes: 5,
       category: { name: "GraphQL" },
-      author: diggy,
+      author: michael,
     },
     {
       title: "I know some things about Dgraph",

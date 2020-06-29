@@ -45,7 +45,10 @@ export function PostFeed() {
         <Feed.Label>{avatar}</Feed.Label>
         <Feed.Content>
           <Feed.Summary>
-            <Feed.User>{post?.author.displayName} </Feed.User> {post?.title}
+            <Feed.User>{post?.author.displayName} </Feed.User>{" "}
+            <a href={"/post/" + post?.id} style={{ color: "black" }}>
+              {post?.title}
+            </a>
             <Feed.Date>{dateStr}</Feed.Date>
             <Feed.Extra text>
               {post?.text.substring(0, 100)}...(posted in{" "}

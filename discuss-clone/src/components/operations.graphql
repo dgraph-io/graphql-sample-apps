@@ -1,17 +1,27 @@
+fragment postData on Post {
+  id
+  title
+  text
+  datePublished
+  likes
+  category {
+    name
+  }
+  author {
+    username
+    displayName
+    avatarImg
+  }
+}
+
 query allPosts {
   queryPost(order: { desc: datePublished }) {
-    id
-    title
-    text
-    datePublished
-    likes
-    category {
-      name
-    }
-    author {
-      username
-      displayName
-      avatarImg
-    }
+    ...postData
+  }
+}
+
+query getPost($id: ID!) {
+  getPost(id: $id) {
+    ...postData
   }
 }
