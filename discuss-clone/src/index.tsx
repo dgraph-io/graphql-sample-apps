@@ -10,6 +10,7 @@ import {
   HttpLink,
   ApolloProvider,
 } from "@apollo/client"
+import { Auth0Provider } from "@auth0/auth0-react"
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
@@ -19,9 +20,15 @@ const client = new ApolloClient({
 })
 
 ReactDOM.render(
-  <ApolloProvider client={client}>
-    <App />
-  </ApolloProvider>,
+  <Auth0Provider
+    domain="dev-x44cgu-8.auth0.com"
+    clientId="f9l2o1N0ocIUNlb62KmQxCJ5QM8WurWI"
+    redirectUri="http://localhost:3000/"
+  >
+    <ApolloProvider client={client}>
+      <App />
+    </ApolloProvider>
+  </Auth0Provider>,
   document.getElementById("root")
 )
 
