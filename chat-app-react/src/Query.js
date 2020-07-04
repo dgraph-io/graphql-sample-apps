@@ -4,18 +4,18 @@ const SUBSCRIPTION_QUERY = gql`
   subscription {
     queryMessage(order: { desc: time }) {
       name
-      message
+      text
       time
     }
   }
 `;
 
 const SEND_MESSAGE = gql`
-  mutation sendMessage($name: String!, $message: String!, $time: DateTime!) {
-    addMessage(input: [{ name: $name, message: $message, time: $time }]) {
+  mutation sendMessage($name: String!, $text: String!, $time: DateTime!) {
+    addMessage(input: [{ name: $name, text: $text, time: $time }]) {
       message {
         name
-        message
+        text
         time
       }
     }
