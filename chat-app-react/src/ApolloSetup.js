@@ -5,8 +5,7 @@ import { WebSocketLink } from "apollo-link-ws";
 import { getMainDefinition } from "apollo-utilities";
 import { InMemoryCache } from "apollo-cache-inmemory";
 
-const url = "funny-money-3574.us-east-1.aws.thegaas.com/graphql";
-// const url = "<Slash Graphql endpoint>"
+const url = "<Slash GraphQL endpoint>"
 
 const wsLink = new WebSocketLink({
     uri: `wss://${url}`,
