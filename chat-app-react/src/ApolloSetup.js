@@ -1,21 +1,20 @@
-import { split } from "apollo-link";
-import { HttpLink } from "apollo-link-http";
-import { ApolloClient } from "apollo-client";
-import { WebSocketLink } from "apollo-link-ws";
-import { getMainDefinition } from "apollo-utilities";
-import { InMemoryCache } from "apollo-cache-inmemory";
+import { ApolloClient } from '@apollo/client/core';
+import { getMainDefinition } from '@apollo/client/utilities';
+import { InMemoryCache } from '@apollo/client/cache';
+import { HttpLink, split } from '@apollo/client';
+import { WebSocketLink } from "@apollo/link-ws";
 
-const url = "<Slash GraphQL endpoint>"
+const endpoint = "<Slash GraphQL endpoint>"
 
 const wsLink = new WebSocketLink({
-    uri: `wss://${url}`,
+    uri: `wss://${endpoint}`,
     options: {
         reconnect: true
     }
 });
 
 const httpLink = new HttpLink({
-    uri: `https://${url}`
+    uri: `https://${endpoint}`
 });
 
 const link = split(

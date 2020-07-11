@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { useSubscription } from "@apollo/react-hooks";
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useSubscription } from "@apollo/client";
 import { SUBSCRIPTION_QUERY, SEND_MESSAGE } from "./Query"
 import "./index.css";
 
