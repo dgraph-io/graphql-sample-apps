@@ -1,0 +1,39 @@
+.cursor {
+  cursor: pointer;
+}
+
+.filterContainer {
+  display: none;
+}
+.filterContainerMobile {
+  display: flex;
+  flex-direction: column;
+}
+
+.filterRowOne, .filterRowTwo {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.filterContainer > div {
+  margin-right: 20px;
+}
+.filterRowOne > div {
+  margin-right: 20px;
+}
+.filterRowTwo > div {
+  margin-right: 20px;
+}
+
+@media (min-width: 768px) {
+  .filterContainer {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .filterContainerMobile {
+    display: none;
+  }
+}

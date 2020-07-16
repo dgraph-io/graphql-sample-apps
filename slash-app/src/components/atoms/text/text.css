@@ -1,0 +1,99 @@
+/**************************************** FONT SIZES**********************************/
+
+.fontsize-extrasmall {
+  font-size: var(--extra-small);
+}
+
+.fontsize-little-small {
+  font-size: var(--little-small);
+}
+
+.fontsize-small {
+  font-size: var(--small);
+}
+
+.fontsize-medium {
+  font-size: var(--medium);
+}
+
+.fontsize-little-large {
+  font-size: var(--little-large);
+}
+
+.fontsize-large {
+  font-size: var(--large);
+}
+
+.fontsize-extra-large {
+  font-size: var(--extra-large);
+}
+
+.rs-fontsize-small {
+  font-size: var(--extra-small);
+}
+
+.rs-fontsize-medium {
+  font-size: var(--little-small);
+}
+
+.rs-fontsize-large {
+  font-size: var(--little-large);
+}
+
+.rs-fontsize-extra-large {
+  font-size: var(--medium);
+}
+
+/**************************************** FONT COLORS**********************************/
+
+.fontcolor-white {
+  color: var(--white);
+}
+
+.fontcolor-dark-blue {
+  color: var(--dark-blue);
+}
+
+.fontcolor-black {
+  color: var(--black);
+}
+
+/**************************************** FONT WEIGHTS**********************************/
+
+.fontweight-medium {
+  font-weight: 600;
+}
+
+.fontweight-bold {
+  font-weight: bold;
+}
+
+/**************************************** OPACITY LEVELS**********************************/
+
+.opacity-light {
+  opacity: 0.5;
+}
+
+.opacity-normal {
+  opacity: 1;
+}
+
+@media (min-width: 768px) {
+
+  .rs-fontsize-small {
+    font-size: var(--small);
+  }
+
+  .rs-fontsize-medium {
+    font-size: var(--medium);
+  }
+
+  .rs-fontsize-large {
+    font-size: var(--large);
+  }
+
+  .rs-fontsize-extra-large {
+    font-size: var(--extra-large);
+  }
+
+}

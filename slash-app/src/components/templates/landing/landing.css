@@ -1,0 +1,58 @@
+.wrapper {
+  background-color: var(--very-dark-blue);
+  color: var(--white);
+  background-image: url("../../../assets/images/tweet-bg-sm.png");
+  height: 100vh; /* Fallback for browsers that do not support Custom Properties */
+  height: calc(var(--vh, 1vh) * 92);
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0px 50px;
+}
+
+.image-title-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  margin-left: 20px;
+}
+.footer {
+  position: absolute;
+  bottom: 1em;
+  display: flex;
+  flex-direction: column;
+}
+
+.dgraph-text {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.icons {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-gap: 10px;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .wrapper {
+    background-image: url("../../../assets/images/tweet-bg.png");
+  }
+
+  .image-title-wrapper {
+    display: flex;
+    align-items: center;
+  }
+
+}
+
+

@@ -1,0 +1,19 @@
+:root {
+  --extra-small: 0.75rem;
+  --small: 0.875rem; 
+  --little-small: 1rem;
+  --medium: 1.25rem;
+  --little-large: 1.5rem;
+  --large: 1.875rem;
+  --extra-large: 2rem;
+}
+
+/*
+extra-small : 
+small: 14px
+little-small: 16px
+medium: 20px
+little-large: 24px;
+large: 30px
+extra-large: 32px
+*/
