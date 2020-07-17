@@ -4,7 +4,7 @@ import { InMemoryCache } from '@apollo/client/cache';
 import { HttpLink, split } from '@apollo/client';
 import { WebSocketLink } from "@apollo/link-ws";
 
-const endpoint = "<Slash GraphQL endpoint>"
+const endpoint = process.env.REACT_APP_GRAPHQL_ENDPOINT;
 
 const wsLink = new WebSocketLink({
     uri: `wss://${endpoint}`,
