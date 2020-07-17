@@ -1,8 +1,13 @@
 #!/bin/bash -e
 
 if [ -z "$PROJECT" -o -z "$REACT_APP_GRAPHQL_ENDPOINT" ]; then
-  echo PROJECT=project BUCKET=bucket DIRECTORY=dir REACT_APP_GRAPHQL_ENDPOINT=foo/graphql Usage $0
+  echo "PROJECT=project REACT_APP_GRAPHQL_ENDPOINT=http://foo/graphql Usage $0"
   exit -1
+fi
+
+if [ "$PROJECT" -eq "noop" ]; then
+  echo "Nothing to do"
+  exit 0
 fi
 
 cd $PROJECT

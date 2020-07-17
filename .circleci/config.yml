@@ -2,16 +2,16 @@ version: 2.1
 parameters:
   project:
     type: string
-    default:
+    default: noop
   bucket:
     type: string
-    default:
+    default: noop
   subdomain:
     type: string
-    default:
+    default: noop
   graphql-endpoint:
     type: string
-    default:
+    default: noop
 jobs:
   build:
     docker:
