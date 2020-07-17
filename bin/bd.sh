@@ -5,7 +5,7 @@ if [ -z "$PROJECT" -o -z "$REACT_APP_GRAPHQL_ENDPOINT" ]; then
   exit -1
 fi
 
-if [ "$PROJECT" -eq "noop" ]; then
+if [ "$PROJECT" == "noop" ]; then
   echo "Nothing to do"
   exit 0
 fi
