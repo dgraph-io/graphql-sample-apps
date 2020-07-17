@@ -23,4 +23,9 @@ jobs:
       - run: sudo apt-get install awscli -qq
       - checkout
       - run: ./bin/bd.sh
-      - run: aws s3 sync << pipeline.parameters.project >>/build/ s3://<< pipeline.parameters.bucket >>/<< pipeline.parameters.subdomain >>/
+      - run: ls << pipeline.parameters.project >>/build/ && aws s3 sync << pipeline.parameters.project >>/build/ s3://<< pipeline.parameters.bucket >>/<< pipeline.parameters.subdomain >>/ || true
+workflows:
+  build:
+    jobs:
+      - build:
+          context: Staging S3
