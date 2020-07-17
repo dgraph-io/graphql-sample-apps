@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-if [ -z "$PROJECT" -o -z "$BUCKET" -o -z "$DIRECTORY" -o -z "$REACT_APP_GRAPHQL_ENDPOINT" ]; then
+if [ -z "$PROJECT" -o -z "$REACT_APP_GRAPHQL_ENDPOINT" ]; then
   echo PROJECT=project BUCKET=bucket DIRECTORY=dir REACT_APP_GRAPHQL_ENDPOINT=foo/graphql Usage $0
   exit -1
 fi

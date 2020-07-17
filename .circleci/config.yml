@@ -1,9 +1,26 @@
 version: 2.1
+parameters:
+  project:
+    type: string
+    default:
+  bucket:
+    type: string
+    default:
+  subdomain:
+    type: string
+    default:
+  graphql-endpoint:
+    type: string
+    default:
 jobs:
   build:
     docker:
       - image: circleci/node:12
+    environment:
+      PROJECT: << pipeline.parameters.project >>
+      REACT_APP_GRAPHQL_ENDPOINT: << pipeline.parameters.graphql-endpoint >>
     steps:
       - run: sudo apt-get install awscli -qq
       - checkout
       - run: ./bin/bd.sh
+      - run: aws s3 sync build/ s3://<< pipeline.parameters.bucket >>/<< pipeline.parameters.subdomain >>/
