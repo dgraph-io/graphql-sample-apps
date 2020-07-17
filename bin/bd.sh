@@ -13,4 +13,3 @@ fi
 cd $PROJECT
 npm install
 NODE_ENV=production npm run build
-aws s3 sync build/ s3://$BUCKET/$DIRECTORY/
