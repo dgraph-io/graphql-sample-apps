@@ -1,0 +1,38 @@
+type SearchTweets {
+    id: ID!
+    text: String!
+    user: User
+    hashtag: HashTag 
+}
+
+type HashTag {
+    id: ID!
+    name: String!
+    tweets: [SearchTweets] @hasInverse(field: hashtag)
+}
+
+type User {
+    id: ID!
+    screen_name: String! @id
+    followers: Followers @custom(http:{
+        url: "https://api.twitter.com/1.1/followers/list.json?screen_name=$screen_name"
+        method: "GET",
+        forwardHeaders: ["Authorization"]
+    })
+    tweets: [SearchTweets] @hasInverse(field: user)
+}
+
+type RemoteUser@remote {
+    id: ID!
+    name: String
+    screen_name: String
+    location: String
+    description: String
+    followers_count: Int
+    statuses_count: Int
+    friends_count: Int
+}
+
+type Followers@remote{
+    users: [RemoteUser]
+}

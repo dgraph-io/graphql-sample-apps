@@ -1,0 +1,16 @@
+type Author {
+        id: ID!
+        name: String! @search(by: [hash, trigram])
+        dob: DateTime @search
+        posts: [Post!] @hasInverse(field: author)
+}
+type Post {
+        postID: ID!
+        title: String! @search(by: [term, fulltext])
+        text: String @search(by: [fulltext])
+        tags: [String] @search(by: [exact])
+        topic: String @search(by: [exact])
+        numLikes: Int @search
+        isPublished: Boolean @search
+        author: Author! @hasInverse(field: posts)
+}
