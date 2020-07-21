@@ -5,15 +5,12 @@ import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/sty
 
 import './index.css';
 import App from './App';
+import themes from './theme';
 import client from "./graphql/config";
 
 import * as serviceWorker from './serviceWorker';
 
-const theme = createMuiTheme({
-  // status: {
-  //   danger: orange[500],
-  // },
-});
+const theme = createMuiTheme(themes);
 
 ReactDOM.render(
   <React.StrictMode>
