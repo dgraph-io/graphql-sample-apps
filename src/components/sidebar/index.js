@@ -109,11 +109,11 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Sidebar = () => {
+const Sidebar = ( props ) => {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
-  const [openSubmenu, setOpenSubmenu] = React.useState(true);
+  const [openSubmenu, setOpenSubmenu] = React.useState({});
 
   const handleDrawerOpen = () => {
     setOpen(false);
@@ -123,8 +123,10 @@ const Sidebar = () => {
     console.log("close");
     setOpen(true);
   };
-  const handleClick = () => {
-    setOpenSubmenu(!openSubmenu);
+  const handleClick = (key) => {
+    console.log(openSubmenu);
+    setOpenSubmenu({ ...openSubmenu, [key]: !openSubmenu[key] });
+    // setOpenSubmenu(!openSubmenu);
   };
 
   return (
@@ -171,7 +173,7 @@ const Sidebar = () => {
         </div>
         <Divider />
         <List>
-          <ListItem button>
+          {/* <ListItem button>
             <ListItemIcon>
               <HomeIcon />
             </ListItemIcon>
@@ -205,7 +207,32 @@ const Sidebar = () => {
                 <ListItemText primary="Orders" />
               </ListItem>
             </List>
-          </Collapse>
+          </Collapse> */}
+        {props.sidelists.map(({ key, label, icon: Icon, items }) => {
+            const open = openSubmenu[key] || false;
+            return (
+              <div key={key}>
+                <ListItem button onClick={() => handleClick(key)}>
+                  <ListItemIcon>
+                    <Icon />
+                  </ListItemIcon>
+                  <ListItemText primary={label} />
+                  {items.length > 0 ? open ? <ExpandLess /> : <ExpandMore /> : null }
+                </ListItem>
+                <Collapse in={open} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    {items.map(({ key: childKey, label: childLabel }) => (
+                      <ListItem key={childKey} button className={classes.nested}>
+                        <ListItemIcon>
+                        </ListItemIcon>
+                        <ListItemText primary={childLabel} />
+                      </ListItem>
+                    ))}
+                  </List>
+                </Collapse>
+              </div>
+            );
+          })}
         </List>
         <div className={clsx(classes.hideSidebar)}>
           <IconButton onClick={handleDrawerOpen}>
