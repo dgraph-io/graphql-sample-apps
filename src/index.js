@@ -13,7 +13,6 @@ import * as serviceWorker from './serviceWorker';
 const theme = createMuiTheme(themes);
 
 ReactDOM.render(
-
    <ApolloProvider client={client}>
     <ThemeProvider theme={theme}>
       <App />

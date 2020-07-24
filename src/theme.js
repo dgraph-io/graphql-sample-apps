@@ -1,5 +1,3 @@
-import { yellow } from "@material-ui/core/colors";
-
 const theme = {
   palette: {
     primary: {

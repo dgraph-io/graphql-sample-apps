@@ -1,4 +1,6 @@
-//Uncomment/comment the required/non-required parts as the per the use.
+
+
+// Note: Uncomment/comment the required/non-required parts as the per the use.
 
 const navbarData = {
     basicStyle: {

@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
         position: 'absolute',
         display: 'flex',
         flexDirection: 'column',
-        width: 'calc(100% - 48px)',
+        width: 'calc(100%)',
         height: 'auto',
     },
     ml2: {
