@@ -1,28 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { ApolloProvider } from '@apollo/react-hooks';
-import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
 import './index.css';
 import App from './App';
+import themes from './theme';
 import client from "./graphql/config";
 
 import * as serviceWorker from './serviceWorker';
 
-const theme = createMuiTheme({
-  // status: {
-  //   danger: orange[500],
-  // },
-});
+const theme = createMuiTheme(themes);
 
 ReactDOM.render(
-  <React.StrictMode>
    <ApolloProvider client={client}>
     <ThemeProvider theme={theme}>
       <App />
     </ThemeProvider>
-    </ApolloProvider>
-  </React.StrictMode>,
+    </ApolloProvider>,
   document.getElementById('root')
 );
 
