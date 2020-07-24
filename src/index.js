@@ -13,11 +13,13 @@ import * as serviceWorker from './serviceWorker';
 const theme = createMuiTheme(themes);
 
 ReactDOM.render(
+  <React.StrictMode>
    <ApolloProvider client={client}>
     <ThemeProvider theme={theme}>
       <App />
     </ThemeProvider>
-    </ApolloProvider>,
+    </ApolloProvider>
+  </React.StrictMode>,
   document.getElementById('root')
 );
 
