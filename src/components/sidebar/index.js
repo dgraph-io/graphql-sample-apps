@@ -19,15 +19,12 @@ import useStyles from "./sidebar.style"
 
 const Sidebar = (props) => {
   const classes = useStyles();
-  // const theme = useTheme();
   const [open, setOpen] = React.useState(true);
   const [openSubmenu, setOpenSubmenu] = React.useState({});
 
   const handleClick = (key) => {
-    console.log(openSubmenu);
     setOpenSubmenu({ ...openSubmenu, [key]: !openSubmenu[key] });
     setOpen(true);
-    // setOpenSubmenu(!openSubmenu);
   };
 
   return (
