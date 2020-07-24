@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
         height: 'auto',
     },
     ml2: {
-        marginLeft: theme.spacing(2)
+        marginLeft: theme.spacing(4)
     },
 
     search: {

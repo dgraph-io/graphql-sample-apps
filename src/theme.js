@@ -1,3 +1,5 @@
+import { yellow } from "@material-ui/core/colors";
+
 const theme = {
   palette: {
     primary: {
@@ -50,6 +52,54 @@ const theme = {
       disabledOpacity: 0.12
     }
   },
+  typography:{
+    h1: {
+      fontFamily: 'Roboto',
+      fontWeight: 300,
+      fontSize: '96px',
+      lineHeight: '112px',
+      letterSpacing: '-1.5px',
+    },
+    h2: {
+      fontFamily: 'Roboto',
+      fontWeight: 300,
+      fontSize: '60px',
+      lineHeight: '72px',
+      letterSpacing: '-0.5px',
+    },
+    h3: {
+      fontFamily: 'Roboto',
+      fontWeight: 400,
+      fontSize: '48px',
+      lineHeight: '56px',
+      letterSpacing: '0px',
+    },
+    h4: {
+      fontFamily: 'Roboto',
+      fontWeight: 400,
+      fontSize: '34px',
+      lineHeight: '42px',
+      letterSpacing: '0.25px',
+    },
+    h5: {
+      fontFamily: 'Roboto',
+      fontWeight: 400,
+      fontSize: '24px',
+      lineHeight: '32px',
+      letterSpacing: '0px',
+    },
+    h6: {
+      fontFamily: 'Roboto',
+      fontWeight: 500,
+      fontSize: '20px',
+      lineHeight: '2px',
+      letterSpacing: '0.15px',
+    }
+  },
+  button: {
+    background: "yellow",
+
+  }
 }
 
 export default theme;

@@ -54,11 +54,7 @@ export default function Navbar({ navProperties}) {
                         <Typography variant={item.variant}>{item.text}</Typography>
                     </a>: 
                     <div onClick={item.onClick}>
-                        <IconButton color="inherit">
-                            <Badge badgeContent={item.badgeContent ? item.badgeContent: null} color="secondary">
-                                <MailIcon />
-                            </Badge>
-                        </IconButton>
+                        <img src={require(`../../assets/images/${item.iconName}`)} alt="icon" width={item.width} height={item.height} />    
                     </div>
                 }
             </div>

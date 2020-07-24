@@ -1,9 +1,10 @@
 import React from "react";
-import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Navbar from '../../components/navbar';
 
+
+import Sidebar from '../../components/sidebar'
 
 const Home = () => {
     const navProperties = {
@@ -19,8 +20,8 @@ const Home = () => {
             width: 30
         },
         title: {
-            text: 'Nav Title',
-            variant: 'h5'
+            text: 'Payments',
+            variant: 'h6'
         },
         searchBar: {
             placeholder: 'Search here',
@@ -44,16 +45,12 @@ const Home = () => {
 
 
     return(
-        // <Box component="div"  m={1}>
-        //     <Button variant="contained" color="primary" >
-        //         BUTTON
-        //     </Button>
-        //     <Typography variant="h2" gutterBottom>
-        //         h2. Heading
-        //     </Typography>
-        // </Box>
-        <Navbar navProperties={navProperties} />
+        <Box component="div"  m={1}>
+            <Sidebar />
+        </Box>
     )
 }
-
 export default Home;
+
+
+
