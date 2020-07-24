@@ -17,16 +17,15 @@ import ListSubheader from "@material-ui/core/ListSubheader";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Collapse from "@material-ui/core/Collapse";
-import SettingsIcon from '@material-ui/icons/Settings';
+import SettingsIcon from "@material-ui/icons/Settings";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
-import PeopleIcon from '@material-ui/icons/People';
-import HomeIcon from '@material-ui/icons/Home';
-import SearchIcon from '@material-ui/icons/Search';
-import PersonIcon from '@material-ui/icons/Person';
-import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
+import PeopleIcon from "@material-ui/icons/People";
+import HomeIcon from "@material-ui/icons/Home";
+import SearchIcon from "@material-ui/icons/Search";
+import PersonIcon from "@material-ui/icons/Person";
+import SettingsApplicationsIcon from "@material-ui/icons/SettingsApplications";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
-
 import Navbar from "../navbar";
 
 import Logo from "../../assets/images/logo.svg";
@@ -120,7 +119,7 @@ const useStyles = makeStyles((theme) => ({
   sideBarIcons: {
     display: "flex",
     alignItems: "center",
-    color:"inherit",
+    color: "inherit",
     padding: theme.spacing(0, 1),
     ...theme.mixins.toolbar,
     justifyContent: "space-evenly",
@@ -145,15 +144,15 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(4),
   },
   hideSidebar: {
-    marginTop: '100%'
-  }
+    marginTop: "100%",
+  },
 }));
 
-const Sidebar = () => {
+const Sidebar = (props) => {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
-  const [openSubmenu, setOpenSubmenu] = React.useState(true);
+  const [openSubmenu, setOpenSubmenu] = React.useState({});
 
   const handleDrawerOpen = () => {
     setOpen(false);
@@ -163,8 +162,10 @@ const Sidebar = () => {
     console.log("close");
     setOpen(true);
   };
-  const handleClick = () => {
-    setOpenSubmenu(!openSubmenu);
+  const handleClick = (key) => {
+    console.log(openSubmenu);
+    setOpenSubmenu({ ...openSubmenu, [key]: !openSubmenu[key] });
+    // setOpenSubmenu(!openSubmenu);
   };
 
   return (
@@ -186,8 +187,11 @@ const Sidebar = () => {
           >
             <MenuIcon />
           </IconButton>
+          <Typography variant="h6" noWrap>
+            Persistent drawer
+          </Typography>
         </Toolbar> */}
-        <Navbar navProperties={navProperties}/>
+        <Navbar navProperties={navProperties} />
       </AppBar>
       <Drawer
         className={classes.drawer}
@@ -209,41 +213,40 @@ const Sidebar = () => {
         </div>
         <Divider />
         <List>
-          <ListItem button>
-            <ListItemIcon>
-              <HomeIcon />
-            </ListItemIcon>
-            <ListItemText primary="Home" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <PeopleIcon />
-            </ListItemIcon>
-            <ListItemText primary="Customers" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <InboxIcon />
-            </ListItemIcon>
-            <ListItemText primary="Payments" />
-          </ListItem>
-          <ListItem button onClick={handleClick}>
-            <ListItemIcon>
-              <SettingsIcon />
-            </ListItemIcon>
-            <ListItemText primary="Management" />
-            {openSubmenu ? <ExpandLess /> : <ExpandMore />}
-          </ListItem>
-          <Collapse in={openSubmenu} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <ListItem button className={classes.nested}>
-                <ListItemText primary="Products" />
-              </ListItem>
-              <ListItem button className={classes.nested}>
-                <ListItemText primary="Orders" />
-              </ListItem>
-            </List>
-          </Collapse>
+          {props.sidelists.map(({ key, label, icon: Icon, items }) => {
+            const open = openSubmenu[key] || false;
+            return (
+              <div key={key}>
+                <ListItem button onClick={() => handleClick(key)}>
+                  <ListItemIcon>
+                    <Icon />
+                  </ListItemIcon>
+                  <ListItemText primary={label} />
+                  {items.length > 0 ? (
+                    open ? (
+                      <ExpandLess />
+                    ) : (
+                      <ExpandMore />
+                    )
+                  ) : null}
+                </ListItem>
+                <Collapse in={open} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    {items.map(({ key: childKey, label: childLabel }) => (
+                      <ListItem
+                        key={childKey}
+                        button
+                        className={classes.nested}
+                      >
+                        <ListItemIcon></ListItemIcon>
+                        <ListItemText primary={childLabel} />
+                      </ListItem>
+                    ))}
+                  </List>
+                </Collapse>
+              </div>
+            );
+          })}
         </List>
         <div className={clsx(classes.hideSidebar)}>
           <IconButton onClick={handleDrawerOpen}>
@@ -251,7 +254,8 @@ const Sidebar = () => {
               <ChevronLeftIcon />
             ) : (
               <ChevronRightIcon />
-            )}<ListItemText primary="Collapse menu" />
+            )}
+            <ListItemText primary="Collapse menu" />
           </IconButton>
         </div>
       </Drawer>
@@ -262,31 +266,37 @@ const Sidebar = () => {
       >
         <div className={classes.drawerHeader} />
         <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-          ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
-          facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit
-          gravida rutrum quisque non tellus. Convallis convallis tellus id interdum velit laoreet id
-          donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-          adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra nibh cras.
-          Metus vulputate eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo quis
-          imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus at augue. At augue eget
-          arcu dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem
-          donec massa sapien faucibus et molestie ac.
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus
+          dolor purus non enim praesent elementum facilisis leo vel. Risus at
+          ultrices mi tempus imperdiet. Semper risus in hendrerit gravida rutrum
+          quisque non tellus. Convallis convallis tellus id interdum velit
+          laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed
+          adipiscing. Amet nisl suscipit adipiscing bibendum est ultricies
+          integer quis. Cursus euismod quis viverra nibh cras. Metus vulputate
+          eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo
+          quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat
+          vivamus at augue. At augue eget arcu dictum varius duis at consectetur
+          lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa sapien
+          faucibus et molestie ac.
         </Typography>
         <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
-          facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
-          tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-          consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed
-          vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in. In
-          hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem et
-          tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin
-          nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo viverra maecenas
-          accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
+          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est
+          ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
+          elementum integer enim neque volutpat ac tincidunt. Ornare suspendisse
+          sed nisi lacus sed viverra tellus. Purus sit amet volutpat consequat
+          mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis
+          risus sed vulputate odio. Morbi tincidunt ornare massa eget egestas
+          purus viverra accumsan in. In hendrerit gravida rutrum quisque non
+          tellus orci ac. Pellentesque nec nam aliquam sem et tortor. Habitant
+          morbi tristique senectus et. Adipiscing elit duis tristique
+          sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
+          eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
+          posuere sollicitudin aliquam ultrices sagittis orci a.
         </Typography>
       </main>
     </div>
   );
-}
+};
 
 export default Sidebar;
