@@ -21,10 +21,49 @@ import PersonIcon from "@material-ui/icons/Person";
 import SettingsApplicationsIcon from "@material-ui/icons/SettingsApplications";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
+import Navbar from "../navbar";
 
 import Logo from "../../assets/images/logo.svg";
 
 const drawerWidth = 240;
+
+const navProperties = {
+        basicStyle: {
+            height: 64,
+            padding: '0px 24px 0px 24px',
+            background: 'linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), #2196F3',
+            color: 'white',
+        },
+        // logo: {
+        //     imageName: 'logo.png',
+        //     height: 20,
+        //     width: 20
+        // },
+        title: {
+            text: 'Payments',
+            variant: 'h6'
+        },
+        // searchBar: {
+        //     placeholder: 'Search here',
+        //     onChange: () => {}
+        // },
+        navRightItems: [
+            // { type: 'text', text: 'About', variant: 'h6', href: "https://www.google.com" },
+            // { type: 'text', text: 'Like Us!', variant: 'h6', onClick: () => {} },
+            // { type: 'text', text: 'Follow', variant: 'h6' },
+            { type: 'icon', iconName: 'search.svg', height: 20, width: 20 , oncClick: () => {} },
+            { type: 'icon', iconName: 'user.svg', height: 20, width: 20 , oncClick: () => {} },
+            { type: 'icon', iconName: 'settings.svg', height: 20, width: 20 , oncClick: () => {} },
+
+        ],
+        mobileViewNavLink: {
+            backgroundColor: '#0B79D0',
+            color: 'white',
+            top: 64,
+            padding: '16px 24px'
+        }
+
+    }
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -131,7 +170,7 @@ const Sidebar = (props) => {
           [classes.appBarShift]: open,
         })}
       >
-        <Toolbar>
+        {/* <Toolbar>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -141,10 +180,11 @@ const Sidebar = (props) => {
           >
             <MenuIcon />
           </IconButton>
-          {/* <Typography variant="h6" noWrap>
+          <Typography variant="h6" noWrap>
             Persistent drawer
-          </Typography> */}
-        </Toolbar>
+          </Typography>
+        </Toolbar> */}
+        <Navbar navProperties={navProperties} />
       </AppBar>
       <Drawer
         className={classes.drawer}
