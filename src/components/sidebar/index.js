@@ -1,6 +1,4 @@
 import React from "react";
-
-import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
@@ -16,50 +14,11 @@ import ExpandMore from "@material-ui/icons/ExpandMore";
 
 import Logo from "../../assets/images/logo.svg";
 
-const drawerWidth = 240;
+import useStyles  from './sidebar.style';
 
-const useStyles = makeStyles((theme) => ({
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-  },
-  drawerPaper: {
-    width: drawerWidth,
-  },
-  drawerHeader: {
-    display: "flex",
-    alignItems: "center",
-    padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
-    justifyContent: "flex-end",
-  },
-  logo: {
-    display: "flex",
-    alignItems: "center",
-    padding: theme.spacing(0, 1),
-    ...theme.mixins.toolbar,
-    justifyContent: "center",
-  },
-  sideBarIcons: {
-    display: "flex",
-    alignItems: "center",
-    color: "inherit",
-    padding: theme.spacing(0, 1),
-    ...theme.mixins.toolbar,
-    justifyContent: "space-evenly",
-  },
-  nested: {
-    paddingLeft: theme.spacing(4),
-  },
-  hideSidebar: {
-    marginTop: "100%",
-  },
-}));
 
 const Sidebar = (props) => {
   const classes = useStyles();
-  const theme = useTheme();
   const [open, setOpen] = React.useState(true);
   const [openSubmenu, setOpenSubmenu] = React.useState({});
 
