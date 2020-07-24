@@ -13,14 +13,9 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
-import ListSubheader from "@material-ui/core/ListSubheader";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Collapse from "@material-ui/core/Collapse";
-import SettingsIcon from "@material-ui/icons/Settings";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import PeopleIcon from "@material-ui/icons/People";
-import HomeIcon from "@material-ui/icons/Home";
 import SearchIcon from "@material-ui/icons/Search";
 import PersonIcon from "@material-ui/icons/Person";
 import SettingsApplicationsIcon from "@material-ui/icons/SettingsApplications";
@@ -124,9 +119,7 @@ const Sidebar = (props) => {
     setOpen(true);
   };
   const handleClick = (key) => {
-    console.log(openSubmenu);
     setOpenSubmenu({ ...openSubmenu, [key]: !openSubmenu[key] });
-    // setOpenSubmenu(!openSubmenu);
   };
 
   return (
@@ -198,7 +191,6 @@ const Sidebar = (props) => {
                         button
                         className={classes.nested}
                       >
-                        <ListItemIcon></ListItemIcon>
                         <ListItemText primary={childLabel} />
                       </ListItem>
                     ))}
@@ -208,15 +200,16 @@ const Sidebar = (props) => {
             );
           })}
         </List>
-        <div className={clsx(classes.hideSidebar)}>
-          <IconButton onClick={handleDrawerOpen}>
+        <div className={clsx(classes.hideSidebar)} onClick={handleDrawerOpen}>
+          <IconButton >
             {theme.direction === "ltr" ? (
               <ChevronLeftIcon />
             ) : (
               <ChevronRightIcon />
             )}
-            <ListItemText primary="Collapse menu" />
-          </IconButton>
+          </IconButton>Collapse menu
+          {/* <ListItemText primary="Collapse menu" /> */}
+
         </div>
       </Drawer>
       <main
