@@ -7,11 +7,10 @@ const Posts = () => {
   const [name, setName] = useState('');
   const [text, setText] = useState('');
 
-  const [sendMessage, { loading: mutationLoading, error: mutationError }] = useMutation(SEND_MESSAGE);
-  const { data, loading: subscriptionLoading, error: subscriptionError } = useSubscription(SUBSCRIPTION_QUERY);
+  const [sendMessage, { error: mutationError }] = useMutation(SEND_MESSAGE);
+  const { data, error: subscriptionError } = useSubscription(SUBSCRIPTION_QUERY);
 
-  if (!data || !data.queryMessage) return (<h1>No Database Connection...</h1>);
-  if (subscriptionLoading || mutationLoading) return (<h1>Loading...</h1>);
+  if (!data || !data.queryMessage) return (<h1>Connecting...</h1>);
   if (subscriptionError || mutationError) return (<h1>Error...</h1>);
 
   const handleClick = () => {
