@@ -1,5 +1,14 @@
 import { gql } from "@apollo/client";
 
+/* GraphQL Schema used for reference
+type Message @withSubscription {
+  id: ID!
+  name: String!
+  text: String!
+  time: DateTime!
+}
+*/
+
 const SUBSCRIPTION_QUERY = gql`
   subscription {
     queryMessage(order: { desc: time }) {
