@@ -2,7 +2,6 @@ import { fade, makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
     nav: {
-        
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -32,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up('md')]: {
             display: 'none'
         },
-      
+
     },
     navLinks: {
         position: 'absolute',
