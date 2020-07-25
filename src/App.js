@@ -2,22 +2,17 @@ import React, { Suspense } from 'react';
 import { Router, Route } from "react-router-dom";
 
 import history from "./utils/history";
-import routes from "./routes";
+import Home from "./pages/home";
 
 import './App.css';
+
 
 function App() {
   return (
      <Router history={history}>
       <Suspense fallback={<div  />}>
-          {routes.map((route) => (
-            <Route
-              key={route.path}
-              exact={route.exact}
-              path={route.path}
-              render={(props) => <route.component {...props} />}
-            />
-          ))}
+        <Route path="/" exact={true} component={Home} />
+        <Route path="/types" exact={true} component={Home} />
       </Suspense>
     </Router>
   );
