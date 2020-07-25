@@ -1,40 +1,17 @@
 import React from "react";
 import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
-import AppBar from "@material-ui/core/AppBar";
-import clsx from "clsx";
-import { makeStyles } from "@material-ui/core/styles";
 
 import Content from '../../components/content';
-import Navbar from '../../components/navbar';
-import navbarData from '../../components/navbar/navbarData';
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-  },
-  appBar: {
-    transition: theme.transitions.create(["margin", "width"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    })
-  },
-  appBarShift: {
-    width: `calc(100% - 240px)`,
-    marginLeft: 240,
-    transition: theme.transitions.create(["margin", "width"], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }
-}));
+import { Navbar, NavbarItem } from '../../components/navbar';
 
 const Home = () => {
-  const classes = useStyles();
   return <>
-    <AppBar position="fixed" className={clsx(classes.appBar, classes.appBarShift)}>
-      <Navbar navProperties={navbarData} />
-    </AppBar>
+    <Navbar title="Home">
+      <NavbarItem type='icon' iconName='search.svg' oncClick={() => { }} />
+      <NavbarItem type='icon' iconName='user.svg' oncClick={() => { }} />
+      <NavbarItem type='icon' iconName='settings.svg' oncClick={() => { }} />
+    </Navbar>
     <Content>
       <Link to="/types">See Types Here</Link>
       <Typography paragraph>

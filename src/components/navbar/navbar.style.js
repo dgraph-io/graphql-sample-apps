@@ -1,50 +1,58 @@
 import { fade, makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
-    nav: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
+  nav: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: 64,
+    padding: '0px 24px 0px 24px',
+    background: 'linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), #2196F3',
+    color: 'white',
+  },
+  navLeft: {
+    display: 'grid',
+    gridTemplateColumns: 'auto auto auto',
+    gridGap: 20,
+    alignItems: 'center'
+  },
+  navRight: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    [theme.breakpoints.down('md')]: {
+      display: 'none',
     },
-    navLeft: {
-        display: 'grid',
-        gridTemplateColumns: 'auto auto auto',
-        gridGap: 20,
-        alignItems: 'center'
+    [theme.breakpoints.up('md')]: {
+      display: 'flex',
     },
-    navRight: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        [theme.breakpoints.down('md')]: {
-            display: 'none',
-        },
-        [theme.breakpoints.up('md')]: {
-            display: 'flex',
-        },
+  },
+  toggleBtn: {
+    display: 'none',
+    [theme.breakpoints.down('md')]: {
+      display: 'block'
     },
-    toggleBtn: {
-        display: 'none',
-        [theme.breakpoints.down('md')]: {
-            display: 'block'
-        },
-        [theme.breakpoints.up('md')]: {
-            display: 'none'
-        },
-
-    },
-    navLinks: {
-        position: 'absolute',
-        display: 'flex',
-        flexDirection: 'column',
-        width: 'calc(100%)',
-        height: 'auto',
-    },
-    ml2: {
-        marginLeft: theme.spacing(4)
+    [theme.breakpoints.up('md')]: {
+      display: 'none'
     },
 
-    search: {
+  },
+  navLinks: {
+    position: 'absolute',
+    display: 'flex',
+    flexDirection: 'column',
+    width: 'calc(100%)',
+    height: 'auto',
+    backgroundColor: '#0B79D0',
+    color: 'white',
+    top: 64,
+    padding: '16px 24px'
+  },
+  ml2: {
+    marginLeft: theme.spacing(4)
+  },
+
+  search: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
     backgroundColor: fade(theme.palette.common.white, 0.15),
@@ -55,14 +63,14 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 0,
     width: '100%',
     [theme.breakpoints.up('md')]: {
-        marginLeft: theme.spacing(3),
-        width: 'auto',
+      marginLeft: theme.spacing(3),
+      width: 'auto',
     },
     [theme.breakpoints.down('md')]: {
       display: 'none'
     },
   },
-    searchToggle: {
+  searchToggle: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
     backgroundColor: fade(theme.palette.common.white, 0.15),
@@ -96,8 +104,21 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('md')]: {
       width: '20ch',
     },
+  },
+  appBar: {
+    transition: theme.transitions.create(["margin", "width"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    })
+  },
+  appBarShift: {
+    width: `calc(100% - 240px)`,
+    marginLeft: 240,
+    transition: theme.transitions.create(["margin", "width"], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
   }
-
 }));
 
 export default useStyles;
