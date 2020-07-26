@@ -80,7 +80,7 @@ export const Sidebar = ({children = []}) => {
           {children.map((child, index) => React.cloneElement(child, {
             key: index,
             open: openSubmenu[index] || false,
-            onClick: () => handleClick(index),
+            onClick: () => child.props.link ? window.location = child.props.link : handleClick(index),
           }))}
         </List>
         {/* <div className={clsx(classes.hideSidebar)}>

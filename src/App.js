@@ -3,6 +3,7 @@ import { Router, Route } from "react-router-dom";
 
 import history from "./utils/history";
 import Home from "./pages/home";
+import Types from "./pages/types";
 
 import { makeStyles } from "@material-ui/core/styles";
 import HomeIcon from '@material-ui/icons/Home';
@@ -28,7 +29,7 @@ function App() {
     <div className={classes.root}>
       <CssBaseline />
       <Sidebar>
-        <SidebarItem label="Home" icon={HomeIcon} />
+        <SidebarItem label="Home" icon={HomeIcon} link="/" />
         <SidebarItem label="Customers" icon={PeopleIcon} />
         <SidebarItem label="Payments" icon={CreditCardIcon} />
         <SidebarItem label="Management" icon={SettingsIcon} >
@@ -39,7 +40,7 @@ function App() {
       <Router history={history}>
         <Suspense fallback={<div />}>
           <Route path="/" exact={true} component={Home} />
-          <Route path="/types" exact={true} component={Home} />
+          <Route path="/types" exact={true} component={Types} />
         </Suspense>
       </Router>
     </div>
