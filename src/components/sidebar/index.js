@@ -17,11 +17,11 @@ import ExpandMore from "@material-ui/icons/ExpandMore";
 import Logo from "../../assets/images/logo.svg";
 import useStyles from "./sidebar.style"
 
-export const SidebarItem = ({ key, label, icon: Icon, open, className, onClick, children = [] }) => {
+export const SidebarItem = ({ key, label, icon: Icon, open, className, onClick, link, children = [] }) => {
   const classes = useStyles();
   return (
     <div key={key}>
-      <ListItem button onClick={onClick} className={className}>
+      <ListItem button onClick={link ? () => window.location = link : onClick} className={className}>
         {Icon && <ListItemIcon>
           <Icon />
         </ListItemIcon>}
@@ -70,17 +70,17 @@ export const Sidebar = ({children = []}) => {
           <img src={Logo} alt="logo" />
         </div>
         <Divider />
-        <div className={classes.sideBarIcons}>
+        {/* <div className={classes.sideBarIcons}>
           <SearchIcon />
           <PersonIcon />
           <SettingsApplicationsIcon />
-        </div>
+        </div> */}
         <Divider />
         <List>
           {children.map((child, index) => React.cloneElement(child, {
             key: index,
             open: openSubmenu[index] || false,
-            onClick: () => child.props.link ? window.location = child.props.link : handleClick(index),
+            onClick: () => handleClick(index),
           }))}
         </List>
         {/* <div className={clsx(classes.hideSidebar)}>

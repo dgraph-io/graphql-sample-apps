@@ -25,7 +25,7 @@ const Home = () => {
       <NavbarItem type='icon' iconName='settings.svg' oncClick={() => { }} />
     </Navbar>
     <Content>
-      <Typography paragraph>
+      <Typography>
         This is the Slash GraphQL Starter App. If you are looking for where to get started, you
         might want to check out the following files:
       </Typography>

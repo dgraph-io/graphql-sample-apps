@@ -1,9 +1,10 @@
 import React, { Suspense } from 'react';
-import { Router, Route } from "react-router-dom";
+import { Router, Route, Switch } from "react-router-dom";
 
 import history from "./utils/history";
 import Home from "./pages/home";
 import Types from "./pages/types";
+import NotFound from "./pages/not-found";
 
 import { makeStyles } from "@material-ui/core/styles";
 import HomeIcon from '@material-ui/icons/Home';
@@ -30,17 +31,20 @@ function App() {
       <CssBaseline />
       <Sidebar>
         <SidebarItem label="Home" icon={HomeIcon} link="/" />
-        <SidebarItem label="Customers" icon={PeopleIcon} />
-        <SidebarItem label="Payments" icon={CreditCardIcon} />
-        <SidebarItem label="Management" icon={SettingsIcon} >
-          <SidebarItem label="Product" />
-          <SidebarItem label="Order" />
+        <SidebarItem label="People" icon={PeopleIcon} link="/not-implemented"/>
+        <SidebarItem label="Credit Cards" icon={CreditCardIcon} link="/not-implemented" />
+        <SidebarItem label="Settings" icon={SettingsIcon}>
+          <SidebarItem label="Start" link="/not-implemented" />
+          <SidebarItem label="Here" link="/not-implemented" />
         </SidebarItem>
       </Sidebar>
       <Router history={history}>
         <Suspense fallback={<div />}>
-          <Route path="/" exact={true} component={Home} />
-          <Route path="/types" exact={true} component={Types} />
+          <Switch>
+            <Route path="/" exact={true} component={Home} />
+            <Route path="/types/:typeId" exact={true} component={Types} />
+            <Route component={NotFound} />
+          </Switch>
         </Suspense>
       </Router>
     </div>
