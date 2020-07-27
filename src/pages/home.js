@@ -25,11 +25,7 @@ const Home = () => {
   }
 
   return <>
-    <Navbar title="Home" color="primary">
-      <NavbarItem type='icon' iconName='search.svg' oncClick={() => { }} />
-      <NavbarItem type='icon' iconName='user.svg' oncClick={() => { }} />
-      <NavbarItem type='icon' iconName='settings.svg' oncClick={() => { }} />
-    </Navbar>
+    <Navbar title="Home" color="primary" />
     <Content>
       <Typography>
         This is the Slash GraphQL Starter App. If you are looking for where to get started, you

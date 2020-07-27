@@ -32,13 +32,11 @@ function App() {
       <CssBaseline />
       <Sidebar>
         <SidebarItem label="Home" icon={HomeIcon} link="/" />
-        <SidebarItem label="People" icon={PeopleIcon} link="/not-implemented"/>
-        <SidebarItem label="Credit Cards" icon={CreditCardIcon} link="/not-implemented" />
+        <SidebarItem label="Form Example" icon={PeopleIcon} link="/form"/>
         <SidebarItem label="Settings" icon={SettingsIcon}>
           <SidebarItem label="Start" link="/not-implemented" />
           <SidebarItem label="Here" link="/not-implemented" />
         </SidebarItem>
-        <SidebarItem label="Form" icon={CreditCardIcon} link="/form" />
       </Sidebar>
       <Router history={history}>
         <Suspense fallback={<div />}>
