@@ -19,7 +19,7 @@ const Home = () => {
   const { loading, error, data } = useQuery(query);
 
   return <>
-    <Navbar title="Home">
+    <Navbar title="Home" bgColor="primary">
       <NavbarItem type='icon' iconName='search.svg' oncClick={() => { }} />
       <NavbarItem type='icon' iconName='user.svg' oncClick={() => { }} />
       <NavbarItem type='icon' iconName='settings.svg' oncClick={() => { }} />

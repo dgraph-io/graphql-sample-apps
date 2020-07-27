@@ -33,7 +33,7 @@ export function NavbarItem({type, href, onClick, text, iconName, width, height})
     )
 }
 
-export function Navbar({title, searchBar, children = []}) {
+export function Navbar({title, searchBar, children = [], bgColor = "primary"}) {
   const classes = useStyles();
   const [closeBtn, setCloseBtn] = useState(false);
 
@@ -71,7 +71,7 @@ export function Navbar({title, searchBar, children = []}) {
   };
 
   return (
-    <AppBar position="fixed" className={clsx(classes.appBar, classes.appBarShift)}>
+    <AppBar position="fixed" className={clsx(classes.appBar, classes.appBarShift)} color={bgColor}>
       <div className={classes.nav} >
         <div className={classes.navLeft}>
           <Typography variant="h6">{title}</Typography>
