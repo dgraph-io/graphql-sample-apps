@@ -7,7 +7,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     height: 64,
     padding: '0px 24px 0px 24px',
-    background: 'linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), #2196F3',
     color: 'white',
   },
   navLeft: {
