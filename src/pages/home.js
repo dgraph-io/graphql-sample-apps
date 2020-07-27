@@ -44,7 +44,7 @@ const Home = () => {
         Below, you should see a list of types in your schema. The columns will auto adjust as per
         the screen size. So take a look at how we use the <i>{"<Grid>"}</i> component
       </Typography>
-      {!loading && !error ? <Search data={data.__schema.types} label="Search your type here" onChange={handleClick} />: null}
+      {!loading && !error ? <Search data={data.__schema.types || []} label="Search your type here" onChange={handleClick} />: null}
       <TypesList loading={loading} error={error} data={data} />
     </Content>
   </>
