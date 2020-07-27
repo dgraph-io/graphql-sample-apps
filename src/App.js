@@ -4,6 +4,7 @@ import { Router, Route, Switch } from "react-router-dom";
 import history from "./utils/history";
 import Home from "./pages/home";
 import Types from "./pages/types";
+import Form from "./pages/form";
 import NotFound from "./pages/not-found";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -31,8 +32,7 @@ function App() {
       <CssBaseline />
       <Sidebar>
         <SidebarItem label="Home" icon={HomeIcon} link="/" />
-        <SidebarItem label="People" icon={PeopleIcon} link="/not-implemented"/>
-        <SidebarItem label="Credit Cards" icon={CreditCardIcon} link="/not-implemented" />
+        <SidebarItem label="Form Example" icon={PeopleIcon} link="/form"/>
         <SidebarItem label="Settings" icon={SettingsIcon}>
           <SidebarItem label="Start" link="/not-implemented" />
           <SidebarItem label="Here" link="/not-implemented" />
@@ -43,6 +43,7 @@ function App() {
           <Switch>
             <Route path="/" exact={true} component={Home} />
             <Route path="/types/:typeId" exact={true} component={Types} />
+            <Route path="/form" exact={true} component={Form} />
             <Route component={NotFound} />
           </Switch>
         </Suspense>

@@ -1,11 +1,12 @@
 import React from "react";
 import {List, ListItem, Typography, Grid} from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { gql, useQuery } from '@apollo/client'
 
 import Content from '../components/content';
 import { Navbar, NavbarItem } from '../components/navbar';
 import { CenteredCard } from '../components/card';
+import { Search } from "../components/search";
 
 const query = gql`{
   __schema {
@@ -17,13 +18,14 @@ const query = gql`{
 
 const Home = () => {
   const { loading, error, data } = useQuery(query);
+  const history = useHistory();
+
+  const handleClick = (event, value) => {
+    history.push(`/types/${value}`)
+  }
 
   return <>
-    <Navbar title="Home">
-      <NavbarItem type='icon' iconName='search.svg' oncClick={() => { }} />
-      <NavbarItem type='icon' iconName='user.svg' oncClick={() => { }} />
-      <NavbarItem type='icon' iconName='settings.svg' oncClick={() => { }} />
-    </Navbar>
+    <Navbar title="Home" color="primary" />
     <Content>
       <Typography>
         This is the Slash GraphQL Starter App. If you are looking for where to get started, you
@@ -38,6 +40,7 @@ const Home = () => {
         Below, you should see a list of types in your schema. The columns will auto adjust as per
         the screen size. So take a look at how we use the <i>{"<Grid>"}</i> component
       </Typography>
+      {!loading && !error ? <Search data={data.__schema.types || []} label="Search your type here" onChange={handleClick} />: null}
       <TypesList loading={loading} error={error} data={data} />
     </Content>
   </>
