@@ -1,11 +1,12 @@
 import React from "react";
 import {List, ListItem, Typography, Grid} from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { gql, useQuery } from '@apollo/client'
 
 import Content from '../components/content';
 import { Navbar, NavbarItem } from '../components/navbar';
 import { CenteredCard } from '../components/card';
+import { Search } from "../components/search";
 
 const query = gql`{
   __schema {
@@ -17,6 +18,11 @@ const query = gql`{
 
 const Home = () => {
   const { loading, error, data } = useQuery(query);
+  const history = useHistory();
+
+  const handleClick = (event, value) => {
+    history.push(`/types/${value}`)
+  }
 
   return <>
     <Navbar title="Home">
@@ -38,6 +44,7 @@ const Home = () => {
         Below, you should see a list of types in your schema. The columns will auto adjust as per
         the screen size. So take a look at how we use the <i>{"<Grid>"}</i> component
       </Typography>
+      {!loading && !error ? <Search data={data.__schema.types} label="Search your type here" onChange={handleClick} />: null}
       <TypesList loading={loading} error={error} data={data} />
     </Content>
   </>
