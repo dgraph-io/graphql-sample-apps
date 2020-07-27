@@ -5,7 +5,7 @@ const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
   drawer: {
     width: drawerWidth,
-    flexShrink: 0,
+    // flexShrink: 0,
   },
   drawerPaper: {
     width: drawerWidth,
@@ -20,18 +20,9 @@ const useStyles = makeStyles((theme) => ({
   },
   logo: {
     display: "flex",
-    alignItems: "center",
     padding: theme.spacing(0, 1),
     ...theme.mixins.toolbar,
     justifyContent: "center",
-  },
-  sideBarIcons: {
-    display: "flex",
-    alignItems: "center",
-    color: "inherit",
-    padding: theme.spacing(0, 1),
-    ...theme.mixins.toolbar,
-    justifyContent: "space-evenly",
   },
   nested: {
     paddingLeft: theme.spacing(4),
