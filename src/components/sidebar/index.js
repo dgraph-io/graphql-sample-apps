@@ -17,21 +17,46 @@ import ExpandMore from "@material-ui/icons/ExpandMore";
 import Logo from "../../assets/images/logo.svg";
 import useStyles from "./sidebar.style"
 
-const Sidebar = (props) => {
+export const SidebarItem = ({ key, label, icon: Icon, open, className, onClick, link, children = [] }) => {
   const classes = useStyles();
-  // const theme = useTheme();
+  return (
+    <div key={key}>
+      <ListItem button onClick={link ? () => window.location = link : onClick} className={className}>
+        {Icon && <ListItemIcon>
+          <Icon />
+        </ListItemIcon>}
+        <ListItemText primary={label} />
+        {children.length > 0 ? (
+          open ? (
+            <ExpandLess />
+          ) : (
+              <ExpandMore />
+            )
+        ) : null}
+      </ListItem>
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          {children.map((child, index) => React.cloneElement(child, {
+            key: index,
+            className: classes.nested,
+          }))}
+        </List>
+      </Collapse>
+    </div>
+  );
+}
+
+export const Sidebar = ({children = []}) => {
+  const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const [openSubmenu, setOpenSubmenu] = React.useState({});
 
   const handleClick = (key) => {
-    console.log(openSubmenu);
     setOpenSubmenu({ ...openSubmenu, [key]: !openSubmenu[key] });
     setOpen(true);
-    // setOpenSubmenu(!openSubmenu);
   };
 
   return (
-    
       <Drawer
         className={classes.drawer}
         variant="persistent"
@@ -45,46 +70,18 @@ const Sidebar = (props) => {
           <img src={Logo} alt="logo" />
         </div>
         <Divider />
-        <div className={classes.sideBarIcons}>
+        {/* <div className={classes.sideBarIcons}>
           <SearchIcon />
           <PersonIcon />
           <SettingsApplicationsIcon />
-        </div>
+        </div> */}
         <Divider />
         <List>
-          {props.sidelists.map(({ key, label, icon: Icon, items }) => {
-            const open = openSubmenu[key] || false;
-            return (
-              <div key={key}>
-                <ListItem button onClick={() => handleClick(key)}>
-                  <ListItemIcon>
-                    <Icon />
-                  </ListItemIcon>
-                  <ListItemText primary={label} />
-                  {items.length > 0 ? (
-                    open ? (
-                      <ExpandLess />
-                    ) : (
-                      <ExpandMore />
-                    )
-                  ) : null}
-                </ListItem>
-                <Collapse in={open} timeout="auto" unmountOnExit>
-                  <List component="div" disablePadding>
-                    {items.map(({ key: childKey, label: childLabel }) => (
-                      <ListItem
-                        key={childKey}
-                        button
-                        className={classes.nested}
-                      >
-                        <ListItemText primary={childLabel} />
-                      </ListItem>
-                    ))}
-                  </List>
-                </Collapse>
-              </div>
-            );
-          })}
+          {children.map((child, index) => React.cloneElement(child, {
+            key: index,
+            open: openSubmenu[index] || false,
+            onClick: () => handleClick(index),
+          }))}
         </List>
         {/* <div className={clsx(classes.hideSidebar)}>
           <IconButton onClick={handleDrawerOpen}>
@@ -99,5 +96,3 @@ const Sidebar = (props) => {
       </Drawer>
   );
 };
-
-export default Sidebar;
