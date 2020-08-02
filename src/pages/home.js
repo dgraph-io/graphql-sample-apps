@@ -1,14 +1,13 @@
 import React from "react";
-import {List, ListItem, Typography, Grid} from '@material-ui/core';
+import {Typography, Grid} from '@material-ui/core';
 import { Link, useHistory } from 'react-router-dom';
 import { gql, useQuery } from '@apollo/client'
 
 import Content from '../components/content';
 import { Navbar, NavbarItem } from '../components/navbar';
-import { CenteredCard } from '../components/card';
-import { Search } from "../components/search";
+import { Search } from "../components/searchbar/search";
+import { Sort } from "../components/searchbar/sort";
 import PostCard from "../components/postCard";
-import Profile from "./profile";
 
 const query = gql`{
   __schema {
@@ -29,7 +28,12 @@ const Home = () => {
   return <>
     <Navbar title="Home" color="primary" />
     <Content>
-      {!loading && !error ? <Search data={data.__schema.types || []} label="Search your type here" onChange={handleClick} />: null}
+      {!loading && !error ?
+      <>
+      <Search data={data.__schema.types || []} label="Search your joke here" onChange={handleClick} />
+      <Sort />
+      </>
+      : null}
       <TypesList loading={loading} error={error} data={data} />
     </Content>
   </>

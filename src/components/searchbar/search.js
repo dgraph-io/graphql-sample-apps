@@ -5,7 +5,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 
 export function Search({ data, label, onChange }) {
   return (
-    <div style={{ width: 300 }}>
+    <div style={{ width: 600 }}>
       <Autocomplete
         onChange={onChange}
         id="free-solo-demo"

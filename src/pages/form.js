@@ -15,7 +15,7 @@ export const Form = () => {
       <Navbar title="Create" />
       <Content>
         <form noValidate autoComplete="off">
-          <Typography variant="overline">Form Title</Typography>
+          <Typography variant="overline">Anything funny??</Typography>
           <JokeField type="joke" label="Joke" name="joke" rows={2}defaultValue="" required={true} />
           <Box mt={4}>
             <Button variant="contained" color="primary" size="large">
