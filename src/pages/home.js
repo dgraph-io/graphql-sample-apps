@@ -8,6 +8,7 @@ import { Navbar, NavbarItem } from '../components/navbar';
 import { CenteredCard } from '../components/card';
 import { Search } from "../components/search";
 import PostCard from "../components/postCard";
+import Profile from "./profile";
 
 const query = gql`{
   __schema {
@@ -18,9 +19,9 @@ const query = gql`{
 }`;
 
 const Home = () => {
+
   const { loading, error, data } = useQuery(query);
   const history = useHistory();
-
   const handleClick = (event, value) => {
     history.push(`/types/${value}`)
   }
@@ -41,7 +42,7 @@ function TypesList({loading, error, data}) {
       Something Went Wrong. Did you remember to set the REACT_APP_GRAPHQL_ENDPOINT environment variable?
     </Typography>
   }
-  return <Grid container spacing={3}>
+  return <Grid container spacing={2}>
     {data.__schema.types.map(type =>
       <Grid item xs={12} sm={6} md={4} lg={3} key={type.name}>
         <PostCard author={type.name}/>

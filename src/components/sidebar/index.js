@@ -8,9 +8,6 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Collapse from "@material-ui/core/Collapse";
 
-import SearchIcon from "@material-ui/icons/Search";
-import PersonIcon from "@material-ui/icons/Person";
-import SettingsApplicationsIcon from "@material-ui/icons/SettingsApplications";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 
@@ -70,11 +67,6 @@ export const Sidebar = ({children = []}) => {
           <img src={Logo} alt="logo" />
         </div>
         <Divider />
-        {/* <div className={classes.sideBarIcons}>
-          <SearchIcon />
-          <PersonIcon />
-          <SettingsApplicationsIcon />
-        </div> */}
         <Divider />
         <List>
           {children.map((child, index) => React.cloneElement(child, {
@@ -83,16 +75,6 @@ export const Sidebar = ({children = []}) => {
             onClick: () => handleClick(index),
           }))}
         </List>
-        {/* <div className={clsx(classes.hideSidebar)}>
-          <IconButton onClick={handleDrawerOpen}>
-            {theme.direction === "ltr" ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
-            <ListItemText primary="Collapse menu" />
-          </IconButton>
-        </div> */}
       </Drawer>
   );
 };

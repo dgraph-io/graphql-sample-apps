@@ -9,6 +9,10 @@ import MenuIcon from "@material-ui/icons/Menu";
 import CloseIcon from "@material-ui/icons/Close";
 import AppBar from "@material-ui/core/AppBar";
 
+import LogoutButton from "../logoutButton";
+import LoginButton from "../loginButton";
+import { useAuth0 } from "@auth0/auth0-react";
+
 import clsx from "clsx";
 import useStyles from "./navbar.style";
 
@@ -32,6 +36,17 @@ export function NavbarItem({type, href, onClick, text, iconName, width, height})
       </div>
     )
 }
+
+const AuthNav = () => {
+  const { isAuthenticated } = useAuth0();
+
+  return (
+    <div>
+      {isAuthenticated ? <LogoutButton /> : <LoginButton />}
+    </div>
+  );
+};
+
 
 export function Navbar({title, searchBar, children = [], color = "primary"}) {
   const classes = useStyles();
@@ -88,6 +103,7 @@ export function Navbar({title, searchBar, children = [], color = "primary"}) {
             {!closeBtn ? <MenuIcon /> : <CloseIcon />}
           </IconButton>
         </div>
+        <AuthNav />
       </div>
       {closeBtn ? (
         <div className={classes.navLinks}>
