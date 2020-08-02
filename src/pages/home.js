@@ -7,6 +7,7 @@ import Content from '../components/content';
 import { Navbar, NavbarItem } from '../components/navbar';
 import { CenteredCard } from '../components/card';
 import { Search } from "../components/search";
+import PostCard from "../components/postCard";
 
 const query = gql`{
   __schema {
@@ -27,19 +28,6 @@ const Home = () => {
   return <>
     <Navbar title="Home" color="primary" />
     <Content>
-      <Typography>
-        This is the Slash GraphQL Starter App. If you are looking for where to get started, you
-        might want to check out the following files:
-      </Typography>
-      <List>
-        <ListItem><i>src/App.js</i></ListItem>
-        <ListItem><i>src/pages/home.js</i></ListItem>
-        <ListItem><i>src/pages/type.js</i></ListItem>
-      </List>
-      <Typography paragraph>
-        Below, you should see a list of types in your schema. The columns will auto adjust as per
-        the screen size. So take a look at how we use the <i>{"<Grid>"}</i> component
-      </Typography>
       {!loading && !error ? <Search data={data.__schema.types || []} label="Search your type here" onChange={handleClick} />: null}
       <TypesList loading={loading} error={error} data={data} />
     </Content>
@@ -56,9 +44,7 @@ function TypesList({loading, error, data}) {
   return <Grid container spacing={3}>
     {data.__schema.types.map(type =>
       <Grid item xs={12} sm={6} md={4} lg={3} key={type.name}>
-        <Link to={`/types/${type.name}`}>
-          <CenteredCard>{type.name}</CenteredCard>
-        </Link>
+        <PostCard author={type.name}/>
       </Grid>
     )}
   </Grid>;

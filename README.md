@@ -1,3 +1,6 @@
+# sudo-laugh
+Slash powered DevJokes application
+
 ## Available Scripts
 
 In the project directory, you can run:

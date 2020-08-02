@@ -9,8 +9,7 @@ import NotFound from "./pages/not-found";
 
 import { makeStyles } from "@material-ui/core/styles";
 import HomeIcon from '@material-ui/icons/Home';
-import PeopleIcon from '@material-ui/icons/People';
-import CreditCardIcon from '@material-ui/icons/CreditCard';
+import EditIcon from '@material-ui/icons/Edit';
 import SettingsIcon from '@material-ui/icons/Settings';
 
 import './App.css';
@@ -32,7 +31,7 @@ function App() {
       <CssBaseline />
       <Sidebar>
         <SidebarItem label="Home" icon={HomeIcon} link="/" />
-        <SidebarItem label="Form Example" icon={PeopleIcon} link="/form"/>
+        <SidebarItem label="Create" icon={EditIcon} link="/form"/>
         <SidebarItem label="Settings" icon={SettingsIcon}>
           <SidebarItem label="Start" link="/not-implemented" />
           <SidebarItem label="Here" link="/not-implemented" />
