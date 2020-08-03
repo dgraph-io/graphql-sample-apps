@@ -1,0 +1,15 @@
+type Metric {
+  name: String! @id
+  readings: [Reading!]
+}
+
+type Collection {
+  timestamp: DateTime! @search
+  readings: [Reading!]!
+}
+
+type Reading {
+  value: Float
+  metric: Metric! @hasInverse(field: readings)
+  collection: Collection! @hasInverse(field: readings)
+}
