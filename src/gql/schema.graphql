@@ -4,15 +4,15 @@ type User{
     posts: [Post]
     isMod: Boolean
   }
-  type Tag{
+type Tag{
     name: String! @id @search(by: [fulltext])
     posts: [Post] @hasInverse(field: tags)
-  }
-  type Post{
+}
+type Post{
     id: ID!
     text: String @search(by: [fulltext])
     tags: [Tag]
     createdby: User!
     timeStamp: DateTime @search
     isApproved: Boolean @search
-  }
+}

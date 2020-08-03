@@ -5,7 +5,7 @@ import history from "./utils/history";
 import Home from "./pages/home";
 import Profile from './pages/profile';
 import Types from "./pages/types";
-import Form from "./pages/form";
+import Create from "./pages/create";
 import Approve from "./pages/approve"
 import NotFound from "./pages/not-found";
 
@@ -45,7 +45,7 @@ function App() {
       <Sidebar>
         <SidebarItem label="Home" icon={HomeIcon} link="/" />
         <SidebarItem label="Profile" icon={PersonIcon} link="/profile" />
-        <SidebarItem label="Create" icon={EditIcon} link="/form"/>
+        <SidebarItem label="Create" icon={EditIcon} link="/create"/>
         {isAuthenticated ?
           <SidebarItem label="Approve" icon={CheckCircleIcon} link="/approve" />:
           <></>
@@ -57,7 +57,7 @@ function App() {
             <Route path="/" exact={true} component={Home} />
             <PrivateRoute path="/profile" exact={true} component={Profile} />
             <PrivateRoute path="/types/:typeId" exact={true} component={Types} />
-            <PrivateRoute path="/form" exact={true} component={Form} />
+            <PrivateRoute path="/create" exact={true} component={Create} />
             <PrivateRoute path="/approve" exact={true} component={Approve} />
             <Route component={NotFound} />
           </Switch>
