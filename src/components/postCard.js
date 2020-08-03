@@ -13,6 +13,8 @@ import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import CancelIcon from '@material-ui/icons/Cancel';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
@@ -39,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PostCard({author}) {
+export default function PostCard({author, isApproved}) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
 
@@ -55,19 +57,14 @@ export default function PostCard({author}) {
             R
           </Avatar>
         }
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
-        }
         title={author}
         subheader="September 14, 2016"
       />
-      <CardMedia
+      {/* <CardMedia
         className={classes.media}
         image="/static/images/cards/paella.jpg"
         title="Paella dish"
-      />
+      /> */}
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">
           This impressive paella is a perfect party dish and a fun meal to cook together with your
@@ -75,12 +72,21 @@ export default function PostCard({author}) {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
-        </IconButton>
+        {
+          isApproved ?
+          <>
+          <IconButton aria-label="add to favorites">
+            <FavoriteIcon />
+          </IconButton>
+          </> : <>
+          <IconButton aria-label="approve">
+            <CheckCircleIcon htmlColor="green"/>
+          </IconButton>
+          <IconButton aria-label="reject">
+            <CancelIcon htmlColor="red"/>
+          </IconButton>
+          </>
+        }
         <IconButton
           className={clsx(classes.expand, {
             [classes.expandOpen]: expanded,
@@ -92,7 +98,8 @@ export default function PostCard({author}) {
           <ExpandMoreIcon />
         </IconButton>
       </CardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
+      {/* Can be used for long jokes */}
+      {/* <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           <Typography paragraph>Method:</Typography>
           <Typography paragraph>
@@ -118,7 +125,7 @@ export default function PostCard({author}) {
             Set aside off of the heat to let rest for 10 minutes, and then serve.
           </Typography>
         </CardContent>
-      </Collapse>
+      </Collapse> */}
     </Card>
   );
 }

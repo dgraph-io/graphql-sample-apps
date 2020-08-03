@@ -11,6 +11,7 @@ import AppBar from "@material-ui/core/AppBar";
 
 import LogoutButton from "../logoutButton";
 import LoginButton from "../loginButton";
+import SignupButton from "../signupButton";
 import { useAuth0 } from "@auth0/auth0-react";
 
 import clsx from "clsx";
@@ -42,7 +43,7 @@ const AuthNav = () => {
 
   return (
     <div>
-      {isAuthenticated ? <LogoutButton /> : <LoginButton />}
+      {isAuthenticated ? <LogoutButton /> : <><LoginButton /> <SignupButton /></>}
     </div>
   );
 };

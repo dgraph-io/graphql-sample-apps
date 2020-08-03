@@ -6,8 +6,8 @@ import Home from "./pages/home";
 import Profile from './pages/profile';
 import Types from "./pages/types";
 import Form from "./pages/form";
+import Approve from "./pages/approve"
 import NotFound from "./pages/not-found";
-
 
 import PrivateRoute from "./components/privateRoute"
 
@@ -15,7 +15,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
 import EditIcon from '@material-ui/icons/Edit';
-import SettingsIcon from '@material-ui/icons/Settings';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CssBaseline from "@material-ui/core/CssBaseline";
 
 import './App.css';
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 function App() {
   const classes = useStyles();
 
-  const { isLoading } = useAuth0();
+  const { isLoading, isAuthenticated } = useAuth0();
   if (isLoading) {
     return <Loading />;
   }
@@ -46,10 +46,10 @@ function App() {
         <SidebarItem label="Home" icon={HomeIcon} link="/" />
         <SidebarItem label="Profile" icon={PersonIcon} link="/profile" />
         <SidebarItem label="Create" icon={EditIcon} link="/form"/>
-        <SidebarItem label="Settings" icon={SettingsIcon}>
-          <SidebarItem label="Start" link="/not-implemented" />
-          <SidebarItem label="Here" link="/not-implemented" />
-        </SidebarItem>
+        {isAuthenticated ?
+          <SidebarItem label="Approve" icon={CheckCircleIcon} link="/approve" />:
+          <></>
+        }
       </Sidebar>
       <Router history={history}>
         <Suspense fallback={<div />}>
@@ -58,6 +58,7 @@ function App() {
             <PrivateRoute path="/profile" exact={true} component={Profile} />
             <PrivateRoute path="/types/:typeId" exact={true} component={Types} />
             <PrivateRoute path="/form" exact={true} component={Form} />
+            <PrivateRoute path="/approve" exact={true} component={Approve} />
             <Route component={NotFound} />
           </Switch>
         </Suspense>

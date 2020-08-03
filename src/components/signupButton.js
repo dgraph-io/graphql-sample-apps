@@ -11,7 +11,8 @@ const SignupButton = () => {
           screen_hint: "signup",
         })
       }
-      variant="primary"
+      variant="contained"
+      color="secondary"
       className="btn-margin"
     >
       Sign Up

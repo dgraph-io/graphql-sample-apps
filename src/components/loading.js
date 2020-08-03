@@ -4,7 +4,7 @@ const loading =
 
 const Loading = () => (
   <div className="spinner">
-    <img src={loading} class="center" alt="Loading" />
+    <img src={loading} alt="Loading" />
   </div>
 );
 
