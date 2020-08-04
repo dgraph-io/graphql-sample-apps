@@ -9,6 +9,7 @@ import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
+import ToggleButton from '@material-ui/lab/ToggleButton';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import FavoriteIcon from '@material-ui/icons/Favorite';
@@ -16,7 +17,7 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CancelIcon from '@material-ui/icons/Cancel';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { useQuery, useMutation } from "@apollo/react-hooks";
-import { DELETE_POST,APPROVE_POST } from "../gql/queryData"
+import { DELETE_POST,APPROVE_POST,UPDATE_LIKES } from "../gql/queryData"
 
 
 const useStyles = makeStyles((theme) => ({
@@ -42,15 +43,44 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PostCard({author, text, isApproved, postID, time}) {
+export default function PostCard({author, text, isApproved, postID, numLikes,time}) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
+  const [liked,setLiked] = React.useState(false);
   const [deletePost] = useMutation(DELETE_POST);
   const [approvePost] = useMutation(APPROVE_POST);
+  const [likePost] = useMutation(UPDATE_LIKES);
+
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
+  
+  const handleLike = () => {
+
+    //console.log("Approving post...", text, author)
+    console.log("liked",{liked})
+    if ({liked}==false) {
+      likePost({
+        variables: {
+          input:postID,
+          likes: numLikes+1
+        }
+      })
+    } else{
+      likePost({
+        variables: {
+          input:postID,
+          likes: numLikes-1
+        }
+      })
+    }
+ 
+    setLiked(!{liked})
+   
+  }
+  
+  
   const handleApprove = () => {
     console.log("Approving post...", text, author)
     
@@ -98,9 +128,9 @@ export default function PostCard({author, text, isApproved, postID, time}) {
         {
           isApproved ?
           <>
-          <IconButton aria-label="add to favorites">
+          <ToggleButton aria-label="add to favorites" onClick={handleLike}>
             <FavoriteIcon />
-          </IconButton>
+          </ToggleButton>
           </> : <>
           <IconButton aria-label="approve" onClick={handleApprove}>
             <CheckCircleIcon htmlColor="green"/>
