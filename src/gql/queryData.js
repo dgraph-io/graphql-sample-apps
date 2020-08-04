@@ -16,10 +16,10 @@ export const GET_USER = gql`
     getUser(username: $username) {
       username
       name
+      isMod
     }
   }
 `;
-
 
 export const ADD_POST = gql`
     mutation addPost($post: [AddPostInput!]!){
@@ -33,6 +33,7 @@ export const ADD_POST = gql`
                         name
                     }
                     timeStamp
+                    isApproved
             }
         }
     }

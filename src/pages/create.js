@@ -12,14 +12,7 @@ import TextField from "@material-ui/core/TextField";
 import {GET_USER, ADD_USER, ADD_POST} from "../gql/queryData"
 import { useAuth0 } from "@auth0/auth0-react";
 import { useQuery, useMutation } from "@apollo/react-hooks";
-
-const useImperativeQuery = (query) => {
-  const { refetch } = useQuery(query, {skip:true});
-  const imperativelyCallQuery = (variables) => {
-    return refetch(variables);
-  };
-  return imperativelyCallQuery;
-};
+import useImperativeQuery from "../utils/imperativeQuery"
 
 export const Create = () => {
   const [postText, setPostText] = useState("");
@@ -41,6 +34,7 @@ export const Create = () => {
       const newUser = {
         username: user.email,
         name: user.nickname,
+        isMod: false,
       };
       addUser({
         variables: {
@@ -54,13 +48,14 @@ export const Create = () => {
       evt.preventDefault();
       // user must exist
       console.log(new Date().toISOString())
-      console.log("Submitting post...", postText, user.email)
+      console.log("Submitting post...", postText, user.email, user.isMod)
       const newPost = [{
         text: postText,
         createdby: {
           username: user.email,
         },
         timeStamp: new Date().toISOString(),
+        isApproved: user.isMod ? true : false
       }];
       addPost({
         variables: {
