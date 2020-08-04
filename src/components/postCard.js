@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
@@ -15,9 +15,9 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CancelIcon from '@material-ui/icons/Cancel';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import { DELETE_POST,APPROVE_POST } from "../gql/queryData"
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PostCard({author, text, isApproved, postID}) {
+export default function PostCard({author, text, isApproved, postID, time}) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const [deletePost] = useMutation(DELETE_POST);
@@ -82,7 +82,7 @@ export default function PostCard({author, text, isApproved, postID}) {
           </Avatar>
         }
         title={author}
-        subheader="September 14, 2016"
+        subheader={time}
       />
       {/* <CardMedia
         className={classes.media}

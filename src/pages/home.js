@@ -9,17 +9,11 @@ import { Search } from "../components/searchbar/search";
 import { Sort } from "../components/searchbar/sort";
 import PostCard from "../components/postCard";
 
-const query = gql`{
-  __schema {
-    types {
-      name
-    }
-  }
-}`;
+import { GET_APPROVED_POST } from "../gql/queryData"
 
 const Home = () => {
 
-  const { loading, error, data } = useQuery(query);
+  const { loading, error, data } = useQuery(GET_APPROVED_POST);
   const history = useHistory();
   const handleClick = (event, value) => {
     history.push(`/types/${value}`)
@@ -30,16 +24,16 @@ const Home = () => {
     <Content>
       {!loading && !error ?
       <>
-      <Search data={data.__schema.types || []} label="Search your joke here" onChange={handleClick} />
+      <Search data={data.queryPost.text || []} label="Search your joke here" onChange={handleClick} />
       <Sort />
       </>
       : null}
-      <TypesList loading={loading} error={error} data={data} />
+      <PostList loading={loading} error={error} data={data} />
     </Content>
   </>
 }
 
-function TypesList({loading, error, data}) {
+function PostList({loading, error, data}) {
   if (loading) { return <Typography>Loading...</Typography> }
   if (error) {
     return <Typography>
@@ -47,9 +41,9 @@ function TypesList({loading, error, data}) {
     </Typography>
   }
   return <Grid container spacing={2}>
-    {data.__schema.types.map(type =>
-      <Grid item xs={12} sm={6} md={4} lg={3} key={type.name}>
-        <PostCard author={type.name} isApproved={true}/>
+    {data.queryPost.map(post =>
+      <Grid item xs={12} sm={6} md={4} lg={3} key={post.id}>
+        <PostCard author={post.createdby.username} text={post.text} postID={post.id} time={post.timeStamp} isApproved={true}/>
       </Grid>
     )}
   </Grid>;
