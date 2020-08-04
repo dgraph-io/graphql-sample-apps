@@ -69,6 +69,21 @@ query{
       createdby{
         username
       }
+      timeStamp
+      isApproved
+    }
+  }
+`;
+
+export const GET_APPROVED_POST = gql`
+query{
+    queryPost(filter:{isApproved:true}){
+      id
+      text
+      createdby{
+        username
+      }
+      timeStamp
       isApproved
     }
   }
