@@ -16,10 +16,10 @@ export const GET_USER = gql`
     getUser(username: $username) {
       username
       name
+      isMod
     }
   }
 `;
-
 
 export const ADD_POST = gql`
     mutation addPost($post: [AddPostInput!]!){
@@ -32,11 +32,12 @@ export const ADD_POST = gql`
                     tags{
                         name
                     }
+                    timeStamp
+                    isApproved
             }
         }
     }
 `;
-
 
 export const GET_POST_FOR_USER = gql`
 query queryUser($input: String!){
