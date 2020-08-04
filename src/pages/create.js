@@ -57,7 +57,6 @@ export const Create = () => {
         username: user.email
       });
 
-      console.log(new Date().toISOString())
       console.log("Submitting post...", postText, user.email, data.getUser.isMod)
       const newPost = [{
         text: postText,
@@ -76,7 +75,7 @@ export const Create = () => {
 
   useEffect( () => {
     createUser()
-  })
+  }, [user])
 
   return (
     <>
