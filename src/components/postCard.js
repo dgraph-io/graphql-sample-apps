@@ -17,7 +17,7 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { useQuery, useMutation } from "@apollo/react-hooks";
-import { DELETE_POST } from "../gql/queryData"
+import { DELETE_POST,APPROVE_POST } from "../gql/queryData"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,10 +46,20 @@ export default function PostCard({author, text, isApproved, postID}) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const [deletePost] = useMutation(DELETE_POST);
-
+  const [approvePost] = useMutation(APPROVE_POST);
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+
+  const handleApprove = () => {
+    console.log("Approving post...", text, author)
+    
+    approvePost({
+      variables: {
+        input:postID
+      }
+    })
+  }
 
   const handleReject = () => {
     console.log("Rejecting post...", text, author)
@@ -92,7 +102,7 @@ export default function PostCard({author, text, isApproved, postID}) {
             <FavoriteIcon />
           </IconButton>
           </> : <>
-          <IconButton aria-label="approve">
+          <IconButton aria-label="approve" onClick={handleApprove}>
             <CheckCircleIcon htmlColor="green"/>
           </IconButton>
           <IconButton aria-label="reject" onClick={handleReject}>

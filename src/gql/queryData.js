@@ -95,3 +95,19 @@ mutation deletePost($input: PostFilter!){
     } 
 }
 `;
+
+export const APPROVE_POST = gql`
+mutation updatePost($input:ID!){
+    updatePost(input:{
+      filter: {id : [$input]},
+      set: {isApproved:true}
+    }){
+      post{
+        text
+        createdby{
+          username
+        }
+      }
+    }
+}
+`;
