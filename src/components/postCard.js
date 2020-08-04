@@ -12,11 +12,12 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CancelIcon from '@material-ui/icons/Cancel';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+
+import { useQuery, useMutation } from "@apollo/react-hooks";
+import { DELETE_POST } from "../gql/queryData"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,13 +42,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PostCard({author, isApproved}) {
+export default function PostCard({author, text, isApproved, postID}) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
+  const [deletePost] = useMutation(DELETE_POST);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+
+  const handleReject = () => {
+    console.log("Rejecting post...", text, author)
+    const delPost = {
+      id : [postID]
+    };
+    deletePost({
+      variables: {
+        input: delPost
+      }
+    })
+}
 
   return (
     <Card className={classes.root}>
@@ -67,8 +81,7 @@ export default function PostCard({author, isApproved}) {
       /> */}
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">
-          This impressive paella is a perfect party dish and a fun meal to cook together with your
-          guests. Add 1 cup of frozen peas along with the mussels, if you like.
+          {text}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
@@ -82,7 +95,7 @@ export default function PostCard({author, isApproved}) {
           <IconButton aria-label="approve">
             <CheckCircleIcon htmlColor="green"/>
           </IconButton>
-          <IconButton aria-label="reject">
+          <IconButton aria-label="reject" onClick={handleReject}>
             <CancelIcon htmlColor="red"/>
           </IconButton>
           </>

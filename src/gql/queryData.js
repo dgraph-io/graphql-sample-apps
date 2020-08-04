@@ -64,6 +64,7 @@ export const SEARCH_POST_BY_TAG = gql`
 export const GET_UNAPPROVED_POST = gql`
 query{
     queryPost(filter:{isApproved:false}){
+      id
       text
       createdby{
         username
