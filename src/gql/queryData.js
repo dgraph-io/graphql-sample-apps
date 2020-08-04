@@ -70,6 +70,7 @@ query{
         username
       }
       timeStamp
+      numLikes
       isApproved
     }
   }
@@ -84,6 +85,7 @@ query{
         username
       }
       timeStamp
+      numLikes
       isApproved
     }
   }
@@ -116,6 +118,22 @@ mutation updatePost($input:ID!){
     updatePost(input:{
       filter: {id : [$input]},
       set: {isApproved:true}
+    }){
+      post{
+        text
+        createdby{
+          username
+        }
+      }
+    }
+}
+`;
+
+export const UPDATE_LIKES = gql`
+mutation updatePost($input:ID!,$likes:Int!){
+    updatePost(input:{
+      filter: {id : [$input]},
+      set: {numLikes :$likes}
     }){
       post{
         text
