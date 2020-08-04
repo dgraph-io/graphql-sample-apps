@@ -15,4 +15,5 @@ type Post{
     createdby: User!
     timeStamp: DateTime @search
     isApproved: Boolean @search
+    numLikes: Int @search
 }
