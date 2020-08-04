@@ -6,7 +6,7 @@ import { Navbar } from '../components/navbar';
 const Profile = () => {
 
   const { user } = useAuth0();
-  console.log(user)
+  console.log("Profile", user)
 
   return <>
     <Navbar title="Profile" color="primary" />

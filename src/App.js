@@ -80,7 +80,7 @@ function SideItem({user, label, icon, link}) {
       Something Went Wrong. Did you remember to set the REACT_APP_GRAPHQL_ENDPOINT environment variable?
     </Typography>
   }
-  console.log(data)
+  console.log("App:", data)
   return data.getUser && data.getUser.isMod ? <SidebarItem label="Approve" icon={CheckCircleIcon} link="/approve" user={user}/>:
   <></>
 }

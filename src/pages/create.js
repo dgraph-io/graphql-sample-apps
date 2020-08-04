@@ -16,8 +16,14 @@ import useImperativeQuery from "../utils/imperativeQuery"
 
 export const Create = () => {
   const [postText, setPostText] = useState("");
+
+  const printMessage = () => {
+    setPostText("")
+    alert("Joke submitted succesfully!!")
+  }
+
   const [addUser] = useMutation(ADD_USER);
-  const [addPost] = useMutation(ADD_POST);
+  const [addPost] = useMutation(ADD_POST, {onCompleted: printMessage});
   const getUsers = useImperativeQuery(GET_USER)
 
   const { user } = useAuth0()
@@ -44,18 +50,21 @@ export const Create = () => {
     }
   }
 
-  const handleSubmit = (evt) => {
+  const handleSubmit = async (evt) => {
       evt.preventDefault();
       // user must exist
-      console.log(new Date().toISOString())
-      console.log("Submitting post...", postText, user.email, user.isMod)
+      const { data } = await getUsers({
+        username: user.email
+      });
+
+      console.log("Submitting post...", postText, user.email, data.getUser.isMod)
       const newPost = [{
         text: postText,
         createdby: {
           username: user.email,
         },
         timeStamp: new Date().toISOString(),
-        isApproved: user.isMod ? true : false
+        isApproved: data.getUser.isMod ? true : false
       }];
       addPost({
         variables: {
@@ -66,7 +75,7 @@ export const Create = () => {
 
   useEffect( () => {
     createUser()
-  })
+  }, [user])
 
   return (
     <>
@@ -80,7 +89,7 @@ export const Create = () => {
             type="joke"
             name="Joke"
             margin="normal"
-            defaultValue={postText}
+            value={postText}
             variant="outlined"
             fullWidth
             multiline
