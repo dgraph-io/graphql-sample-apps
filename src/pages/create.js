@@ -64,7 +64,7 @@ export const Create = () => {
           username: user.email,
         },
         timeStamp: new Date().toISOString(),
-        isApproved: data.getUser.isMod ? true : false
+        isApproved: data.getUser.isMod ? true : false,
       }];
       addPost({
         variables: {

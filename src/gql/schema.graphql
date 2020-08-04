@@ -3,6 +3,7 @@ type User{
     name: String
     posts: [Post]
     isMod: Boolean
+    likedPost: [Post]
   }
 type Tag{
     name: String! @id @search(by: [fulltext])
@@ -15,5 +16,5 @@ type Post{
     createdby: User!
     timeStamp: DateTime @search
     isApproved: Boolean @search
-    numLikes: Int @search
+    likes: [User] @hasInverse(field: likedPost)
 }

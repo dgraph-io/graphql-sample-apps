@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { Router, Route, Switch } from "react-router-dom";
 
 import history from "./utils/history";
+import Dashboard from "./pages/dashboard";
 import Home from "./pages/home";
 import Profile from './pages/profile';
 import Types from "./pages/types";
@@ -17,6 +18,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
 import EditIcon from '@material-ui/icons/Edit';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import DashboardIcon from '@material-ui/icons/Dashboard';
 import CssBaseline from "@material-ui/core/CssBaseline";
 
 import './App.css';
@@ -45,18 +47,23 @@ function App() {
     <div className={classes.root}>
       <CssBaseline />
       <Sidebar>
-        <SidebarItem label="Home" icon={HomeIcon} link="/" />
-        { isAuthenticated ? <>
+        <></>
+        <>
+      { isAuthenticated ? <>
+        <SidebarItem label="Home" icon={HomeIcon} link="/home" />
         <SidebarItem label="Profile" icon={PersonIcon} link="/profile" />
         <SidebarItem label="Create" icon={EditIcon} link="/create"/>
         <SideItem label="Approve" icon={CheckCircleIcon} link="/approve" user={user}/>
-        </> : <></>
-        }
+        </> :
+        <SidebarItem label="DashBoard" icon={DashboardIcon} link="/"/>
+      }
+      </>
       </Sidebar>
       <Router history={history}>
         <Suspense fallback={<div />}>
           <Switch>
-            <Route path="/" exact={true} component={Home} />
+            <Route path="/" exact={true} component={Dashboard} />
+            <PrivateRoute path="/home" exact={true} component={Home} />
             <PrivateRoute path="/profile" exact={true} component={Profile} />
             <PrivateRoute path="/types/:typeId" exact={true} component={Types} />
             <PrivateRoute path="/create" exact={true} component={Create} />

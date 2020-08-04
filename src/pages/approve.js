@@ -22,7 +22,7 @@ function UnApprovedList({loading, error, data}) {
   if (loading) { return <Typography>Loading...</Typography> }
   if (error) {
     return <Typography>
-      Something Went Wrong. Did you remember to set the REACT_APP_GRAPHQL_ENDPOINT environment variable?
+      Something Went Wrong. Did you remember to set the REACT_APP_GRAPHQL_ENDPOINT environment variables?
     </Typography>
   }
   return <Grid container spacing={2}>

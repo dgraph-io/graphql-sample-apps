@@ -70,6 +70,9 @@ query{
         username
       }
       timeStamp
+      likes {
+        username
+      }
       isApproved
     }
   }
@@ -84,6 +87,9 @@ query{
         username
       }
       timeStamp
+      likes {
+        username
+      }
       isApproved
     }
   }
@@ -122,6 +128,32 @@ mutation updatePost($input:ID!){
         createdby{
           username
         }
+      }
+    }
+}
+`;
+
+export const LIKE_POST = gql`
+mutation updatePost($input:ID!,$likes:[UserRef!]!){
+    updatePost(input:{
+      filter: {id : [$input]},
+      set: {likes :$likes}
+    }){
+      post{
+        id
+      }
+    }
+}
+`;
+
+export const UNLIKE_POST = gql`
+mutation updatePost($input:ID!,$likes:[UserRef!]!){
+    updatePost(input:{
+      filter: {id : [$input]},
+      remove: {likes :$likes}
+    }){
+      post{
+        id
       }
     }
 }

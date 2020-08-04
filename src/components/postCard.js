@@ -9,15 +9,19 @@ import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
+import ToggleButton from '@material-ui/lab/ToggleButton';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CancelIcon from '@material-ui/icons/Cancel';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { useQuery, useMutation } from "@apollo/react-hooks";
-import { DELETE_POST,APPROVE_POST } from "../gql/queryData"
 
+import { useQuery, useMutation } from "@apollo/react-hooks";
+
+import { DELETE_POST, APPROVE_POST, LIKE_POST, UNLIKE_POST } from "../gql/queryData"
+import { useAuth0 } from '@auth0/auth0-react';
+import Loading from "./loading"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,15 +46,44 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PostCard({author, text, isApproved, postID, time}) {
+export default function PostCard({author, text, isApproved, postID, likes, time}) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
+  const { isLoading, user } = useAuth0()
+  const [liked, setLiked] = React.useState(false);
+
   const [deletePost] = useMutation(DELETE_POST);
   const [approvePost] = useMutation(APPROVE_POST);
+  const [likePost] = useMutation(LIKE_POST);
+  const [unlikePost] = useMutation(UNLIKE_POST);
+
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
+  const handleLike = () => {
+    if (liked) {
+      console.log("Unliking post...", postID)
+      unlikePost({
+        variables: {
+          input:postID,
+          likes: [{ username: user.email }]
+        }
+      })
+      setLiked(false)
+    } else{
+      console.log("Liking post...", postID)
+      likePost({
+        variables: {
+          input:postID,
+          likes: [{ username: user.email }]
+        }
+      })
+      setLiked(true)
+    }
+  }
+  
+  
   const handleApprove = () => {
     console.log("Approving post...", text, author)
     
@@ -71,7 +104,19 @@ export default function PostCard({author, text, isApproved, postID, time}) {
         input: delPost
       }
     })
-}
+  }
+
+  useEffect(() => {
+    likes.forEach( (item, idx) => {
+      if(item["username"] === user.email){
+        setLiked(true)
+      }    
+    })
+  },[user])
+
+  if(isLoading) {
+    return <Loading />
+  }
 
   return (
     <Card className={classes.root}>
@@ -98,9 +143,9 @@ export default function PostCard({author, text, isApproved, postID, time}) {
         {
           isApproved ?
           <>
-          <IconButton aria-label="add to favorites">
+          <ToggleButton aria-label="add to favorites" value="check" onChange={handleLike} selected={liked}>
             <FavoriteIcon />
-          </IconButton>
+          </ToggleButton>
           </> : <>
           <IconButton aria-label="approve" onClick={handleApprove}>
             <CheckCircleIcon htmlColor="green"/>
