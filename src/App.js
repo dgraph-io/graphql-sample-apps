@@ -10,6 +10,7 @@ import Approve from "./pages/approve"
 import NotFound from "./pages/not-found";
 
 import PrivateRoute from "./components/privateRoute"
+import {Typography} from '@material-ui/core';
 
 import { makeStyles } from "@material-ui/core/styles";
 import HomeIcon from '@material-ui/icons/Home';
@@ -24,6 +25,8 @@ import {Sidebar, SidebarItem} from './components/sidebar';
 import Loading from "./components/loading"
 
 import { useAuth0 } from "@auth0/auth0-react";
+import {GET_USER} from "./gql/queryData";
+import { useQuery, useMutation } from "@apollo/react-hooks";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,8 +36,7 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const classes = useStyles();
-
-  const { isLoading, isAuthenticated } = useAuth0();
+  const { isLoading, isAuthenticated, user } = useAuth0();
   if (isLoading) {
     return <Loading />;
   }
@@ -44,11 +46,11 @@ function App() {
       <CssBaseline />
       <Sidebar>
         <SidebarItem label="Home" icon={HomeIcon} link="/" />
+        { isAuthenticated ? <>
         <SidebarItem label="Profile" icon={PersonIcon} link="/profile" />
         <SidebarItem label="Create" icon={EditIcon} link="/create"/>
-        {isAuthenticated ?
-          <SidebarItem label="Approve" icon={CheckCircleIcon} link="/approve" />:
-          <></>
+        <SideItem label="Approve" icon={CheckCircleIcon} link="/approve" user={user}/>
+        </> : <></>
         }
       </Sidebar>
       <Router history={history}>
@@ -65,6 +67,22 @@ function App() {
       </Router>
     </div>
   )
+}
+
+function SideItem({user, label, icon, link}) {
+  const {loading, error, data} = useQuery(GET_USER, {variables: {username: user.email}})
+
+  if(loading) {
+    return <Loading />
+  }
+  if(error) {
+    return <Typography>
+      Something Went Wrong. Did you remember to set the REACT_APP_GRAPHQL_ENDPOINT environment variable?
+    </Typography>
+  }
+  console.log(data)
+  return data.getUser && data.getUser.isMod ? <SidebarItem label="Approve" icon={CheckCircleIcon} link="/approve" user={user}/>:
+  <></>
 }
 
 export default App;
