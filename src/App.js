@@ -3,6 +3,7 @@ import { Router, Route, Switch } from "react-router-dom";
 
 import history from "./utils/history";
 import Dashboard from "./pages/dashboard";
+import Login from "./pages/login";
 import Home from "./pages/home";
 import Profile from './pages/profile';
 import Types from "./pages/types";
@@ -68,6 +69,7 @@ function App() {
             <PrivateRoute path="/types/:typeId" exact={true} component={Types} />
             <PrivateRoute path="/create" exact={true} component={Create} />
             <PrivateRoute path="/approve" exact={true} component={Approve} />
+            <PrivateRoute path="/login" exact={true} component={Login} />
             <Route component={NotFound} />
           </Switch>
         </Suspense>
