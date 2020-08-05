@@ -167,24 +167,24 @@ query{
       createdby{
         username
       }
-      numLikes
+      
       timeStamp
     }
   }
 `;
 
-export const GET_LIKED_POSTS = gql`
-query{
-    queryPost(filter:{isApproved:true},order:{desc:numLikes}){
-      id
-      text
-      createdby{
-        username
-      }
-      numLikes
-      timeStamp
-    }
-  }
-`;
+// export const GET_LIKED_POSTS = gql`
+// query{
+//     queryPost(filter:{isApproved:true},order:{desc:numLikes}){
+//       id
+//       text
+//       createdby{
+//         username
+//       }
+     
+//       timeStamp
+//     }
+//   }
+// `;
 
 
