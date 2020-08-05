@@ -51,6 +51,7 @@ export default function PostCard({author, text, isApproved, postID, likes, time,
   const [expanded, setExpanded] = React.useState(false);
   const { isLoading, user } = useAuth0()
   const [liked, setLiked] = React.useState(false);
+  const [numlikes,setnumlikes] = React.useState(likes.length);
 
   const [deletePost] = useMutation(DELETE_POST, {update:updateCache});
   const [approvePost] = useMutation(APPROVE_POST, {update:updateCache});
@@ -71,6 +72,7 @@ export default function PostCard({author, text, isApproved, postID, likes, time,
         }
       })
       setLiked(false)
+      setnumlikes(numlikes-1)
     } else{
       console.log("Liking post...", postID)
       likePost({
@@ -80,6 +82,7 @@ export default function PostCard({author, text, isApproved, postID, likes, time,
         }
       })
       setLiked(true)
+      setnumlikes(numlikes+1)
     }
   }
   
@@ -138,14 +141,19 @@ export default function PostCard({author, text, isApproved, postID, likes, time,
         <Typography variant="body2" color="textSecondary" component="p">
           {text}
         </Typography>
+        
       </CardContent>
       <CardActions disableSpacing>
         {
           isApproved ?
           <>
+          <Typography variant="button" color="primary" component="p">
+          {numlikes}
+          </Typography>
           <ToggleButton aria-label="add to favorites" value="check" onChange={handleLike} selected={liked}>
             <FavoriteIcon />
           </ToggleButton>
+          
           </> : <>
           <IconButton aria-label="approve" onClick={handleApprove}>
             <CheckCircleIcon htmlColor="green"/>
