@@ -180,3 +180,34 @@ query{
   }
 }
 `;
+
+export const GET_RECENT_POSTS = gql`
+query{
+    queryPost(filter:{isApproved:true},order:{desc:timeStamp}){
+      id
+      text
+      createdby{
+        username
+      }
+      
+      timeStamp
+    }
+  }
+`;
+
+export const SEARCH_POSTS = gql`
+query($text:String!){
+  queryPost(filter:{text:{anyoftext:$text},isApproved:true}){
+    text
+    id
+    createdby{
+      username
+    }
+    isApproved
+    timeStamp
+    likes{
+      username
+    }
+  }
+}
+`;
