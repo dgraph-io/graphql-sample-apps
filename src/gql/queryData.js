@@ -65,6 +65,9 @@ export const SEARCH_POST_BY_TAG = gql`
             likes{
               username
             }
+            tags {
+              name
+            }
           }
         }
     }

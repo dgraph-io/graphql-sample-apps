@@ -52,7 +52,7 @@ export default function PostCard({author, text, isApproved, postID, likes, time,
   const [expanded, setExpanded] = React.useState(false);
   const { isLoading, user } = useAuth0()
   const [liked, setLiked] = React.useState(false);
-  const [numlikes,setnumlikes] = React.useState(likes.length);
+  const [numlikes,setnumlikes] = React.useState(0);
 
   const [deletePost] = useMutation(DELETE_POST, {update:updateCache});
   const [approvePost] = useMutation(APPROVE_POST, {update:updateCache});
@@ -128,6 +128,7 @@ export default function PostCard({author, text, isApproved, postID, likes, time,
         setLiked(true)
       }    
     })
+    setnumlikes(likes.length)
   },[user])
 
   if(isLoading) {
