@@ -158,3 +158,11 @@ mutation updatePost($input:ID!,$likes:[UserRef!]!){
     }
 }
 `;
+
+export const GET_TAGS = gql`
+query{
+    queryTag {
+      name
+  }
+}
+`;
