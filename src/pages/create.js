@@ -62,6 +62,8 @@ export const Create = () => {
   const [tags, setTags] = useState([]);
   const [names, setNames] = useState([]);
   const [postText, setPostText] = useState("");
+  const [postTags, setPostTags] = useState("");
+
 
   const printMessage = () => {
     setPostText("")
@@ -98,6 +100,7 @@ export const Create = () => {
         },
         tags: formatted_tags,
         timeStamp: new Date().toISOString(),
+        numLikes: 0,
         isApproved: data.getUser.isMod ? true : false,
       }];
       addPost({
