@@ -3,6 +3,7 @@ import { Router, Route, Switch } from "react-router-dom";
 
 import history from "./utils/history";
 import Home from "./pages/home";
+import GenerateData from "./pages/generate-data";
 import Metrics from "./pages/metrics";
 import AddData from "./pages/add-data";
 import NotFound from "./pages/not-found";
@@ -34,6 +35,7 @@ function App() {
         <SidebarItem label="Settings" icon={SettingsIcon}>
           <SidebarItem label="Metrics" link="/metrics" />
           <SidebarItem label="Add Data" link="/add-data" />
+          <SidebarItem label="Generate Data" link="/generate-data" />
         </SidebarItem>
       </Sidebar>
       <Router history={history}>
@@ -42,6 +44,7 @@ function App() {
             <Route path="/" exact={true} component={Home} />
             <Route path="/metrics" exact={true} component={Metrics} />
             <Route path="/add-data" exact={true} component={AddData} />
+            <Route path="/generate-data" exact={true} component={GenerateData} />
             <Route component={NotFound} />
           </Switch>
         </Suspense>

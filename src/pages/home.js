@@ -21,10 +21,10 @@ query QueryMetrics($timestampGE: DateTime!, $timestampLT: DateTime!){
 }`;
 
 const Home = ({currentTime = new Date()}) => {
-  const [startTime] = useState(currentTime)
-  const oneMonthAgo = new Date(startTime.getTime() -  28 * 3600 * 1000 * 24);
-  const startDate = startTime.toISOString().substr(0, 10)
-  const endDate = oneMonthAgo.toISOString().substr(0, 10)
+  const [endTime] = useState(currentTime)
+  const oneMonthAgo = new Date(endTime.getTime() -  28 * 3600 * 1000 * 24);
+  const startDate = oneMonthAgo.toISOString().substr(0, 10)
+  const endDate = endTime.toISOString().substr(0, 10)
 
   const {loading, error, data, refetch} = useQuery(query, {
     variables: {
@@ -38,7 +38,7 @@ const Home = ({currentTime = new Date()}) => {
       name,
       data: [
         ["Timestamp", name],
-        ...readings.map(({ value, collection }) => [new Date(collection.timestamp), value]).sort(([k, _]) => k)
+        ...readings.map(({ value, collection }) => [new Date(collection.timestamp), value]).sort(([k1], [k2]) => k1 < k2 ? -1 : 1)
       ]
     }));
   }, [data])
