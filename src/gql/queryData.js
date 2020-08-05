@@ -100,6 +100,9 @@ query{
         username
       }
       isApproved
+      tags{
+          name
+      }
     }
   }
 `;
@@ -177,6 +180,9 @@ query{
         username
       }
       timeStamp
+      tags{
+          name
+      }
     }
   }
 `;
@@ -214,6 +220,9 @@ query($text:String!){
     timeStamp
     likes{
       username
+    }
+    tags{
+        name
     }
   }
 }
