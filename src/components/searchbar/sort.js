@@ -4,6 +4,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
+import  {GET_LIKED_POSTS,GET_RECENT_POSTS}   from "../../gql/queryData.js";
+
+
+
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -24,6 +28,7 @@ export function Sort() {
 
   const handleChange = (event) => {
     const name = event.target.name;
+    console.log(event.target.value)
     setState({
       ...state,
       [name]: event.target.value,
@@ -45,9 +50,9 @@ export function Sort() {
           }}
         >
           <option aria-label="None" value="" />
-          <option>Newest</option>
-          <option>Oldest</option>
-          <option>Most Liked</option>
+          <option value="new">Newest</option>
+          <option value="old">Oldest</option>
+          <option value="liked">Most Liked</option>
         </Select>
       </FormControl>
     </div>
