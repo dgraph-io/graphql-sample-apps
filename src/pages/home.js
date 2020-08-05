@@ -11,8 +11,9 @@ import PostCard from "../components/postCard";
 
 import { GET_APPROVED_POST } from "../gql/queryData"
 
-const Home = () => {
-
+const Home = (value) => {
+  console.log("home");
+  console.log(value);
   const { loading, error, data } = useQuery(GET_APPROVED_POST);
   const history = useHistory();
   const handleClick = (event, value) => {
