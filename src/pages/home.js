@@ -10,6 +10,7 @@ import PostCard from "../components/postCard";
 import { GET_APPROVED_POST, SEARCH_POSTS } from "../gql/queryData"
 import useImperativeQuery from "../utils/imperativeQuery"
 
+
 const Home = () => {
   const [mydata, setMydata] = useState(null)
   const searchPosts = useImperativeQuery(SEARCH_POSTS)

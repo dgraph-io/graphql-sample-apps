@@ -16,6 +16,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CancelIcon from '@material-ui/icons/Cancel';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import DateTimeFormat from 'dateformat';
 
 import { useQuery, useMutation } from "@apollo/react-hooks";
 
@@ -58,7 +59,8 @@ export default function PostCard({author, text, isApproved, postID, likes, time,
   const [likePost] = useMutation(LIKE_POST);
   const [unlikePost] = useMutation(UNLIKE_POST);
 
-  const handleExpandClick = () => {
+
+ const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
@@ -130,7 +132,7 @@ export default function PostCard({author, text, isApproved, postID, likes, time,
           </Avatar>
         }
         title={author}
-        subheader={time}
+        subheader={DateTimeFormat(time, "mmmm dS, yyyy ,h:MM:ss TT ")}
       />
       {/* <CardMedia
         className={classes.media}
