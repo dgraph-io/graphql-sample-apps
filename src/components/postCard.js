@@ -47,17 +47,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PostCard({author, text, isApproved, postID, likes, time, updateCache}) {
+export default function PostCard({author, text, isApproved, postID, likes, time,tags, updateCache}) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const { isLoading, user } = useAuth0()
   const [liked, setLiked] = React.useState(false);
-  const [numlikes,setnumlikes] = React.useState(0);
+  const [numlikes,setnumlikes] = React.useState(likes.length);
 
   const [deletePost] = useMutation(DELETE_POST, {update:updateCache});
   const [approvePost] = useMutation(APPROVE_POST, {update:updateCache});
   const [likePost] = useMutation(LIKE_POST);
   const [unlikePost] = useMutation(UNLIKE_POST);
+
+  var i, tagString
+  tagString="tags:"
+  for (i = 0 ; i < tags.length;i++){
+    tagString+=tags[i].name
+    if (i<tags.length-1){
+      tagString+=", "
+    }
+  }
 
 
  const handleExpandClick = () => {
@@ -117,7 +126,6 @@ export default function PostCard({author, text, isApproved, postID, likes, time,
         setLiked(true)
       }    
     })
-    setnumlikes(likes.length)
   },[user])
 
   if(isLoading) {
@@ -129,11 +137,14 @@ export default function PostCard({author, text, isApproved, postID, likes, time,
       <CardHeader
         avatar={
           <Avatar aria-label="recipe" className={classes.avatar}>
-            R
+             {author[0].toUpperCase()}
           </Avatar>
         }
         title={author}
-        subheader={DateTimeFormat(time, "mmmm dS, yyyy ,h:MM:ss TT ")}
+        subheader={DateTimeFormat(time, "mmmm dS, yyyy ,h:MM:ss TT")+"\n"+ tagString}
+        // subheader={<Typography variant="caption" color="initial" component="p">
+        // { "tags: "+tags[0].name}
+        // </Typography>}
       />
       {/* <CardMedia
         className={classes.media}
@@ -141,6 +152,7 @@ export default function PostCard({author, text, isApproved, postID, likes, time,
         title="Paella dish"
       /> */}
       <CardContent>
+        
         <Typography variant="body2" color="textSecondary" component="p">
           {text}
         </Typography>

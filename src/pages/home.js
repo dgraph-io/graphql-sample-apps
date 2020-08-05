@@ -68,7 +68,7 @@ function PostList({mydata}) {
   return <Grid container spacing={2}>
     {mydata.queryPost.map(post =>
       <Grid item xs={12} sm={6} md={4} lg={3} key={post.id}>
-        <PostCard author={post.createdby.username} text={post.text} postID={post.id} time={post.timeStamp} likes={post.likes} isApproved={true}/>
+        <PostCard author={post.createdby.username} text={post.text} postID={post.id} time={post.timeStamp} likes={post.likes} tags={post.tags} isApproved={true}/>
       </Grid>
     )}
   </Grid>;
