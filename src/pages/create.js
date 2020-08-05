@@ -16,6 +16,8 @@ import useImperativeQuery from "../utils/imperativeQuery"
 
 export const Create = () => {
   const [postText, setPostText] = useState("");
+  const [postTags, setPostTags] = useState("");
+
 
   const printMessage = () => {
     setPostText("")
@@ -64,6 +66,7 @@ export const Create = () => {
           username: user.email,
         },
         timeStamp: new Date().toISOString(),
+        numLikes: 0,
         isApproved: data.getUser.isMod ? true : false,
       }];
       addPost({

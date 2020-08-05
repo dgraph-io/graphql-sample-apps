@@ -158,3 +158,33 @@ mutation updatePost($input:ID!,$likes:[UserRef!]!){
     }
 }
 `;
+
+export const GET_RECENT_POSTS = gql`
+query{
+    queryPost(filter:{isApproved:true},order:{desc:timeStamp}){
+      id
+      text
+      createdby{
+        username
+      }
+      numLikes
+      timeStamp
+    }
+  }
+`;
+
+export const GET_LIKED_POSTS = gql`
+query{
+    queryPost(filter:{isApproved:true},order:{desc:numLikes}){
+      id
+      text
+      createdby{
+        username
+      }
+      numLikes
+      timeStamp
+    }
+  }
+`;
+
+
