@@ -3,6 +3,7 @@ import { Router, Route, Switch } from "react-router-dom";
 
 import history from "./utils/history";
 import Home from "./pages/home";
+import Metrics from "./pages/metrics";
 import NotFound from "./pages/not-found";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -30,7 +31,7 @@ function App() {
       <Sidebar>
         <SidebarItem label="Home" icon={HomeIcon} link="/" />
         <SidebarItem label="Settings" icon={SettingsIcon}>
-          <SidebarItem label="Start" link="/not-implemented" />
+          <SidebarItem label="Metrics" link="/metrics" />
           <SidebarItem label="Here" link="/not-implemented" />
         </SidebarItem>
       </Sidebar>
@@ -38,6 +39,7 @@ function App() {
         <Suspense fallback={<div />}>
           <Switch>
             <Route path="/" exact={true} component={Home} />
+            <Route path="/metrics" exact={true} component={Metrics} />
             <Route component={NotFound} />
           </Switch>
         </Suspense>

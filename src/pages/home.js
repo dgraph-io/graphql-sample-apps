@@ -1,5 +1,5 @@
-import React, { useMemo } from "react";
-import { Typography, CircularProgress, Backdrop, Grid, Card, CardHeader, CardContent} from '@material-ui/core';
+import React, { useMemo, useState } from "react";
+import { CircularProgress, Backdrop, Grid, Card, CardContent, TextField, Typography} from '@material-ui/core';
 import {Alert} from '@material-ui/lab';
 import { gql, useQuery } from '@apollo/client'
 import Chart from "react-google-charts";
@@ -21,11 +21,16 @@ query QueryMetrics($timestampGE: DateTime!, $timestampLT: DateTime!){
   }
 }`;
 
-const Home = () => {
-  const {loading, error, data} = useQuery(query, {
-      variables: {
-      timestampGE: "2020-07-01",
-      timestampLT: "2020-08-02",
+const Home = ({currentTime = new Date()}) => {
+  const [startTime] = useState(currentTime)
+  const oneMonthAgo = new Date(startTime.getTime() -  28 * 3600 * 1000 * 24);
+  const startDate = currentTime.toISOString().substr(0, 10)
+  const endDate = oneMonthAgo.toISOString().substr(0, 10)
+
+  const {loading, error, data, refetch} = useQuery(query, {
+    variables: {
+      timestampGE: startDate,
+      timestampLT: endDate,
     }
   });
   const graphData = useMemo(() => {
@@ -46,21 +51,47 @@ const Home = () => {
         <CircularProgress />
       </Backdrop>}
       {error && <Alert severity="error">Something Went Horribly Wrong</Alert>}
-      <Grid container spacing="3">
-        {graphData.map(({name, data}, index) => <Grid item key={index} sm="12" lg="6">
+      <Grid container spacing={3}>
+        <Grid item sm={12}>
+          <Card style={{ padding: 30 }}>
+            <TextField
+              label="From"
+              type="date"
+              defaultValue={startDate}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              style={{marginRight: 20}}
+              onChange={e => refetch({ timestampGE: e.target.value })}
+            />
+            <TextField
+              label="To"
+              type="date"
+              defaultValue={endDate }
+              InputLabelProps={{
+                shrink: true,
+              }}
+              onChange={e => refetch({ timestampLT: e.target.value })}
+            />
+          </Card>
+        </Grid>
+        {graphData.map(({name, data}, index) => <Grid item key={index} sm={12} lg={6}>
           <Card style={{textAlign: "center"}}>
             <CardContent>
               <h3>{name}</h3>
-              <Chart
-                chartType="LineChart"
-                width="100%"
-                loader={<CircularProgress />}
-                data={data}
-                options={{
-                  pointSize: 5,
-                  curveType: "function",
-                  legend: { position: "none" }
-                }} />
+              {data.length > 1
+                ? <Chart
+                    chartType="LineChart"
+                    width="100%"
+                    loader={<CircularProgress />}
+                    data={data}
+                    options={{
+                      pointSize: 5,
+                      curveType: "function",
+                      legend: { position: "none" }
+                    }} />
+                : <Typography>Not enough Data to show this chart</Typography>}
+
             </CardContent>
           </Card>
         </Grid>)}
