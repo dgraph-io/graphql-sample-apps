@@ -4,9 +4,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
-import  {GET_LIKED_POSTS,GET_RECENT_POSTS}   from "../../gql/queryData.js";
-import HOME from "../../pages/home";
-
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -18,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export function Sort() {
+export function Sort({cb}) {
   const classes = useStyles();
   const [state, setState] = React.useState({
     sort: '',
@@ -27,14 +24,12 @@ export function Sort() {
 
   const handleChange = (event) => {
     const name = event.target.name;
-    
-    
-    
     setState({
       ...state,
       [name]: event.target.value,
     });
-    return <HOME value={event.target.value}/>
+    const by = event.target.value;
+    cb(by)
   };
 
   return (

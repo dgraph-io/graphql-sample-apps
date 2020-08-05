@@ -7,14 +7,16 @@ import { Search } from "../components/searchbar/search";
 import { Sort } from "../components/searchbar/sort";
 import PostCard from "../components/postCard";
 
-import { GET_APPROVED_POST, SEARCH_POSTS } from "../gql/queryData"
+import { GET_RECENT_POSTS, GET_OLDEST_POSTS, GET_APPROVED_POST, SEARCH_POSTS } from "../gql/queryData";
 import useImperativeQuery from "../utils/imperativeQuery"
 
 
 const Home = () => {
   const [mydata, setMydata] = useState(null)
   const searchPosts = useImperativeQuery(SEARCH_POSTS)
-  let getPosts = useImperativeQuery(GET_APPROVED_POST);
+  const getPosts = useImperativeQuery(GET_APPROVED_POST);
+  const getMostRecentPosts = useImperativeQuery(GET_RECENT_POSTS);
+  const getMostOldestPosts = useImperativeQuery(GET_OLDEST_POSTS);
 
   const handleClick = async (event, value) => {
     if(value === null)
@@ -28,8 +30,22 @@ const Home = () => {
 
   const getData = async () => {
     const {data} = await getPosts();
+    console.log(data)
     setMydata(data)
   }
+
+  const sortBy = async (by) => {
+    let data;
+    console.log("triggered", by)
+    if(by == "new"){
+      data = await getMostRecentPosts()
+    } else if(by == "old"){
+      data = await getMostOldestPosts()
+    }
+    console.log("Data after sort:", data.data)
+    setMydata(data.data)
+  }
+
   useEffect( () => {
     getData()
   }, [])
@@ -40,7 +56,7 @@ const Home = () => {
       { mydata != null &&
       <>
       <Search data={[]} label="Search your joke here" onChange={handleClick} />
-      <Sort/>
+      <Sort cb={sortBy}/>
       <PostList mydata={mydata}/>
       </>
       }

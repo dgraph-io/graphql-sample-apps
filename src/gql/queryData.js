@@ -167,7 +167,19 @@ query{
       createdby{
         username
       }
-      
+      timeStamp
+    }
+  }
+`;
+
+export const GET_OLDEST_POSTS = gql`
+query{
+    queryPost(filter:{isApproved:true},order:{asc:timeStamp}){
+      id
+      text
+      createdby{
+        username
+      }
       timeStamp
     }
   }
@@ -179,20 +191,6 @@ query{
       name
   }
 }
-`;
-
-export const GET_RECENT_POSTS = gql`
-query{
-    queryPost(filter:{isApproved:true},order:{desc:timeStamp}){
-      id
-      text
-      createdby{
-        username
-      }
-      
-      timeStamp
-    }
-  }
 `;
 
 export const SEARCH_POSTS = gql`
