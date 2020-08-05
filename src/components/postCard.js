@@ -112,7 +112,9 @@ export default function PostCard({author, text, isApproved, postID, likes, time,
   }
 
   useEffect(() => {
-    likes.forEach( (item, idx) => {
+    if(!likes)
+      return
+    likes.forEach( (item) => {
       if(item["username"] === user.email){
         setLiked(true)
       }    
