@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { CircularProgress, Backdrop, Card, CardContent, TextField, List, ListItem, Button, Typography} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { CircularProgress, Backdrop, Card, TextField, List, ListItem, Button, Typography} from '@material-ui/core';
 import {Alert} from '@material-ui/lab';
 import { gql, useQuery, useMutation } from '@apollo/client'
 
 import Content from '../components/content';
 import { Navbar } from '../components/navbar';
+import UglyButton from "../components/ugly-button";
 
 const query = gql`{
   queryMetric {
@@ -22,20 +22,8 @@ mutation AddMetric($newMetricName: String!) {
   }
 }`
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    margin: "4px 12px",
-    backgroundColor: theme.palette.primary.main,
-    color: "white",
-    '&:hover': {
-      backgroundColor: theme.palette.secondary.main,
-    }
-  }
-}))
-
 const Metrics = () => {
   const {loading, error, data} = useQuery(query);
-  const { root } = useStyles();
   const [newMetricName, setNewMetricName] = useState("");
   const [addMetric, { loading: mutationLoading }] = useMutation(addMetricMutation, {
     awaitRefetchQueries: true,
@@ -64,7 +52,9 @@ const Metrics = () => {
           defaultValue={newMetricName}
           onChange={e => setNewMetricName(e.target.value)}
         />
-        <Button onClick={() => addMetric({variables: { newMetricName }}) } color="primary" size="large" className={root} disabled={newMetricName === ""}>Add Metric</Button>
+        <UglyButton onClick={() => addMetric({ variables: { newMetricName } })} disabled={newMetricName === ""}>
+          Add Metric
+        </UglyButton>
       </Card>
     </Content>
   </>

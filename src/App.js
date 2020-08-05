@@ -4,6 +4,7 @@ import { Router, Route, Switch } from "react-router-dom";
 import history from "./utils/history";
 import Home from "./pages/home";
 import Metrics from "./pages/metrics";
+import AddData from "./pages/add-data";
 import NotFound from "./pages/not-found";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -32,7 +33,7 @@ function App() {
         <SidebarItem label="Home" icon={HomeIcon} link="/" />
         <SidebarItem label="Settings" icon={SettingsIcon}>
           <SidebarItem label="Metrics" link="/metrics" />
-          <SidebarItem label="Here" link="/not-implemented" />
+          <SidebarItem label="Add Data" link="/add-data" />
         </SidebarItem>
       </Sidebar>
       <Router history={history}>
@@ -40,6 +41,7 @@ function App() {
           <Switch>
             <Route path="/" exact={true} component={Home} />
             <Route path="/metrics" exact={true} component={Metrics} />
+            <Route path="/add-data" exact={true} component={AddData} />
             <Route component={NotFound} />
           </Switch>
         </Suspense>

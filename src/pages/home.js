@@ -4,7 +4,6 @@ import {Alert} from '@material-ui/lab';
 import { gql, useQuery } from '@apollo/client'
 import Chart from "react-google-charts";
 
-
 import Content from '../components/content';
 import { Navbar } from '../components/navbar';
 
@@ -24,7 +23,7 @@ query QueryMetrics($timestampGE: DateTime!, $timestampLT: DateTime!){
 const Home = ({currentTime = new Date()}) => {
   const [startTime] = useState(currentTime)
   const oneMonthAgo = new Date(startTime.getTime() -  28 * 3600 * 1000 * 24);
-  const startDate = currentTime.toISOString().substr(0, 10)
+  const startDate = startTime.toISOString().substr(0, 10)
   const endDate = oneMonthAgo.toISOString().substr(0, 10)
 
   const {loading, error, data, refetch} = useQuery(query, {
