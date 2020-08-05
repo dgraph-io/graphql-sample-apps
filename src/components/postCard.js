@@ -46,14 +46,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PostCard({author, text, isApproved, postID, likes, time}) {
+export default function PostCard({author, text, isApproved, postID, likes, time, updateCache}) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const { isLoading, user } = useAuth0()
   const [liked, setLiked] = React.useState(false);
 
-  const [deletePost] = useMutation(DELETE_POST);
-  const [approvePost] = useMutation(APPROVE_POST);
+  const [deletePost] = useMutation(DELETE_POST, {update:updateCache});
+  const [approvePost] = useMutation(APPROVE_POST, {update:updateCache});
   const [likePost] = useMutation(LIKE_POST);
   const [unlikePost] = useMutation(UNLIKE_POST);
 
