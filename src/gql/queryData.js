@@ -173,18 +173,10 @@ query{
   }
 `;
 
-// export const GET_LIKED_POSTS = gql`
-// query{
-//     queryPost(filter:{isApproved:true},order:{desc:numLikes}){
-//       id
-//       text
-//       createdby{
-//         username
-//       }
-     
-//       timeStamp
-//     }
-//   }
-// `;
-
-
+export const GET_TAGS = gql`
+query{
+    queryTag {
+      name
+  }
+}
+`;
