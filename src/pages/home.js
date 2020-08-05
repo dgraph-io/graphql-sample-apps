@@ -36,11 +36,11 @@ const Home = () => {
 function PostList({loading, error, data}) {
   if (loading) { return <Typography>Loading...</Typography> }
   if (error) {
+    console.log(error)
     return <Typography>
-      Something Went Wrong. Did you remember to set the REACT_APP_GRAPHQL_ENDPOINT environment variable?
+      "Error fetching posts"
     </Typography>
   }
-  console.log(data)
   return <Grid container spacing={2}>
     {data.queryPost.map(post =>
       <Grid item xs={12} sm={6} md={4} lg={3} key={post.id}>
