@@ -53,10 +53,19 @@ query queryUser($input: String!){
 export const SEARCH_POST_BY_TAG = gql`
     query queryTag($input:String!) {
         queryTag(filter:{name: {alloftext: $input} }) {
-        name
-        posts{
+          name
+          posts{
             text
-        }
+            id
+            createdby{
+              username
+            }
+            isApproved
+            timeStamp
+            likes{
+              username
+            }
+          }
         }
     }
 `;

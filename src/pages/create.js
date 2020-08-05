@@ -100,7 +100,6 @@ export const Create = () => {
         },
         tags: formatted_tags,
         timeStamp: new Date().toISOString(),
-        numLikes: 0,
         isApproved: data.getUser.isMod ? true : false,
       }];
       addPost({
