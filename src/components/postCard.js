@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
+
+import Box from '@material-ui/core/Box';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -15,6 +17,7 @@ import { red } from '@material-ui/core/colors';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CancelIcon from '@material-ui/icons/Cancel';
+import EditIcon from '@material-ui/icons/Edit';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import DateTimeFormat from 'dateformat';
 
@@ -59,21 +62,15 @@ export default function PostCard({author, text, isApproved, postID, likes, time,
   const [likePost] = useMutation(LIKE_POST);
   const [unlikePost] = useMutation(UNLIKE_POST);
 
-  var i, tagString
-  tagString="tags:"
-  for (i = 0 ; i < tags.length;i++){
-    tagString+=tags[i].name
-    if (i<tags.length-1){
-      tagString+=", "
-    }
-  }
-
-
  const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
   const handleLike = () => {
+    if(!user) {
+      alert("Login to like the post")
+      return
+    }
     if (liked) {
       console.log("Unliking post...", postID)
       unlikePost({
@@ -137,18 +134,6 @@ export default function PostCard({author, text, isApproved, postID, likes, time,
 
   return (
     <Card className={classes.root}>
-      <CardHeader
-        avatar={
-          <Avatar aria-label="recipe" className={classes.avatar}>
-             {author[0].toUpperCase()}
-          </Avatar>
-        }
-        title={author}
-        subheader={DateTimeFormat(time, "mmmm dS, yyyy ,h:MM:ss TT")+"\n"+ tagString}
-        // subheader={<Typography variant="caption" color="initial" component="p">
-        // { "tags: "+tags[0].name}
-        // </Typography>}
-      />
       {/* <CardMedia
         className={classes.media}
         image="/static/images/cards/paella.jpg"
@@ -179,6 +164,10 @@ export default function PostCard({author, text, isApproved, postID, likes, time,
           <IconButton aria-label="reject" onClick={handleReject}>
             <CancelIcon htmlColor="red"/>
           </IconButton>
+          {/* TODO: implement handleEdit */}
+          <IconButton aria-label="edit">
+            <EditIcon htmlColor="blue"/>
+          </IconButton>
           </>
         }
         <IconButton
@@ -192,34 +181,29 @@ export default function PostCard({author, text, isApproved, postID, likes, time,
           <ExpandMoreIcon />
         </IconButton>
       </CardActions>
-      {/* Can be used for long jokes */}
-      {/* <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
-          <Typography paragraph>Method:</Typography>
-          <Typography paragraph>
-            Heat 1/2 cup of the broth in a pot until simmering, add saffron and set aside for 10
-            minutes.
-          </Typography>
-          <Typography paragraph>
-            Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet over medium-high
-            heat. Add chicken, shrimp and chorizo, and cook, stirring occasionally until lightly
-            browned, 6 to 8 minutes. Transfer shrimp to a large plate and set aside, leaving chicken
-            and chorizo in the pan. Add pimentón, bay leaves, garlic, tomatoes, onion, salt and
-            pepper, and cook, stirring often until thickened and fragrant, about 10 minutes. Add
-            saffron broth and remaining 4 1/2 cups chicken broth; bring to a boil.
-          </Typography>
-          <Typography paragraph>
-            Add rice and stir very gently to distribute. Top with artichokes and peppers, and cook
-            without stirring, until most of the liquid is absorbed, 15 to 18 minutes. Reduce heat to
-            medium-low, add reserved shrimp and mussels, tucking them down into the rice, and cook
-            again without stirring, until mussels have opened and rice is just tender, 5 to 7
-            minutes more. (Discard any mussels that don’t open.)
-          </Typography>
-          <Typography>
-            Set aside off of the heat to let rest for 10 minutes, and then serve.
-          </Typography>
-        </CardContent>
-      </Collapse> */}
+      <Collapse in={expanded} timeout="auto" unmountOnExit>
+      <CardHeader
+        avatar={
+          <Avatar aria-label="recipe" className={classes.avatar}>
+             {author[0].toUpperCase()}
+          </Avatar>
+        }
+        title={author}
+        subheader={DateTimeFormat(time, "mmm dS, yyyy ,h:MM TT")}
+      />
+      <TagList tags={tags} />
+      </Collapse>
     </Card>
   );
+}
+
+function TagList({tags}) {
+  return ( <div>
+    {tags.map( tag => 
+      <Box component="div" display="inline" p={1} m={1} bgcolor="yellow">
+      {tag.name}
+    </Box>
+    )}
+    </div>
+  )
 }

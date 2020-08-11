@@ -13,6 +13,7 @@ import useImperativeQuery from "../utils/imperativeQuery"
 
 const Home = () => {
   const [mydata, setMydata] = useState(null)
+
   const searchPosts = useImperativeQuery(SEARCH_POSTS)
   const searchPostsByTag = useImperativeQuery(SEARCH_POST_BY_TAG)
   const getPosts = useImperativeQuery(GET_APPROVED_POST);

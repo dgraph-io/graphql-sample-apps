@@ -2,8 +2,6 @@ import React, { Suspense } from 'react';
 import { Router, Route, Switch } from "react-router-dom";
 
 import history from "./utils/history";
-import Dashboard from "./pages/dashboard";
-import Login from "./pages/login";
 import Home from "./pages/home";
 import Profile from './pages/profile';
 import Types from "./pages/types";
@@ -19,7 +17,6 @@ import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
 import EditIcon from '@material-ui/icons/Edit';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import DashboardIcon from '@material-ui/icons/Dashboard';
 import CssBaseline from "@material-ui/core/CssBaseline";
 
 import './App.css';
@@ -44,32 +41,30 @@ function App() {
     return <Loading />;
   }
 
+  console.log(user)
   return (
     <div className={classes.root}>
       <CssBaseline />
       <Sidebar>
         <></>
         <>
+        <SidebarItem label="Home" icon={HomeIcon} link="/" />
       { isAuthenticated ? <>
-        <SidebarItem label="Home" icon={HomeIcon} link="/home" />
         <SidebarItem label="Profile" icon={PersonIcon} link="/profile" />
         <SidebarItem label="Create" icon={EditIcon} link="/create"/>
         <SideItem label="Approve" icon={CheckCircleIcon} link="/approve" user={user}/>
-        </> :
-        <SidebarItem label="DashBoard" icon={DashboardIcon} link="/"/>
+        </> : null
       }
       </>
       </Sidebar>
       <Router history={history}>
         <Suspense fallback={<div />}>
           <Switch>
-            <Route path="/" exact={true} component={Dashboard} />
-            <PrivateRoute path="/home" exact={true} component={Home} />
+            <Route path="/" exact={true} component={Home} />
             <PrivateRoute path="/profile" exact={true} component={Profile} />
             <PrivateRoute path="/types/:typeId" exact={true} component={Types} />
             <PrivateRoute path="/create" exact={true} component={Create} />
             <PrivateRoute path="/approve" exact={true} component={Approve} />
-            <PrivateRoute path="/login" exact={true} component={Login} />
             <Route component={NotFound} />
           </Switch>
         </Suspense>
@@ -86,7 +81,7 @@ function SideItem({user, label, icon, link}) {
   }
   if(error) {
     return <Typography>
-      Something Went Wrong. Did you remember to set the REACT_APP_GRAPHQL_ENDPOINT environment variable?
+      Unable to fetch user info.
     </Typography>
   }
   console.log("App:", data)

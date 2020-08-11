@@ -85,6 +85,9 @@ query{
       likes {
         username
       }
+      tags {
+        name
+      }
       isApproved
     }
   }
