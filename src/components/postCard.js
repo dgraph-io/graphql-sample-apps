@@ -14,16 +14,17 @@ import IconButton from '@material-ui/core/IconButton';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
-import FavoriteIcon from '@material-ui/icons/Favorite';
+import FavoriteSharpIcon from '@material-ui/icons/FavoriteSharp';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CancelIcon from '@material-ui/icons/Cancel';
+import FlagSharpIcon from '@material-ui/icons/FlagSharp';
 import EditIcon from '@material-ui/icons/Edit';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import DateTimeFormat from 'dateformat';
 
 import { useQuery, useMutation } from "@apollo/react-hooks";
 
-import { DELETE_POST, APPROVE_POST, LIKE_POST, UNLIKE_POST } from "../gql/queryData"
+import { DELETE_POST, APPROVE_POST, LIKE_POST, UNLIKE_POST, FLAG_POST, UNFLAG_POST} from "../gql/queryData"
 import { useAuth0 } from '@auth0/auth0-react';
 import Loading from "./loading"
 
@@ -50,17 +51,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PostCard({author, text, isApproved, postID, likes, time,tags, updateCache}) {
+export default function PostCard({author, text, isApproved, numFlags, postID, likes, time,tags,flags, updateCache}) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const { isLoading, user } = useAuth0()
   const [liked, setLiked] = React.useState(false);
+  const [flagged,setFlagged] = React.useState(false);
   const [numlikes,setnumlikes] = React.useState(0);
 
   const [deletePost] = useMutation(DELETE_POST, {update:updateCache});
   const [approvePost] = useMutation(APPROVE_POST, {update:updateCache});
   const [likePost] = useMutation(LIKE_POST);
   const [unlikePost] = useMutation(UNLIKE_POST);
+  const [flagPost] = useMutation(FLAG_POST);
+  const [unflagPost] = useMutation(UNFLAG_POST)
 
  const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -95,6 +99,37 @@ export default function PostCard({author, text, isApproved, postID, likes, time,
   }
   
   
+  const handleFlag = () => {
+    if(!user) {
+      alert("Login to Flag the post")
+      return
+    }
+    if (flagged){
+      console.log("Unflagging post...", postID)
+      unflagPost({
+        variables: {
+          input: postID,
+          flags: [{ username: user.email }],
+          numflags: numFlags-1
+        }
+      })
+      setFlagged(false)
+    }else{
+      console.log("flagging post...", postID)
+      flagPost({
+        variables: {
+          input: postID,
+          flags: [{ username: user.email }],
+          numflags: numFlags+1
+        }
+      })
+      setFlagged(true)
+    }
+ 
+ 
+  }
+
+  
   const handleApprove = () => {
     console.log("Approving post...", text, author)
     
@@ -104,6 +139,11 @@ export default function PostCard({author, text, isApproved, postID, likes, time,
       }
     })
   }
+
+
+  
+
+
 
   const handleReject = () => {
     console.log("Rejecting post...", text, author)
@@ -128,6 +168,19 @@ export default function PostCard({author, text, isApproved, postID, likes, time,
     setnumlikes(likes.length)
   },[user])
 
+  useEffect(() => {
+    if(!flags)
+      return
+    flags.forEach( (item) => {
+      if(item["username"] === user.email){
+        setFlagged(true)
+      }    
+    })
+  },[user])
+
+
+
+
   if(isLoading) {
     return <Loading />
   }
@@ -141,7 +194,7 @@ export default function PostCard({author, text, isApproved, postID, likes, time,
       /> */}
       <CardContent>
         
-        <Typography variant="body2" color="textSecondary" component="p">
+        <Typography variant="body2" color="textSecondary" backcomponent="p">
           {text}
         </Typography>
         
@@ -154,9 +207,12 @@ export default function PostCard({author, text, isApproved, postID, likes, time,
           {numlikes}
           </Typography>
           <ToggleButton aria-label="add to favorites" value="check" onChange={handleLike} selected={liked}>
-            <FavoriteIcon />
+            <FavoriteSharpIcon fontSize="small"/>
           </ToggleButton>
-          
+          <ToggleButton aria-label="flag" value="check" onChange={handleFlag} selected={flagged}>
+          <FlagSharpIcon fontSize="small"/>
+          </ToggleButton>
+
           </> : <>
           <IconButton aria-label="approve" onClick={handleApprove}>
             <CheckCircleIcon htmlColor="green"/>

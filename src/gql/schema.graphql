@@ -4,6 +4,7 @@ type User{
     posts: [Post]
     isMod: Boolean
     likedPost: [Post]
+    flaggedPost: [Post]
   }
 type Tag{
     name: String! @id @search(by: [fulltext])
@@ -17,4 +18,6 @@ type Post{
     timeStamp: DateTime @search
     isApproved: Boolean @search
     likes: [User] @hasInverse(field: likedPost)
+    flags: [User] @hasInverse(field: flaggedPost)
+    numFlags: Int @search
 }

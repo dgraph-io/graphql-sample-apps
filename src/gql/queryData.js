@@ -89,13 +89,17 @@ query{
         name
       }
       isApproved
+      flags{
+        username
+      }
+      numFlags
     }
   }
 `;
 
 export const GET_APPROVED_POST = gql`
 query{
-    queryPost(filter:{isApproved:true}){
+    queryPost(filter:{isApproved:true,numFlags:{lt:1}}){
       id
       text
       createdby{
@@ -109,6 +113,10 @@ query{
       tags{
           name
       }
+      flags{
+        username
+      }
+      numFlags
     }
   }
 `;
@@ -177,6 +185,35 @@ mutation updatePost($input:ID!,$likes:[UserRef!]!){
 }
 `;
 
+export const FLAG_POST = gql`
+mutation updatePost($input:ID!,$flags:[UserRef!]!){
+    updatePost(input:{
+      filter: {id : [$input]},
+      set: {flags :$flags}
+    }){
+      post{
+        id
+      }
+    }
+}
+`;
+
+
+
+export const UNFLAG_POST = gql`
+mutation updatePost($input:ID!,$flags:[UserRef!]!){
+  updatePost(input:{
+    filter: {id : [$input]},
+    remove: {flags :$flags}
+  }){
+    post{
+      id
+    }
+  }
+}
+`;
+
+
 export const GET_RECENT_POSTS = gql`
 query{
     queryPost(filter:{isApproved:true},order:{desc:timeStamp}){
@@ -230,6 +267,10 @@ query($text:String!){
     tags{
         name
     }
+    flags{
+      username
+    }
+    numFlags
   }
 }
 `;
