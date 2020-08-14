@@ -17,6 +17,9 @@
 .env.test.local
 .env.production.local
 
+# deployment
+.netlify/
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

@@ -1,4 +1,4 @@
-# sudo-laugh
+# DevJokes
 Slash powered DevJokes application
 
 ## Available Scripts
@@ -15,14 +15,10 @@ You will also see any lint errors in the console.
 
 ### Pointing to a Slash Endpoint
 
-By default, this points to the tweet app Slash GraphQL endpoint. You can change this by starting the app with the following environment variable
+You would need to have the following environment variables set (maybe in a `.env` file):
 
-```
-REACT_APP_GRAPHQL_ENDPOINT=https://beneficial-baseball-9463.us-west-2.aws.cloud.dgraph.io/graphql npm start
-```
+REACT_APP_AUTH0_DOMAIN="<auth0 domain>"
+REACT_APP_AUTH0_CLIENT_ID="<auth0 clientID>"
+REACT_APP_GRAPHQL_ENDPOINT="<slash endpoint>"
 
-### Adding a new page
-
-The quickest way to add a new page would be to
-1) Clone the src/components/home.js, and save it to your new type. Change the default exported constant from Home to whatever your page is
-2) Add the page to the routes in src/App.js
+You may contact the current contributors to provide you the current credentials in use.
