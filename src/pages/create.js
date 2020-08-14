@@ -54,6 +54,7 @@ export const Create = () => {
         tags: formatted_tags,
         timeStamp: new Date().toISOString(),
         isApproved: data.getUser.isMod ? true : false,
+        numFlags: 0
       }];
       addPost({
         variables: {

@@ -34,6 +34,7 @@ export const ADD_POST = gql`
                     }
                     timeStamp
                     isApproved
+                    numFlags
             }
         }
     }
@@ -97,9 +98,33 @@ query{
   }
 `;
 
+export const GET_FLAGGED_POST = gql`
+query{
+  queryPost(filter:{numFlags:{ge:2}}){
+    id
+    text
+    createdby{
+      username
+    }
+    timeStamp
+    likes {
+      username
+    }
+    tags {
+      name
+    }
+    isApproved
+    flags {
+      username
+    }
+    numFlags
+  }
+}
+`;
+
 export const GET_APPROVED_POST = gql`
 query{
-    queryPost(filter:{isApproved:true,numFlags:{lt:1}}){
+    queryPost(filter:{isApproved:true,numFlags:{lt:2}}){
       id
       text
       createdby{
@@ -144,10 +169,11 @@ mutation deletePost($input: PostFilter!){
 `;
 
 export const APPROVE_POST = gql`
-mutation updatePost($input:ID!){
+mutation updatePost($input:ID!,$flagArray:[UserRef!]!){
     updatePost(input:{
       filter: {id : [$input]},
-      set: {isApproved:true}
+      remove :{flags: $flagArray},
+      set: {isApproved:true,numFlags:0}
     }){
       post{
         text
@@ -158,6 +184,8 @@ mutation updatePost($input:ID!){
     }
 }
 `;
+
+
 
 export const LIKE_POST = gql`
 mutation updatePost($input:ID!,$likes:[UserRef!]!){
@@ -186,10 +214,10 @@ mutation updatePost($input:ID!,$likes:[UserRef!]!){
 `;
 
 export const FLAG_POST = gql`
-mutation updatePost($input:ID!,$flags:[UserRef!]!){
+mutation updatePost($input:ID!,$flags:[UserRef!]!,$flagCnt:Int){
     updatePost(input:{
       filter: {id : [$input]},
-      set: {flags :$flags}
+      set: {flags :$flags,numFlags: $flagCnt}
     }){
       post{
         id
@@ -201,10 +229,11 @@ mutation updatePost($input:ID!,$flags:[UserRef!]!){
 
 
 export const UNFLAG_POST = gql`
-mutation updatePost($input:ID!,$flags:[UserRef!]!){
+mutation updatePost($input:ID!,$flags:[UserRef!]!,$flagCnt:Int){
   updatePost(input:{
     filter: {id : [$input]},
-    remove: {flags :$flags}
+    remove: {flags :$flags},
+    set: {numFlags: $flagCnt}
   }){
     post{
       id
@@ -232,7 +261,7 @@ query{
 
 export const GET_OLDEST_POSTS = gql`
 query{
-    queryPost(filter:{isApproved:true},order:{asc:timeStamp}){
+    queryPost(filter:{isApproved:true,numFlags:{lt:2}},order:{asc:timeStamp}){
       id
       text
       createdby{
@@ -253,7 +282,7 @@ query{
 
 export const SEARCH_POSTS = gql`
 query($text:String!){
-  queryPost(filter:{text:{anyoftext:$text},isApproved:true}){
+  queryPost(filter:{text:{anyoftext:$text},isApproved:true,numFlags:{lt:2}}){
     text
     id
     createdby{

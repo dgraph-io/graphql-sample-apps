@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PostCard({author, text, isApproved, numFlags, postID, likes, time,tags,flags, updateCache}) {
+export default function PostCard({author, text, isApproved, flagCount, postID, likes, time,tags, flags, updateCache}) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const { isLoading, user } = useAuth0()
@@ -64,9 +64,17 @@ export default function PostCard({author, text, isApproved, numFlags, postID, li
   const [likePost] = useMutation(LIKE_POST);
   const [unlikePost] = useMutation(UNLIKE_POST);
   const [flagPost] = useMutation(FLAG_POST);
-  const [unflagPost] = useMutation(UNFLAG_POST)
+  const [unflagPost] = useMutation(UNFLAG_POST);
 
- const handleExpandClick = () => {
+  var i;
+  var flagList=[];
+  for (i = 0; i < flags.length;i++) {
+    flagList.push({username: flags[i]["username"]})
+  }
+
+  console.log(flagList)
+ 
+  const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
@@ -110,7 +118,7 @@ export default function PostCard({author, text, isApproved, numFlags, postID, li
         variables: {
           input: postID,
           flags: [{ username: user.email }],
-          numflags: numFlags-1
+          flagCnt: flagCount=1
         }
       })
       setFlagged(false)
@@ -120,7 +128,7 @@ export default function PostCard({author, text, isApproved, numFlags, postID, li
         variables: {
           input: postID,
           flags: [{ username: user.email }],
-          numflags: numFlags+1
+          flagCnt: flagCount+1
         }
       })
       setFlagged(true)
@@ -135,14 +143,15 @@ export default function PostCard({author, text, isApproved, numFlags, postID, li
     
     approvePost({
       variables: {
-        input:postID
+        input: postID,
+        //flagArray: []
+        flagArray: flagList
       }
     })
   }
 
 
   
-
 
 
   const handleReject = () => {
