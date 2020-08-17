@@ -1,7 +1,9 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import { Router, Route, Switch } from "react-router-dom";
 
 import history from "./utils/history";
+
+// import pages
 import Home from "./pages/home";
 import Profile from './pages/profile';
 import Types from "./pages/types";
@@ -9,9 +11,13 @@ import Create from "./pages/create";
 import Approve from "./pages/approve"
 import NotFound from "./pages/not-found";
 
+// import components
 import PrivateRoute from "./components/privateRoute"
-import {Typography} from '@material-ui/core';
+import {Sidebar, SidebarItem} from './components/sidebar';
+import Loading from "./components/loading"
 
+// imports material UI
+import {Typography} from '@material-ui/core';
 import { makeStyles } from "@material-ui/core/styles";
 import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
@@ -19,14 +25,19 @@ import EditIcon from '@material-ui/icons/Edit';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CssBaseline from "@material-ui/core/CssBaseline";
 
+// import styles
 import './App.css';
 
-import {Sidebar, SidebarItem} from './components/sidebar';
-import Loading from "./components/loading"
-
+// import Auth0
 import { useAuth0 } from "@auth0/auth0-react";
+
+// import GQL queries
 import {GET_USER} from "./gql/queryData";
+
+// import react-apollo
 import { useQuery, useMutation } from "@apollo/react-hooks";
+import { ApolloProvider } from '@apollo/client';
+import createApolloClient from './apollo-client';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,14 +46,32 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
+  const [idToken, setIdToken] = useState("");
+
   const classes = useStyles();
-  const { isLoading, isAuthenticated, user } = useAuth0();
+  const { isLoading, isAuthenticated, user, getIdTokenClaims } = useAuth0();
+
+  useEffect(() => {
+    const initAuth0 = async () => {
+      console.log("isAuth:", isAuthenticated)
+      if (isAuthenticated) {
+        const idTokenClaims = await getIdTokenClaims();
+        setIdToken(idTokenClaims.__raw);
+        console.log(idToken)
+      }
+
+    };
+    initAuth0();
+  }, [isAuthenticated]);
+
   if (isLoading) {
     return <Loading />;
   }
-
+  
+  const client = createApolloClient(idToken);
   console.log(user)
   return (
+    <ApolloProvider client={client}>
     <div className={classes.root}>
       <CssBaseline />
       <Sidebar>
@@ -70,6 +99,7 @@ function App() {
         </Suspense>
       </Router>
     </div>
+    </ApolloProvider>
   )
 }
 
