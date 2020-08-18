@@ -10,8 +10,7 @@ import Types from "./pages/types";
 import Create from "./pages/create";
 import Approve from "./pages/approve"
 import NotFound from "./pages/not-found";
-
-// import components
+import Flagged from "./pages/flagged"
 import PrivateRoute from "./components/privateRoute"
 import {Sidebar, SidebarItem} from './components/sidebar';
 import Loading from "./components/loading"
@@ -23,6 +22,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
 import EditIcon from '@material-ui/icons/Edit';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import FlagIcon from '@material-ui/icons/Flag';
 import CssBaseline from "@material-ui/core/CssBaseline";
 
 // import styles
@@ -82,6 +82,8 @@ function App() {
         <SidebarItem label="Profile" icon={PersonIcon} link="/profile" />
         <SidebarItem label="Create" icon={EditIcon} link="/create"/>
         <SideItem label="Approve" icon={CheckCircleIcon} link="/approve" user={user}/>
+        <SideItem label="Flagged" icon={FlagIcon} link="/flagged" user={user}/>
+        
         </> : null
       }
       </>
@@ -94,6 +96,7 @@ function App() {
             <PrivateRoute path="/types/:typeId" exact={true} component={Types} />
             <PrivateRoute path="/create" exact={true} component={Create} />
             <PrivateRoute path="/approve" exact={true} component={Approve} />
+            <PrivateRoute path="/flagged" exact={true} component={Flagged} />
             <Route component={NotFound} />
           </Switch>
         </Suspense>
@@ -115,7 +118,7 @@ function SideItem({user, label, icon, link}) {
     </Typography>
   }
   console.log("App:", data)
-  return data.getUser && data.getUser.isMod ? <SidebarItem label="Approve" icon={CheckCircleIcon} link="/approve" user={user}/>:
+  return data.getUser && data.getUser.isMod ? <SidebarItem label={label} icon={icon} link={link} user={user}/>:
   <></>
 }
 
