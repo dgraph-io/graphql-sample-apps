@@ -118,7 +118,7 @@ export default function PostCard({author, text, isApproved, flagCount, postID, l
         variables: {
           input: postID,
           flags: [{ username: user.email }],
-          flagCnt: flagCount=1
+          flagCnt: flagCount-1
         }
       })
       setFlagged(false)
@@ -144,7 +144,6 @@ export default function PostCard({author, text, isApproved, flagCount, postID, l
     approvePost({
       variables: {
         input: postID,
-        //flagArray: []
         flagArray: flagList
       }
     })
