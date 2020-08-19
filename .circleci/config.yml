@@ -28,4 +28,4 @@ workflows:
   build:
     jobs:
       - build:
-          context: Staging S3
+          context: Slash GraphQL OneClick
