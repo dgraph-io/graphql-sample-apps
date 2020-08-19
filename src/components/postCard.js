@@ -13,14 +13,17 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import Typography from '@material-ui/core/Typography';
-import { red } from '@material-ui/core/colors';
+import { red, blue, grey, pink, maroon } from '@material-ui/core/colors';
 import FavoriteSharpIcon from '@material-ui/icons/FavoriteSharp';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CancelIcon from '@material-ui/icons/Cancel';
 import FlagSharpIcon from '@material-ui/icons/FlagSharp';
 import EditIcon from '@material-ui/icons/Edit';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import DateTimeFormat from 'dateformat';
+import {TwitterShareButton} from 'react-share';
+import TwitterIcon from '@material-ui/icons/Twitter';
 
 import { useQuery, useMutation } from "@apollo/react-hooks";
 
@@ -42,6 +45,12 @@ const useStyles = makeStyles((theme) => ({
     transition: theme.transitions.create('transform', {
       duration: theme.transitions.duration.shortest,
     }),
+  },
+  share: {
+    marginLeft: '50%',
+  },
+  likeCount:{
+    fontSize: 'large',
   },
   expandOpen: {
     transform: 'rotate(180deg)',
@@ -211,16 +220,18 @@ export default function PostCard({author, text, isApproved, flagCount, postID, l
         {
           isApproved ?
           <>
-          <Typography variant="button" color="primary" component="p">
+          <Typography variant="button" style={{ color: liked?pink[200]:grey[500] }} className={classes.likeCount} color="primary" component="p">
           {numlikes}
           </Typography>
-          <ToggleButton aria-label="add to favorites" value="check" onChange={handleLike} selected={liked}>
-            <FavoriteSharpIcon fontSize="small"/>
-          </ToggleButton>
-          <ToggleButton aria-label="flag" value="check" onChange={handleFlag} selected={flagged}>
+          <IconButton aria-label="add to favorites" style={{ color: liked?pink[200]:grey[500] }} value="check" onClick={handleLike} selected={liked}>
+            <FavoriteIcon  fontSize="small"/>
+          </IconButton>
+          <IconButton aria-label="flag" value="check" style={{ color: flagged?red[500]:grey[500] }} onClick={handleFlag} selected={flagged}>
           <FlagSharpIcon fontSize="small"/>
-          </ToggleButton>
-
+          </IconButton>
+          <TwitterShareButton className={classes.share} style={{ color: blue[500] }} url={window.location.href} title="Check this out"  >
+            <TwitterIcon fontSize="small"/>
+          </TwitterShareButton>
           </> : <>
           <IconButton aria-label="approve" onClick={handleApprove}>
             <CheckCircleIcon htmlColor="green"/>
@@ -244,6 +255,7 @@ export default function PostCard({author, text, isApproved, flagCount, postID, l
         >
           <ExpandMoreIcon />
         </IconButton>
+      
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
       <CardHeader
