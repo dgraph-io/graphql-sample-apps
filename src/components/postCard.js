@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PostCard({author, text, isApproved, flagCount, postID, likes, time,tags, flags, updateCache}) {
+export default function PostCard({author, text, isApproved, flagCount, postID, likes, time,tags, flags, img, updateCache}) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const { isLoading, user } = useAuth0()
@@ -71,8 +71,6 @@ export default function PostCard({author, text, isApproved, flagCount, postID, l
   for (i = 0; i < flags.length;i++) {
     flagList.push({username: flags[i]["username"]})
   }
-
-  console.log(flagList)
  
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -106,7 +104,6 @@ export default function PostCard({author, text, isApproved, flagCount, postID, l
     }
   }
   
-  
   const handleFlag = () => {
     if(!user) {
       alert("Login to Flag the post")
@@ -133,14 +130,10 @@ export default function PostCard({author, text, isApproved, flagCount, postID, l
       })
       setFlagged(true)
     }
- 
- 
   }
 
-  
   const handleApprove = () => {
     console.log("Approving post...", text, author)
-    
     approvePost({
       variables: {
         input: postID,
@@ -148,10 +141,6 @@ export default function PostCard({author, text, isApproved, flagCount, postID, l
       }
     })
   }
-
-
-  
-
 
   const handleReject = () => {
     console.log("Rejecting post...", text, author)
@@ -186,20 +175,20 @@ export default function PostCard({author, text, isApproved, flagCount, postID, l
     })
   },[user])
 
-
-
-
   if(isLoading) {
     return <Loading />
   }
 
+  if(img != null)
+    console.log("url:", img)
+
   return (
     <Card className={classes.root}>
-      {/* <CardMedia
+      <CardMedia
         className={classes.media}
-        image="/static/images/cards/paella.jpg"
+        image={img}
         title="Paella dish"
-      /> */}
+      />
       <CardContent>
         
         <Typography variant="body2" color="textSecondary" backcomponent="p">

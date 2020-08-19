@@ -94,6 +94,7 @@ query{
         username
       }
       numFlags
+      img
     }
   }
 `;
@@ -118,6 +119,7 @@ query{
       username
     }
     numFlags
+    img
   }
 }
 `;
@@ -142,6 +144,7 @@ query{
         username
       }
       numFlags
+      img
     }
   }
 `;
@@ -255,6 +258,10 @@ query{
       tags{
           name
       }
+      flags {
+        username
+      }
+      img
     }
   }
 `;
@@ -268,6 +275,7 @@ query{
         username
       }
       timeStamp
+      img
     }
   }
 `;
@@ -300,6 +308,7 @@ query($text:String!){
       username
     }
     numFlags
+    img
   }
 }
 `;

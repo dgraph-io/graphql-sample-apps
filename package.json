@@ -16,6 +16,7 @@
     "apollo-client": "^2.6.10",
     "apollo-link-context": "^1.0.20",
     "apollo-link-http": "^1.5.17",
+    "axios": "^0.19.2",
     "canvg": "^3.0.6",
     "dateformat": "^3.0.3",
     "emoji-mart": "^3.0.0",
