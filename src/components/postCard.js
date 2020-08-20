@@ -1,7 +1,14 @@
 import React, { useEffect } from 'react';
+
+// import styles
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 
+// import components
+import Loading from "./loading"
+import TransitionModal from "./postModal"
+
+// import material UI
 import Box from '@material-ui/core/Box';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -11,25 +18,26 @@ import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
-import ToggleButton from '@material-ui/lab/ToggleButton';
 import Typography from '@material-ui/core/Typography';
 import { red, blue, grey, pink, maroon } from '@material-ui/core/colors';
-import FavoriteSharpIcon from '@material-ui/icons/FavoriteSharp';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CancelIcon from '@material-ui/icons/Cancel';
 import FlagSharpIcon from '@material-ui/icons/FlagSharp';
 import EditIcon from '@material-ui/icons/Edit';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import DateTimeFormat from 'dateformat';
-import {TwitterShareButton} from 'react-share';
 import TwitterIcon from '@material-ui/icons/Twitter';
 
-import { useQuery, useMutation } from "@apollo/react-hooks";
+// other imports
+import DateTimeFormat from 'dateformat';
+import {TwitterShareButton} from 'react-share';
 
+// import GQL
+import { useQuery, useMutation } from "@apollo/react-hooks";
 import { DELETE_POST, APPROVE_POST, LIKE_POST, UNLIKE_POST, FLAG_POST, UNFLAG_POST} from "../gql/queryData"
+
+// import auth0
 import { useAuth0 } from '@auth0/auth0-react';
-import Loading from "./loading"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -184,6 +192,16 @@ export default function PostCard({author, text, isApproved, flagCount, postID, l
     })
   },[user])
 
+
+  // For modal
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   if(isLoading) {
     return <Loading />
   }
@@ -229,9 +247,10 @@ export default function PostCard({author, text, isApproved, flagCount, postID, l
             <CancelIcon htmlColor="red"/>
           </IconButton>
           {/* TODO: implement handleEdit */}
-          <IconButton aria-label="edit">
+          <IconButton aria-label="edit" onClick={handleOpen}>
             <EditIcon htmlColor="blue"/>
           </IconButton>
+            <TransitionModal open={open} handleClose={handleClose}/>
           </>
         }
         <IconButton

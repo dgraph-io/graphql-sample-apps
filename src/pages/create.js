@@ -20,11 +20,15 @@ import useImperativeQuery from "../utils/imperativeQuery"
 
 // imports for image uploading
 import axios from 'axios';
+import {v4 as uuid} from 'uuid'; 
+import CanvasImage from "../components/canvasImage";
+import * as cimg from "../assets/images/background.jpg"
 
 export const Create = () => {
   const [tags, setTags] = useState([]);
   const [names, setNames] = useState([]);
   const [postText, setPostText] = useState("");
+  const refCanvas = useRef(null)
   var uploadInput = null;
 
   const printMessage = () => {
@@ -62,13 +66,24 @@ export const Create = () => {
       numFlags: 0,
       img: imgUrl
     }];
-    console.log(newPost)
+
+    console.log("Adding post:", newPost)
+
     addPost({
       variables: {
         post: newPost
       }
     })
   }
+
+  const dataURItoBlob = (dataURI) => {
+    var binary = atob(dataURI.split(',')[1]);
+    var array = [];
+    for(var i = 0; i < binary.length; i++) {
+        array.push(binary.charCodeAt(i));
+    }
+    return new Blob([new Uint8Array(array)], {type: 'image/jpeg'});
+}
 
   const handleSubmit = async (evt) => {
       evt.preventDefault();
@@ -78,47 +93,51 @@ export const Create = () => {
         username: user.email
       });
 
-      console.log("Submitting post...", postText, user.email, data.getUser.isMod)
+      // Currently we are overriding the file upload to override the canvas image
+      // TODO: Have a better logic over here, maybe provide an option to user
+
+      var dataUrl = refCanvas.current.toDataURL('image/png')
+      var file = dataURItoBlob(dataUrl);
+      var fileName = uuid()
+      var fileType = "png"
+
+      if(uploadInput.files.length != 0){
+        file = uploadInput.files[0];
+        let fileParts = uploadInput.files[0].name.split('.');
+        fileName = fileParts[0];
+        fileType = fileParts[1];
+      }
 
       // upload the image
-      if(uploadInput.files.length != 0){
-        let file = uploadInput.files[0];
-        // Split the filename to get the name and type
-        let fileParts = uploadInput.files[0].name.split('.');
-        let fileName = fileParts[0];
-        let fileType = fileParts[1];
-        console.log("Preparing the upload");
-        axios.post("http://localhost:4000/sign_s3",{
-          fileName : fileName,
-          fileType : fileType
-        })
-        .then(response => {
-          var returnData = response.data.data.returnData;
-          var signedRequest = returnData.signedRequest;
-          var url = returnData.url;
-          console.log("Recieved a signed request " + signedRequest);
-          
-        // Put the fileType in the headers for the upload
-          var options = {
-            headers: {
-              'Content-Type': fileType
-            }
-          };
-          axios.put(signedRequest,file,options)
-          .then(result => {
-            console.log("Response from s3")
-            addToDatabase(data, url)
-          })
-          .catch(error => {
-            alert("ERROR " + JSON.stringify(error));
-          })
+      console.log("Preparing the upload");
+      axios.post("http://localhost:4000/sign_s3",{
+        fileName : fileName,
+        fileType : fileType
+      })
+      .then(response => {
+        var returnData = response.data.data.returnData;
+        var signedRequest = returnData.signedRequest;
+        var url = returnData.url;
+        console.log("Recieved a signed request " + signedRequest);
+
+      // Put the fileType in the headers for the upload
+        var options = {
+          headers: {
+            'Content-Type': fileType
+          }
+        };
+        axios.put(signedRequest,file,options)
+        .then(result => {
+          console.log("Response from s3: ", result)
+          addToDatabase(data, url)
         })
         .catch(error => {
-          alert(JSON.stringify(error));
+          alert("ERROR " + JSON.stringify(error));
         })
-      } else {
-        addToDatabase(data, "")
-      }
+      })
+      .catch(error => {
+        alert(JSON.stringify(error));
+      })
   }
 
   const fetchTags = async () => {
@@ -147,6 +166,7 @@ export const Create = () => {
           />
           <TagSelector names={names} tags={tags} handleChange={handleChange}/>
           <br />
+          <CanvasImage image={cimg} text={postText} ref={refCanvas}/>
           <input ref={(ref) => { uploadInput = ref; }} type="file"/>
           <Button type="submit" variant="contained" color="primary" size="large">
             Post
