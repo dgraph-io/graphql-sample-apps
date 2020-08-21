@@ -5,19 +5,39 @@ import { gql, useQuery } from '@apollo/client'
 import Content from '../components/content';
 import { Navbar } from '../components/navbar';
 import PostCard from "../components/postCard";
-import {GET_UNAPPROVED_POST} from "../gql/queryData";
+import {GET_UNAPPROVED_POST, GET_TAGS} from "../gql/queryData";
+import useImperativeQuery from "../utils/imperativeQuery"
+
+import { useState, useEffect } from 'react';
 
 const Approve = () => {
+  const [allTags, setAllTags] = useState([]);
   const { loading, error, data } = useQuery(GET_UNAPPROVED_POST);
+  const getTags = useImperativeQuery(GET_TAGS)
+
+  const fetchTags = async () => {
+    const {data} = await getTags()
+    var tmp = []
+    data.queryTag.forEach(element => {
+      tmp.push(element["name"])
+    });
+    setAllTags(tmp)
+    console.log("tags fetched...", data.queryTag, "setNames:", allTags)
+  }
+
+  useEffect( () => {
+    fetchTags()
+  }, [])
+
   return <>
     <Navbar title="Approve" color="primary" />
     <Content>
-      <UnApprovedList loading={loading} error={error} data={data} />
+      <UnApprovedList loading={loading} error={error} data={data} allTags={allTags}/>
     </Content>
   </>
 }
 
-function UnApprovedList({loading, error, data}) {
+function UnApprovedList({loading, error, data, allTags}) {
   const updateCache = (client, {data}) => {
     const existing_unapproved = client.readQuery({
       query: GET_UNAPPROVED_POST
@@ -41,7 +61,7 @@ function UnApprovedList({loading, error, data}) {
   return <Grid container spacing={2}>
     {data.queryPost.map(post =>
       <Grid item xs={12} sm={6} md={4} lg={3} key={post.text}>
-        <PostCard author={post.createdby.username} text={post.text} isApproved={false} postID={post.id} likes={post.likes} tags={post.tags} flags={post.flags} updateCache={updateCache}/>
+        <PostCard author={post.createdby.username} text={post.text} isApproved={false} postID={post.id} likes={post.likes} tags={post.tags} flags={post.flags} img={post.img} updateCache={updateCache} allTags={allTags}/>
       </Grid>
     )}
   </Grid>;

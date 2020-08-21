@@ -245,6 +245,19 @@ mutation updatePost($input:ID!,$flags:[UserRef!]!,$flagCnt:Int){
 }
 `;
 
+export const EDIT_POST = gql`
+mutation updatePost($input:ID!,$ntags:[TagRef!]!,$ptags:[TagRef!]!, $text:String){
+  updatePost(input:{
+    filter: {id : [$input]},
+    remove: {tags: $ptags}
+    set: {tags: $ntags, text: $text}
+  }){
+    post{
+      id
+    }
+  }
+}
+`;
 
 export const GET_RECENT_POSTS = gql`
 query{

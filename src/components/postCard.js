@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // import styles
 import { makeStyles } from '@material-ui/core/styles';
@@ -34,7 +34,7 @@ import {TwitterShareButton} from 'react-share';
 
 // import GQL
 import { useQuery, useMutation } from "@apollo/react-hooks";
-import { DELETE_POST, APPROVE_POST, LIKE_POST, UNLIKE_POST, FLAG_POST, UNFLAG_POST} from "../gql/queryData"
+import { DELETE_POST, APPROVE_POST, LIKE_POST, UNLIKE_POST, FLAG_POST, UNFLAG_POST, EDIT_POST} from "../gql/queryData"
 
 // import auth0
 import { useAuth0 } from '@auth0/auth0-react';
@@ -68,13 +68,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PostCard({author, text, isApproved, flagCount, postID, likes, time,tags, flags, img, updateCache}) {
+export default function PostCard({author, text, isApproved, flagCount, postID, likes, time,tags, flags, img, allTags, updateCache}) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const { isLoading, user } = useAuth0()
   const [liked, setLiked] = React.useState(false);
   const [flagged,setFlagged] = React.useState(false);
   const [numlikes,setnumlikes] = React.useState(0);
+  const [postText, setPostText] = React.useState(text)
+  const [postTags, setPostTags] = React.useState(null)
+  const [open, setOpen] = React.useState(false);
+
+  const [editText, setText] = useState(text)
+  const [editTags, setTags] = useState(null)
 
   const [deletePost] = useMutation(DELETE_POST, {update:updateCache});
   const [approvePost] = useMutation(APPROVE_POST, {update:updateCache});
@@ -82,6 +88,7 @@ export default function PostCard({author, text, isApproved, flagCount, postID, l
   const [unlikePost] = useMutation(UNLIKE_POST);
   const [flagPost] = useMutation(FLAG_POST);
   const [unflagPost] = useMutation(UNFLAG_POST);
+  const [editPost] = useMutation(EDIT_POST);
 
   var i;
   var flagList=[];
@@ -150,7 +157,7 @@ export default function PostCard({author, text, isApproved, flagCount, postID, l
   }
 
   const handleApprove = () => {
-    console.log("Approving post...", text, author)
+    console.log("Approving post...", postText, author)
     approvePost({
       variables: {
         input: postID,
@@ -160,7 +167,7 @@ export default function PostCard({author, text, isApproved, flagCount, postID, l
   }
 
   const handleReject = () => {
-    console.log("Rejecting post...", text, author)
+    console.log("Rejecting post...", postText, author)
     const delPost = {
       id : [postID]
     };
@@ -171,6 +178,32 @@ export default function PostCard({author, text, isApproved, flagCount, postID, l
     })
   }
 
+  const handleEdit = async (newText, newTags) => {
+    console.log("editing post...", postID, newTags, postTags)
+    var removeTags = postTags.filter(x => !newTags.includes(x));
+    var addTags = newTags.filter(x => !postTags.includes(x));
+
+    var ptags = []
+    removeTags.forEach(element => {
+      ptags.push({"name": element})
+    });
+    var ntags = []
+    addTags.forEach(element => {
+      ntags.push({"name": element})
+    });
+    await editPost({
+      variables: {
+        input: postID,
+        ptags: ptags,
+        ntags: ntags,
+        text:  newText
+      }
+    })
+    setPostText(newText)
+    setPostTags(newTags)
+  }
+
+  // set likes
   useEffect(() => {
     if(!likes)
       return
@@ -182,6 +215,7 @@ export default function PostCard({author, text, isApproved, flagCount, postID, l
     setnumlikes(likes.length)
   },[user])
 
+  // set flags
   useEffect(() => {
     if(!flags)
       return
@@ -192,15 +226,15 @@ export default function PostCard({author, text, isApproved, flagCount, postID, l
     })
   },[user])
 
-
-  // For modal
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
+  // set Tags
+  useEffect( () => {
+    var formatted_tags = []
+    tags.forEach(element => {
+      formatted_tags.push(element["name"])
+    });
+    setPostTags(formatted_tags)
+    setTags(formatted_tags)
+  }, [])
 
   if(isLoading) {
     return <Loading />
@@ -219,7 +253,7 @@ export default function PostCard({author, text, isApproved, flagCount, postID, l
       <CardContent>
         
         <Typography variant="body2" color="textSecondary" backcomponent="p">
-          {text}
+          {postText}
         </Typography>
         
       </CardContent>
@@ -239,18 +273,18 @@ export default function PostCard({author, text, isApproved, flagCount, postID, l
           <TwitterShareButton className={classes.share} style={{ color: blue[500] }} url={window.location.href} title="Check this out"  >
             <TwitterIcon fontSize="small"/>
           </TwitterShareButton>
-          </> : <>
+          </> : 
+          <>
           <IconButton aria-label="approve" onClick={handleApprove}>
             <CheckCircleIcon htmlColor="green"/>
           </IconButton>
           <IconButton aria-label="reject" onClick={handleReject}>
             <CancelIcon htmlColor="red"/>
           </IconButton>
-          {/* TODO: implement handleEdit */}
-          <IconButton aria-label="edit" onClick={handleOpen}>
+          <IconButton aria-label="edit" onClick={() => {setOpen(true)}}>
             <EditIcon htmlColor="blue"/>
           </IconButton>
-            <TransitionModal open={open} handleClose={handleClose}/>
+            <TransitionModal open={open} setOpen={setOpen} text={editText} setText={setText} tags={editTags} setTags={setTags} postText={postText} setPostText={setPostText} postTags={postTags} setPostTags={setPostTags} allTags={allTags} handleEdit={handleEdit}/>
           </>
         }
         <IconButton
@@ -275,7 +309,7 @@ export default function PostCard({author, text, isApproved, flagCount, postID, l
         title={author}
         subheader={DateTimeFormat(time, "mmm dS, yyyy ,h:MM TT")}
       />
-      <TagList tags={tags} />
+      <TagList tags={postTags} />
       </Collapse>
     </Card>
   );
@@ -285,7 +319,7 @@ function TagList({tags}) {
   return ( <div>
     {tags.map( tag => 
       <Box component="div" display="inline" p={1} m={1} bgcolor="yellow">
-      {tag.name}
+      {tag}
     </Box>
     )}
     </div>
