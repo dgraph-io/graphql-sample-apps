@@ -39,18 +39,17 @@ PaperProps: {
 };
 
 function getStyles(name, personName, theme) {
-return {
-    fontWeight:
-    personName.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
+  return {
+      fontWeight:
+      personName.indexOf(name) === -1
+          ? theme.typography.fontWeightRegular
+          : theme.typography.fontWeightMedium,
 };
 }
 
 export default function TagSelector({names, tags, handleChange}){
     const classes = useStyles();
     const theme = useTheme();
-
     return (
     <FormControl className={classes.formControl}>
     <InputLabel id="demo-mutiple-chip-label">Tags</InputLabel>

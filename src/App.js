@@ -81,9 +81,7 @@ function App() {
       { isAuthenticated ? <>
         <SidebarItem label="Profile" icon={PersonIcon} link="/profile" />
         <SidebarItem label="Create" icon={EditIcon} link="/create"/>
-        <SideItem label="Approve" icon={CheckCircleIcon} link="/approve" user={user}/>
-        <SideItem label="Flagged" icon={FlagIcon} link="/flagged" user={user}/>
-        
+        <AdminSidebarItem user={user} />
         </> : null
       }
       </>
@@ -106,7 +104,7 @@ function App() {
   )
 }
 
-function SideItem({user, label, icon, link}) {
+function AdminSidebarItem({user}) {
   const {loading, error, data} = useQuery(GET_USER, {variables: {username: user.email}})
 
   if(loading) {
@@ -118,7 +116,12 @@ function SideItem({user, label, icon, link}) {
     </Typography>
   }
   console.log("App:", data)
-  return data.getUser && data.getUser.isMod ? <SidebarItem label={label} icon={icon} link={link} user={user}/>:
+  return data.getUser && data.getUser.isMod ? 
+  <>
+  <SidebarItem label="Approve" icon={CheckCircleIcon} link="/approve"/>
+  <SidebarItem label="Flagged" icon={FlagIcon} link="/flagged"/>
+  </>
+  :
   <></>
 }
 
