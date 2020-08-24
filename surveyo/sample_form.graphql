@@ -1,0 +1,90 @@
+mutation {
+  addForm(input: [{
+    title: "Surveyo: Hello World!", 
+    creator: {email: "rahul@dgraph.io"}, 
+    fields: [
+      {
+        title: "Which Cartoon/Anime do you relate to the most?"
+        type: Text
+        order: 0
+        required:true
+      }
+      {
+        title: "When did you join Dgraph?"
+        type: Date
+        order: 1
+        required: false
+      }
+      {
+        title: "What comes to your mind when you think about Dgraph?"
+        type: Text
+        order:2
+        required:true
+      }
+      {
+        title: "Choose a swag you wish was available already at Dgraph?"
+        type: SingleChoice
+        order: 3
+        required:true
+        options: [
+          {
+            title: "Hoodie"
+            order: 0
+          }
+          {
+            title: "Sketch Notebook"
+            order: 1
+          }
+          {
+            title: "Fridge Magnet"
+            order: 2
+          }
+          {
+            title: "Diary and pen"
+            order:3
+          }
+        ]
+      }
+      {
+        title: "Suppose you meet Diggy, what would be your first conversation like?"
+        type:Text
+        order: 4
+        required:true
+      }
+      {
+        title: "How are you finding this hackathon?"
+        type: SingleChoice
+        order: 5
+        required:true
+        options: [
+          {
+            title: "Loving this roller coaster ride"
+            order: 0
+          }
+          {
+            title: "Let's just say I lost some hair debugging :)"
+            order: 1
+          }
+          {
+            title: "Sitting on the fence  ౦０o ｡ (‾́。‾́ )"
+            order: 2
+          }
+        ]
+      }
+      {
+        title: "Please rate this survey _/\\_"
+        type:Rating
+        required:true
+        count: 5
+        order: 6
+      }
+    ]
+  }]) {
+    form {
+      id
+    }
+  }
+}
+
+
+0x4e23
