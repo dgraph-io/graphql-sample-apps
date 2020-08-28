@@ -13,7 +13,7 @@ import IconButton from '@material-ui/core/IconButton';
 
 import { GET_TAGS, GET_RECENT_POSTS, GET_OLDEST_POSTS, GET_APPROVED_POST, SEARCH_POSTS, SEARCH_BY_TEXT_AND_TAGS, SEARCH_POST_BY_TAG } from "../gql/queryData";
 import useImperativeQuery from "../utils/imperativeQuery"
-
+import DateTimeFormat from 'dateformat';
 
 
 const Home = () => {
@@ -111,21 +111,24 @@ const Home = () => {
     
   }
 
-  
-
-  
-
   const sortBy = async (by) => {
-    let data;
+    let data, sortedData, newData;
+    data = mydata;
     console.log("triggered", by)
+
     if(by === "new"){
-      console.log(data)
-      data = await getMostRecentPosts()
+      newData = data.queryPost.slice().sort(((a,b)=>Date.parse(b.timeStamp)-Date.parse(a.timeStamp)) )
+
     } else if(by === "old"){
-      data = await getMostOldestPosts()
+      newData = data.queryPost.slice().sort(((a,b)=>Date.parse(a.timeStamp)-Date.parse(b.timeStamp)) )
+   
+    } else if (by === "liked"){
+      newData = data.queryPost.slice().sort(((a,b)=>b.likes.length-a.likes.length ) )
     }
-    console.log("Data after sort:", data.data)
-    setMydata(data.data)
+    sortedData = {"queryPost": newData}
+    setMydata(sortedData)
+    return 
+    
   }
 
   useEffect( () => {
