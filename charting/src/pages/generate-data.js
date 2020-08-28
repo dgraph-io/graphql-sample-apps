@@ -1,8 +1,7 @@
-import React, { useMemo, useState } from "react";
-import { CircularProgress, Backdrop, Grid, Card, CardContent, TextField, Typography} from '@material-ui/core';
+import React, { useState } from "react";
+import { CircularProgress, Backdrop, Grid, Card, TextField } from '@material-ui/core';
 import {Alert} from '@material-ui/lab';
 import { gql, useQuery } from '@apollo/client'
-import Chart from "react-google-charts";
 
 import Content from '../components/content';
 import { Navbar } from '../components/navbar';
