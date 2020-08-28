@@ -48,33 +48,31 @@ async function getLines(ctx, phrase, maxPxLength, maxPxHeight, height, margin, s
     var mp = new Map()
     var check = true
 
-    var wa          = phrase.split(" "),
-        phraseArray = [],
-        lastPhrase  = wa[0],
-        measure     = 0,
-        splitChar   = " ";
-
-    if (wa.length <= 1) {
-        mp.set('lines', wa)
-        mp.set('check', check)
-        return mp
-    }
+    var lines = phrase.split("\n")
+    var phraseArray = []
 
     ctx.font = height.toString(10) + "px impact"
-    for (var i=1; i < wa.length; i++) {
-        var w = wa[i];
-        measure = ctx.measureText(lastPhrase+splitChar+w).width;
-        if (measure < maxPxLength - 2*sideMargin) {
-            lastPhrase += (splitChar+w);
-        } else {
-            phraseArray.push(lastPhrase);
-            lastPhrase=w;
+
+    lines.forEach( (line) => {
+        var wa          = line.split(" "),
+            lastPhrase  = "",
+            measure     = 0,
+            splitChar   = " ";
+
+        for (var i=0; i < wa.length; i++) {
+            var w = wa[i];
+            measure = ctx.measureText(lastPhrase + (i==0?"":splitChar) + w).width;
+            if (measure < maxPxLength - 2*sideMargin) {
+                lastPhrase += ((i==0?"":splitChar) + w);
+            } else {
+                phraseArray.push(lastPhrase);
+                lastPhrase=w;
+            }
+            if (i === wa.length-1) {
+                phraseArray.push(lastPhrase);
+            }
         }
-        if (i === wa.length-1) {
-            phraseArray.push(lastPhrase);
-            break;
-        }
-    }
+    })
 
     if(phraseArray.length * height > maxPxHeight - margin)
         check = false
