@@ -152,7 +152,7 @@ export const Create = () => {
 
   useEffect( () => {
     fetchTags()
-  }, [user])
+  }, [])
 
   return (
     <>
@@ -160,13 +160,15 @@ export const Create = () => {
       <Content>
         <form autoComplete="off" onSubmit={handleSubmit}>
           <Typography variant="overline">Anything funny??</Typography>
+          <br/>
           <TextField label="Joke" type="joke" name="Joke" margin="normal"
-            value={postText} variant="outlined" fullWidth multiline rows={5}
+            value={postText} variant="outlined" halfWidth multiline rows={5}
             required={true} onChange={e => setPostText(e.target.value)}
           />
+          <CanvasImage image={cimg} text={postText} ref={refCanvas}/>
+          <br/>
           <TagSelector names={names} tags={tags} handleChange={handleChange}/>
           <br />
-          <CanvasImage image={cimg} text={postText} ref={refCanvas}/>
           <input ref={(ref) => { uploadInput = ref; }} type="file"/>
           <Button type="submit" variant="contained" color="primary" size="large">
             Post
