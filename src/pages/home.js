@@ -1,62 +1,125 @@
 import React, {useState, useEffect} from "react";
 import {Typography, Grid} from '@material-ui/core';
-
 import Content from '../components/content';
 import { Navbar } from '../components/navbar';
 import { Search } from "../components/searchbar/search";
 import { Sort } from "../components/searchbar/sort";
+import SearchIcon from '@material-ui/icons/Search';
+import SearchBar from 'material-ui-search-bar';
 import PostCard from "../components/postCard";
+import TagSelector from "../components/tagSelector";
+import IconButton from '@material-ui/core/IconButton';
 
-import { GET_RECENT_POSTS, GET_OLDEST_POSTS, GET_APPROVED_POST, SEARCH_POSTS, SEARCH_POST_BY_TAG } from "../gql/queryData";
+
+import { GET_TAGS, GET_RECENT_POSTS, GET_OLDEST_POSTS, GET_APPROVED_POST, SEARCH_POSTS, SEARCH_BY_TEXT_AND_TAGS, SEARCH_POST_BY_TAG } from "../gql/queryData";
 import useImperativeQuery from "../utils/imperativeQuery"
 
 
-const Home = () => {
-  const [mydata, setMydata] = useState(null)
 
+const Home = () => {
+  
+  const [mydata, setMydata] = useState(null)
+  const [tags, setTags] = useState([])
+  const [names, setNames] = useState([])
+  const [textString, setTextString] = useState("")
   const searchPosts = useImperativeQuery(SEARCH_POSTS)
   const searchPostsByTag = useImperativeQuery(SEARCH_POST_BY_TAG)
   const getPosts = useImperativeQuery(GET_APPROVED_POST);
   const getMostRecentPosts = useImperativeQuery(GET_RECENT_POSTS);
   const getMostOldestPosts = useImperativeQuery(GET_OLDEST_POSTS);
-
-  const handleClick = async (event, value) => {
-    if(value === null)
-      return
-    const {data} = await searchPosts({
-      text: value
-    });
-    console.log("Search:", data)
-    setMydata(data)
+  const getTags = useImperativeQuery(GET_TAGS);
+  const searchByTextAndTags = useImperativeQuery(SEARCH_BY_TEXT_AND_TAGS);
+  
+  const handleChange = (event) => {
+    
+    setTags(event.target.value);
+    console.log(event.target.value);
   }
-
-  const handleClickOnTags = async (event, value) => {
-    if(value === null)
-      return
-    console.log(value)
-    const {data} = await searchPostsByTag({
-      input: value
-    });
-
-    let queryPost = [];
+  
+  const fetchTags = async () => {
+    const {data} = await getTags()
+    var tmp = []
     data.queryTag.forEach(element => {
-      queryPost.push(...element["posts"])
+      tmp.push(element["name"])
     });
-    let formatted_data = {"queryPost": queryPost}
-    console.log("Search by tag:", formatted_data)
-    setMydata(formatted_data)
+    setNames(tmp)
+    console.log("tags fetched...", data.queryTag, "setNames:", names)
   }
+
+  useEffect( () => {
+    fetchTags()
+  }, [])
 
   const getData = async () => {
     const {data} = await getPosts();
     console.log(data)
     setMydata(data)
   }
+  
+  
+  const handleClick = async () => {
+    if ((tags.length == 0) & (textString=="")) {
+      return 
+    }
+    if (tags.length==0){
+      const {data} = await searchPosts({
+          text: textString
+      })
+      console.log(data)
+      setMydata(data)
+      return 
+    }
+    var i
+    var tagString = ""
+    for (i=0;i<tags.length;i++){
+      tagString+=" "+tags[i]
+    }
+    if(textString === ""){
+      
+      const {data} = await searchPostsByTag({
+        input: tagString
+      })
+      let queryPost = [];
+      data.queryTag.forEach(element => {
+        queryPost.push(...element["posts"])
+      });
+      console.log("here")
+      console.log(data)
+      console.log(queryPost)
+      let formatted_data = {"queryPost": queryPost}
+      console.log("Search by tag:", formatted_data)
+      setMydata(formatted_data)
+      return 
+    }
+
+    console.log(textString)
+    console.log(tagString)
+    const {data} = await searchByTextAndTags({
+      text: textString,
+      tags: tagString
+    })
+    console.log(data)
+    let queryPost = [];
+    data.queryPostByTextAndTags.forEach(element => {
+      queryPost.push(element)
+    });
+    console.log(queryPost)
+    let formatted_data = {"queryPost": queryPost}
+    console.log("Search by tag:", formatted_data)
+    setMydata(formatted_data)
+    return 
+    
+  }
+
+  
+
+  
 
   const sortBy = async (by) => {
     let data;
     console.log("triggered", by)
     if(by === "new"){
+      console.log(data)
       data = await getMostRecentPosts()
     } else if(by === "old"){
       data = await getMostOldestPosts()
@@ -74,8 +137,11 @@ const Home = () => {
     <Content>
       { mydata != null &&
       <>
-      <Search data={[]} label="Search your joke here" onChange={handleClick} />
-      <Search data={[]} label="Search jokes by tags" onChange={handleClickOnTags} />
+      <SearchBar value={textString} label="Search your joke here" onChange={(newText)=> setTextString(newText) } onRequestSearch={handleClick}  />
+      <TagSelector names={names} tags={tags} handleChange={handleChange}  />
+      <IconButton  onClick={handleClick} >
+        <SearchIcon  fontSize="large" />
+      </IconButton>
       <Sort cb={sortBy}/>
       <PostList mydata={mydata}/>
       </>
@@ -88,7 +154,7 @@ function PostList({mydata}) {
   return <Grid container spacing={2}>
     {mydata.queryPost.map(post =>
       <Grid item xs={12} sm={6} md={4} lg={3} key={post.id}>
-        <PostCard author={post.createdby.username} text={post.text} postID={post.id} time={post.timeStamp} likes={post.likes} flagCount={post.flags.length} flags={post.flags} tags={post.tags} img={post.img} isApproved={true}/>
+        <PostCard author={post.createdby.username} text={post.text} postID={post.id} time={post.timeStamp} likes={post.likes} flagCount={post.numFlags} flags={post.flags} tags={post.tags} img={post.img} isApproved={true}/>
       </Grid>
     )}
   </Grid>;

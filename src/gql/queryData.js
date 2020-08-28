@@ -53,9 +53,9 @@ query queryUser($input: String!){
 
 export const SEARCH_POST_BY_TAG = gql`
     query queryTag($input:String!) {
-        queryTag(filter:{name: {alloftext: $input} }) {
+        queryTag(filter:{name: {anyoftext: $input} }) {
           name
-          posts{
+            posts{
             text
             id
             createdby{
@@ -66,9 +66,14 @@ export const SEARCH_POST_BY_TAG = gql`
             likes{
               username
             }
-            tags {
-              name
+            tags{
+                name
             }
+            flags{
+              username
+            }
+            numFlags
+            img
           }
         }
     }
@@ -304,6 +309,31 @@ query{
 export const SEARCH_POSTS = gql`
 query($text:String!){
   queryPost(filter:{text:{anyoftext:$text},isApproved:true,numFlags:{lt:2}}){
+    text
+    id
+    createdby{
+      username
+    }
+    isApproved
+    timeStamp
+    likes{
+      username
+    }
+    tags{
+        name
+    }
+    flags{
+      username
+    }
+    numFlags
+    img
+  }
+}
+`;
+
+export const SEARCH_BY_TEXT_AND_TAGS = gql`
+query($tags: String!, $text: String!){
+  queryPostByTextAndTags(tagString: $tags, postTextString:$text){
     text
     id
     createdby{
