@@ -22,6 +22,7 @@
     "emoji-mart": "^3.0.0",
     "graphql": "^15.3.0",
     "material-ui-color-picker": "^3.5.1",
+    "material-ui-search-bar": "^1.0.0",
     "react": "^16.13.1",
     "react-canvas-draw": "^1.1.1",
     "react-color": "^2.18.1",

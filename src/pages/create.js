@@ -1,9 +1,8 @@
 import React, { useRef, useState, useEffect } from "react";
 
 //import material UI
-import { Typography, FormControl } from "@material-ui/core";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
+import { Typography, FormControl, Select, Button, TextField, InputLabel, MenuItem, FormHelperText } from "@material-ui/core";
+import { makeStyles } from '@material-ui/core/styles';
 
 // import components
 import { Navbar, NavbarItem } from "../components/navbar";
@@ -24,11 +23,24 @@ import {v4 as uuid} from 'uuid';
 import CanvasImage from "../components/canvasImage";
 import * as cimg from "../assets/images/background.jpg"
 
+const useStyles = makeStyles((theme) => ({
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+}));
+
 export const Create = () => {
+  const classes = useStyles();
   const [tags, setTags] = useState([]);
   const [names, setNames] = useState([]);
+  const [type, setType] = React.useState('text');
   const [postText, setPostText] = useState("");
-  const refCanvas = useRef(null)
+  const [imagePreviewURL, setImagePreviewURL] = useState(null);
+  const refCanvas = useRef(null);
   var uploadInput = null;
 
   const printMessage = () => {
@@ -88,25 +100,25 @@ export const Create = () => {
   const handleSubmit = async (evt) => {
       evt.preventDefault();
 
+      // Set image properties
+      var dataUrl, file, fileName = uuid(), fileType;
+      if(type === 'text'){
+        dataUrl = refCanvas.current.toDataURL('image/png')
+        file = dataURItoBlob(dataUrl);
+        fileType = "png"
+      } else if (type === 'meme'){
+          if(uploadInput.files.length == 0){
+            alert('Forgot to upload the meme?')
+            return
+          }
+          file = uploadInput.files[0];
+          fileType = uploadInput.files[0].name.split('.')[1];
+      }
+
       // user must exist
       const { data } = await getUsers({
         username: user.email
       });
-
-      // Currently we are overriding the file upload to override the canvas image
-      // TODO: Have a better logic over here, maybe provide an option to user
-
-      var dataUrl = refCanvas.current.toDataURL('image/png')
-      var file = dataURItoBlob(dataUrl);
-      var fileName = uuid()
-      var fileType = "png"
-
-      if(uploadInput.files.length != 0){
-        file = uploadInput.files[0];
-        let fileParts = uploadInput.files[0].name.split('.');
-        fileName = fileParts[0];
-        fileType = fileParts[1];
-      }
 
       // upload the image
       console.log("Preparing the upload");
@@ -150,6 +162,17 @@ export const Create = () => {
     console.log("tags fetched...", data.queryTag, "setNames:", names)
   }
 
+  const previewImage = (e) => {
+    e.preventDefault();
+
+    let reader = new FileReader()
+    let file = e.target.files[0]
+    reader.onloadend = () => {
+      setImagePreviewURL(reader.result)
+    }
+    reader.readAsDataURL(file)
+  }
+
   useEffect( () => {
     fetchTags()
   }, [])
@@ -158,18 +181,41 @@ export const Create = () => {
     <>
       <Navbar title="Create" />
       <Content>
+      <FormControl className={classes.formControl}>
+        <InputLabel>Joke Type</InputLabel>
+        <Select
+          value={type}
+          onChange={(event) => setType(event.target.value)}
+        >
+          <MenuItem value={'text'}>Text Joke</MenuItem>
+          <MenuItem value={'meme'}>Meme</MenuItem>
+        </Select>
+        <FormHelperText>What kind of joke you have?</FormHelperText>
+      </FormControl>
+
         <form autoComplete="off" onSubmit={handleSubmit}>
-          <Typography variant="overline">Anything funny??</Typography>
-          <br/>
-          <TextField label="Joke" type="joke" name="Joke" margin="normal"
-            value={postText} variant="outlined" halfWidth multiline rows={5}
-            required={true} onChange={e => setPostText(e.target.value)}
+          <TextField type="joke" value={postText} required={true}
+            label={type === 'text' ? "Joke": "Description"}
+            name={type === 'text' ? "Joke": "Description"}
+            onChange={e => setPostText(e.target.value)}
+            margin="normal" variant="outlined" 
+            fullWidth multiline rows={5}
           />
-          <CanvasImage image={cimg} text={postText} ref={refCanvas}/>
-          <br/>
           <TagSelector names={names} tags={tags} handleChange={handleChange}/>
           <br />
-          <input ref={(ref) => { uploadInput = ref; }} type="file"/>
+          {
+            type === 'text' ?
+            <CanvasImage image={cimg} text={postText} ref={refCanvas}/> : <>
+            {imagePreviewURL === null ? <></> :
+              <img src={imagePreviewURL} height={200} width={300}/> }
+            <br/>
+            <input ref={(ref) => { uploadInput = ref; }}
+              type="file" accept="image/*"
+              onChange={previewImage}
+            />
+            </>
+          }
+          <br/>
           <Button type="submit" variant="contained" color="primary" size="large">
             Post
           </Button>
