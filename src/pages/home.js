@@ -1,4 +1,6 @@
 import React, {useState, useEffect} from "react";
+import { Link, useHistory, useLocation } from 'react-router-dom';
+
 import {Typography, Grid} from '@material-ui/core';
 import Content from '../components/content';
 import { Navbar } from '../components/navbar';
@@ -25,11 +27,10 @@ const Home = () => {
   const searchPosts = useImperativeQuery(SEARCH_POSTS)
   const searchPostsByTag = useImperativeQuery(SEARCH_POST_BY_TAG)
   const getPosts = useImperativeQuery(GET_APPROVED_POST);
-  const getMostRecentPosts = useImperativeQuery(GET_RECENT_POSTS);
-  const getMostOldestPosts = useImperativeQuery(GET_OLDEST_POSTS);
   const getTags = useImperativeQuery(GET_TAGS);
   const searchByTextAndTags = useImperativeQuery(SEARCH_BY_TEXT_AND_TAGS);
   
+
   const handleChange = (event) => {
     
     setTags(event.target.value);
@@ -154,10 +155,16 @@ const Home = () => {
 }
 
 function PostList({mydata}) {
+  let location = useLocation();
   return <Grid container spacing={2}>
     {mydata.queryPost.map(post =>
       <Grid item xs={12} sm={6} md={4} lg={3} key={post.id}>
-        <PostCard author={post.createdby.username} text={post.text} postID={post.id} time={post.timeStamp} likes={post.likes} flagCount={post.numFlags} flags={post.flags} tags={post.tags} img={post.img} isApproved={true}/>
+        <Link to={{
+          pathname: `/post/${post.id}`,
+          state: {background: location } 
+         }}  >
+        <PostCard author={post.createdby.username} text={post.text} postID={post.id} time={post.timeStamp} likes={post.likes} flagCount={post.numFlags} flags={post.flags} tags={post.tags} img={post.img} isApproved={true} id={post.id}/>
+        </Link>
       </Grid>
     )}
   </Grid>;

@@ -270,7 +270,7 @@ export default function PostCard({author, text, isApproved, flagCount, postID, l
           <IconButton aria-label="flag" value="check" style={{ color: flagged?red[500]:grey[500] }} onClick={handleFlag} selected={flagged}>
           <FlagSharpIcon fontSize="small"/>
           </IconButton>
-          <TwitterShareButton className={classes.share} style={{ color: blue[500] }} url={window.location.href} title="Check this out"  >
+          <TwitterShareButton className={classes.share} style={{ color: blue[500] }} url={window.location.host+"/post/"+postID} title="Check this out ">
             <TwitterIcon fontSize="small"/>
           </TwitterShareButton>
           </> : 
