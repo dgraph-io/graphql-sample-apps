@@ -1,5 +1,13 @@
 import React, { Suspense, useState, useEffect } from 'react';
-import { Router, Route, Switch } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useHistory,
+  useLocation,
+  useParams
+} from "react-router-dom";
 
 import history from "./utils/history";
 
@@ -14,6 +22,7 @@ import Flagged from "./pages/flagged"
 import PrivateRoute from "./components/privateRoute"
 import {Sidebar, SidebarItem} from './components/sidebar';
 import Loading from "./components/loading"
+import CardModal from "./components/cardModal"
 
 // imports material UI
 import {Typography} from '@material-ui/core';
@@ -46,8 +55,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
+  
   const [idToken, setIdToken] = useState("");
-
   const classes = useStyles();
   const { isLoading, isAuthenticated, user, getIdTokenClaims } = useAuth0();
 
@@ -69,7 +78,7 @@ function App() {
   }
   
   const client = createApolloClient(idToken);
-  console.log(user)
+ 
   return (
     <ApolloProvider client={client}>
     <div className={classes.root}>
@@ -88,21 +97,35 @@ function App() {
       </Sidebar>
       <Router history={history}>
         <Suspense fallback={<div />}>
-          <Switch>
-            <Route path="/" exact={true} component={Home} />
-            <PrivateRoute path="/profile" exact={true} component={Profile} />
-            <PrivateRoute path="/types/:typeId" exact={true} component={Types} />
-            <PrivateRoute path="/create" exact={true} component={Create} />
-            <PrivateRoute path="/approve" exact={true} component={Approve} />
-            <PrivateRoute path="/flagged" exact={true} component={Flagged} />
-            <Route component={NotFound} />
-          </Switch>
+          <ModalSwitch />
         </Suspense>
       </Router>
     </div>
     </ApolloProvider>
   )
 }
+
+function ModalSwitch(){
+  let location = useLocation();
+  let background = location.state && location.state.background;
+  return (
+    <div>
+      <Switch location={background || location}>
+      <Route path="/" exact={true} component={Home} />
+        <PrivateRoute path="/profile" exact={true} component={Profile} />
+        <PrivateRoute path="/post/:postId" exact={true} component={CardModal} />
+        <PrivateRoute path="/create" exact={true} component={Create} />
+        <PrivateRoute path="/approve" exact={true} component={Approve} />
+        <PrivateRoute path="/flagged" exact={true} component={Flagged} />
+        <Route component={NotFound} />
+      </Switch>
+       {background && <PrivateRoute path="/post/:postId" exact={true} component={CardModal}/>}
+    </div>
+  );
+}
+
+
+
 
 function AdminSidebarItem({user}) {
   const {loading, error, data} = useQuery(GET_USER, {variables: {username: user.email}})
