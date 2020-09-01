@@ -8,7 +8,7 @@ type User @auth(
     """
     },
     { rule:  "{$ROLE: { eq: \"ADMIN\" } }"}
-  ]
+  ]}
   delete: { rule:  "{$ROLE: { eq: \"ADMIN\" } }"}
   update: { rule:  "{$ROLE: { eq: \"ADMIN\" } }"}
 ){
