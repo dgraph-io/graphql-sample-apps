@@ -10,7 +10,6 @@ type User @auth(
     { rule:  "{$ROLE: { eq: \"ADMIN\" } }"}
   ]}
   delete: { rule:  "{$ROLE: { eq: \"ADMIN\" } }"}
-  update: { rule:  "{$ROLE: { eq: \"ADMIN\" } }"}
 ){
     username: String! @id
     name: String
@@ -20,7 +19,6 @@ type User @auth(
     flaggedPost: [Post]
 }
 type Tag @auth(
-  add: { rule:  "{$ROLE: { eq: \"ADMIN\" } }"}
   delete: { rule:  "{$ROLE: { eq: \"ADMIN\" } }"}
   update: { rule:  "{$ROLE: { eq: \"ADMIN\" } }"}
 ){
@@ -38,7 +36,6 @@ type Post @auth(
         } """
     }
   delete: { rule:  "{$ROLE: { eq: \"ADMIN\" } }"}
-  update: { rule:  "{$ROLE: { eq: \"ADMIN\" } }"}
 ){
     id: ID!
     text: String @search(by: [fulltext])
