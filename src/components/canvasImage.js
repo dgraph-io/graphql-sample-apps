@@ -163,7 +163,7 @@ export default React.forwardRef(function CanvasImage({text}, ref) {
     const bgImagePromise = useMemo(() => imagePromise(image), [image])
 
     const margin = 50
-    const sideMargin = 5
+    const sideMargin = 10
 
     const classes = useStyles();
     
@@ -184,10 +184,11 @@ export default React.forwardRef(function CanvasImage({text}, ref) {
             const lines = arr.get('lines')
             const textHeight = arr.get('textHeight')
             console.log(lines.length, textHeight)
-            ctx.font = textHeight.toString(10) + "px impact";
+            ctx.font = textHeight.toString(10) + "px arial";
+            let head = (canvas.height/2) - (lines.length/2 - 0.5)*textHeight;
             lines.forEach((line, idx) => {
-                ctx.fillText(line, canvas.width / 2, margin+idx*textHeight);
-                ctx.strokeText(line, canvas.width / 2, margin+idx*textHeight);
+                ctx.fillText(line, canvas.width / 2, head+idx*textHeight);
+                ctx.strokeText(line, canvas.width / 2, head+idx*textHeight);
             });
         })()
     }, [image, ref.current, text, color]) // rerender if image, text or canvas size updates

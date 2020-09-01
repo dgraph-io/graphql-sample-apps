@@ -43,7 +43,7 @@ const AuthNav = () => {
 
   return (
     <div>
-      {isAuthenticated ? <LogoutButton /> : <><LoginButton /> <SignupButton /></>}
+      {isAuthenticated ? <></> : <><LoginButton /> <SignupButton /></>}
     </div>
   );
 };

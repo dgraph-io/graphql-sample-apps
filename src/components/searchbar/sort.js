@@ -33,25 +33,23 @@ export function Sort({cb}) {
   };
 
   return (
-    <div style={{ width: 600 }}>
-      <FormControl variant="outlined" className={classes.formControl}>
-        <InputLabel htmlFor="outlined-age-native-simple">Sort By</InputLabel>
-        <Select
-          native
-          value={state.age}
-          onChange={handleChange}
-          label="Sort By"
-          inputProps={{
-            name: 'sort by',
-            id: 'outlined-age-native-simple',
-          }}
-        >
-          <option aria-label="None" value="" />
-          <option value="new">Newest</option>
-          <option value="old">Oldest</option>
-          <option value="liked">Most Liked</option>
-        </Select>
-      </FormControl>
-    </div>
+    <FormControl variant="outlined" className={classes.formControl}>
+      <InputLabel htmlFor="outlined-age-native-simple">Sort By</InputLabel>
+      <Select
+        native
+        value={state.age}
+        onChange={handleChange}
+        label="Sort By"
+        inputProps={{
+          name: 'sort by',
+          id: 'outlined-age-native-simple',
+        }}
+      >
+        <option aria-label="None" value="" />
+        <option value="new">Newest</option>
+        <option value="old">Oldest</option>
+        <option value="liked">Most Liked</option>
+      </Select>
+    </FormControl>
   );
 }

@@ -20,6 +20,7 @@ import useImperativeQuery from "../utils/imperativeQuery"
 // imports for image uploading
 import axios from 'axios';
 import {v4 as uuid} from 'uuid'; 
+import LoadingOverlay from 'react-loading-overlay';
 import CanvasImage from "../components/canvasImage";
 import * as cimg from "../assets/images/background.jpg"
 
@@ -41,6 +42,8 @@ export const Create = () => {
   const [names, setNames] = useState([]);
   const [type, setType] = React.useState('text');
   const [postText, setPostText] = useState("");
+  const [isMod, setIsMod] = useState(false);
+  const [isActive, setIsActive] = useState(false);
   const [imagePreviewURL, setImagePreviewURL] = useState(null);
   const refCanvas = useRef(null);
   var uploadInput = null;
@@ -48,7 +51,8 @@ export const Create = () => {
   const printMessage = () => {
     setPostText("")
     setTags([])
-    alert("Joke submitted for review!!")
+    setIsActive(false)
+    {isMod ? alert("Joke posted!!") :alert("Joke submitted for review!!")}
   }
 
   const [addPost] = useMutation(ADD_POST, {onCompleted: printMessage});
@@ -68,6 +72,7 @@ export const Create = () => {
       formatted_tags.push({"name": element})
     });
 
+    setIsMod(data.getUser.isMod)
     // add post to db
     const newPost = [{
       text: postText,
@@ -102,6 +107,7 @@ export const Create = () => {
   const handleSubmit = async (evt) => {
       evt.preventDefault();
 
+      setIsActive(true);
       // Set image properties
       var dataUrl, file, fileName = uuid(), fileType;
       if(type === 'text'){
@@ -143,14 +149,17 @@ export const Create = () => {
         axios.put(signedRequest,file,options)
         .then(result => {
           console.log("Response from s3: ", result)
+          console.log(url, data, url)
           addToDatabase(data, url)
         })
         .catch(error => {
+          setIsActive(false)
           alert("ERROR " + JSON.stringify(error));
         })
       })
       .catch(error => {
-        console.log("ERROR: hehe", error, JSON.stringify(error))
+        console.log("ERROR:", error, JSON.stringify(error))
+        setIsActive(false)
         alert("ERROR: " + error);
       })
   }
@@ -184,7 +193,10 @@ export const Create = () => {
     <>
       <Navbar title="Create" />
       <Content>
-
+      <LoadingOverlay
+        active={isActive}
+        text='Posting the joke...'
+        >
       <div style={{"display":"flex", "justify-content":"space-between"}}>
       <FormControl className={classes.formControl}>
         <InputLabel>Joke Type</InputLabel>
@@ -226,6 +238,7 @@ export const Create = () => {
             Post
           </Button>
         </form>
+      </LoadingOverlay>
       </Content>
     </>
   );
