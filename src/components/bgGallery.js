@@ -46,7 +46,7 @@ export default function BGGallery({IMAGES, setBgImage}) {
           <Gallery
             images={images}
             onSelectImage={onSelectImage}
-            showLightboxThumbnails={true}/>
+            onClickThumbnail={onSelectImage}/>
         </div>
     );
 }

@@ -2,6 +2,7 @@ import React from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import Content from '../components/content';
 import { Navbar } from '../components/navbar';
+import LogoutButton from "../components/logoutButton";
 
 const Profile = () => {
 
@@ -16,6 +17,7 @@ const Profile = () => {
           <p>Name: <strong>{user.name}</strong></p>
           <p>Email: <strong>{user.email}</strong></p>
         </div>
+        <LogoutButton />
     </Content>
   </>
 }

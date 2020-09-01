@@ -1,6 +1,6 @@
 import React from "react";
 import {Typography, Grid} from '@material-ui/core';
-import { gql, useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 
 import Content from '../components/content';
 import { Navbar } from '../components/navbar';

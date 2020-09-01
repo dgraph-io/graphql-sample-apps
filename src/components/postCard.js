@@ -19,8 +19,8 @@ import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import { red, blue, grey, pink, maroon } from '@material-ui/core/colors';
-import FavoriteIcon from '@material-ui/icons/Favorite';
+import { red, blue, grey, pink, orange, deepOrange, yellow } from '@material-ui/core/colors';
+import EmojiEmotionsIcon from '@material-ui/icons/EmojiEmotions';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CancelIcon from '@material-ui/icons/Cancel';
 import FlagSharpIcon from '@material-ui/icons/FlagSharp';
@@ -44,8 +44,9 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 345,
   },
   media: {
-    height: 0,
+    height: '100%',
     paddingTop: '56.25%', // 16:9
+    width: '100%'
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -249,23 +250,20 @@ export default function PostCard({author, text, isApproved, flagCount, postID, l
         className={classes.media}
         image={img}
       />
-      <CardContent>
-        
-      </CardContent>
       <CardActions disableSpacing>
         {
           isApproved ?
           <>
-          <Typography variant="button" style={{ color: liked?pink[200]:grey[500] }} className={classes.likeCount} color="primary" component="p">
+          <Typography variant="button" style={{ color: liked?orange[500]:grey[500], font: "15px arial" }} className={classes.likeCount} color="primary" component="p">
           {numlikes}
           </Typography>
-          <IconButton aria-label="add to favorites" style={{ color: liked?pink[200]:grey[500] }} value="check" onClick={handleLike} selected={liked}>
-            <FavoriteIcon  fontSize="small"/>
+          <IconButton aria-label="add to favorites" style={{ color: liked?orange[500]:grey[500] }}  onClick={handleLike} selected={liked} >
+            <EmojiEmotionsIcon fontSize="small"/>
           </IconButton>
           <IconButton aria-label="flag" value="check" style={{ color: flagged?red[500]:grey[500] }} onClick={handleFlag} selected={flagged}>
-          <FlagSharpIcon fontSize="small"/>
+            <FlagSharpIcon fontSize="small"/>
           </IconButton>
-          <TwitterShareButton className={classes.share} style={{ color: blue[500] }} url={window.location.href} title="Check this out"  >
+          <TwitterShareButton style={{ color: blue[500] }} url={window.location.href} title="Check this out"  >
             <TwitterIcon fontSize="small"/>
           </TwitterShareButton>
           </> : 
@@ -292,7 +290,6 @@ export default function PostCard({author, text, isApproved, flagCount, postID, l
         >
           <ExpandMoreIcon />
         </IconButton>
-      
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
       <CardHeader
@@ -304,9 +301,11 @@ export default function PostCard({author, text, isApproved, flagCount, postID, l
         title={author}
         subheader={DateTimeFormat(time, "mmm dS, yyyy ,h:MM TT")}
       />
+      { isApproved ? <></> :
       <Typography variant="body2" color="textSecondary" backcomponent="p">
           {postText}
-        </Typography>
+      </Typography>
+      }
       <TagList tags={postTags} />
       </Collapse>
     </Card>
