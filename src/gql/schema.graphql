@@ -1,12 +1,29 @@
-type User {
+type User @auth(
+  add: {or: [{ rule: """
+      query ($USER: String!){
+        queryUser(filter: {username: {eq: $USER}}) {
+          name
+        }
+      }
+    """
+    },
+    { rule:  "{$ROLE: { eq: \"ADMIN\" } }"}
+  ]
+  delete: { rule:  "{$ROLE: { eq: \"ADMIN\" } }"}
+  update: { rule:  "{$ROLE: { eq: \"ADMIN\" } }"}
+){
     username: String! @id
     name: String
-    posts: [Post]
+    posts: [Post] @hasInverse(field: createdby)
     isMod: Boolean
     likedPost: [Post]
     flaggedPost: [Post]
 }
-type Tag{
+type Tag @auth(
+  add: { rule:  "{$ROLE: { eq: \"ADMIN\" } }"}
+  delete: { rule:  "{$ROLE: { eq: \"ADMIN\" } }"}
+  update: { rule:  "{$ROLE: { eq: \"ADMIN\" } }"}
+){
     name: String! @id @search(by: [fulltext])
     posts: [Post] @hasInverse(field: tags)
 }
@@ -20,6 +37,8 @@ type Post @auth(
             }
         } """
     }
+  delete: { rule:  "{$ROLE: { eq: \"ADMIN\" } }"}
+  update: { rule:  "{$ROLE: { eq: \"ADMIN\" } }"}
 ){
     id: ID!
     text: String @search(by: [fulltext])

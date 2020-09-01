@@ -143,6 +143,7 @@ export const Create = () => {
         axios.put(signedRequest,file,options)
         .then(result => {
           console.log("Response from s3: ", result)
+          console.log(url, data, url)
           addToDatabase(data, url)
         })
         .catch(error => {
