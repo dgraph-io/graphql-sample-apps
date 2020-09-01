@@ -23,6 +23,8 @@ import {v4 as uuid} from 'uuid';
 import CanvasImage from "../components/canvasImage";
 import * as cimg from "../assets/images/background.jpg"
 
+const AWS_ENDPOINT = "https://agfpqpmjc2.execute-api.us-east-1.amazonaws.com/getSignedURL"
+
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
@@ -122,12 +124,12 @@ export const Create = () => {
 
       // upload the image
       console.log("Preparing the upload");
-      axios.post("http://localhost:4000/sign_s3",{
+      axios.post(AWS_ENDPOINT, {
         fileName : fileName,
         fileType : fileType
       })
       .then(response => {
-        var returnData = response.data.data.returnData;
+        var returnData = response.data;
         var signedRequest = returnData.signedRequest;
         var url = returnData.url;
         console.log("Recieved a signed request " + signedRequest);
@@ -148,7 +150,8 @@ export const Create = () => {
         })
       })
       .catch(error => {
-        alert(JSON.stringify(error));
+        console.log("ERROR: hehe", error, JSON.stringify(error))
+        alert("ERROR: " + error);
       })
   }
 
@@ -181,6 +184,8 @@ export const Create = () => {
     <>
       <Navbar title="Create" />
       <Content>
+
+      <div style={{"display":"flex", "justify-content":"space-between"}}>
       <FormControl className={classes.formControl}>
         <InputLabel>Joke Type</InputLabel>
         <Select
@@ -192,6 +197,8 @@ export const Create = () => {
         </Select>
         <FormHelperText>What kind of joke you have?</FormHelperText>
       </FormControl>
+      <TagSelector names={names} tags={tags} handleChange={handleChange}/>
+      </div>
 
         <form autoComplete="off" onSubmit={handleSubmit}>
           <TextField type="joke" value={postText} required={true}
@@ -200,9 +207,8 @@ export const Create = () => {
             onChange={e => setPostText(e.target.value)}
             margin="normal" variant="outlined" 
             fullWidth multiline rows={5}
+            inputProps={{ maxLength: 250}}
           />
-          <TagSelector names={names} tags={tags} handleChange={handleChange}/>
-          <br />
           {
             type === 'text' ?
             <CanvasImage image={cimg} text={postText} ref={refCanvas}/> : <>

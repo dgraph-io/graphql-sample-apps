@@ -25,8 +25,6 @@ const Home = () => {
   const searchPosts = useImperativeQuery(SEARCH_POSTS)
   const searchPostsByTag = useImperativeQuery(SEARCH_POST_BY_TAG)
   const getPosts = useImperativeQuery(GET_APPROVED_POST);
-  const getMostRecentPosts = useImperativeQuery(GET_RECENT_POSTS);
-  const getMostOldestPosts = useImperativeQuery(GET_OLDEST_POSTS);
   const getTags = useImperativeQuery(GET_TAGS);
   const searchByTextAndTags = useImperativeQuery(SEARCH_BY_TEXT_AND_TAGS);
   
@@ -140,12 +138,12 @@ const Home = () => {
     <Content>
       { mydata != null &&
       <>
+      <div style={{"display":"flex", "flex-direction":"row", "justify-content":"flex-end"}}>
       <SearchBar value={textString} label="Search your joke here" onChange={(newText)=> setTextString(newText) } onRequestSearch={handleClick}  />
       <TagSelector names={names} tags={tags} handleChange={handleChange}  />
-      <IconButton  onClick={handleClick} >
-        <SearchIcon  fontSize="large" />
-      </IconButton>
       <Sort cb={sortBy}/>
+      <br/>
+      </div>
       <PostList mydata={mydata}/>
       </>
       }
