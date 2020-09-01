@@ -355,3 +355,29 @@ query($tags: String!, $text: String!){
   }
 }
 `;
+
+
+export const GET_POST_BY_ID = gql`
+  query($postId:ID! ){
+    getPost(id:$postId){
+      text
+      id
+      createdby{
+        username
+      }
+      isApproved
+      timeStamp
+      likes{
+        username
+      }
+      tags{
+          name
+      }
+      flags{
+        username
+      }
+      numFlags
+      img
+    }
+  }
+`;
