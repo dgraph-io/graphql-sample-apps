@@ -8,6 +8,60 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 // import styles
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
+import BGGallery from "./bgGallery";
+
+const IMAGES =  [
+    {
+        src: "https://devjokes.s3.amazonaws.com/background/blue.jpg",
+        thumbnail: "https://devjokes.s3.amazonaws.com/background/blue.jpg",
+        thumbnailWidth: 200,
+        thumbnailHeight: 200,
+        tags: [{value: "Blue", title: "Blue"}, {value: "Solid", title: "Solid"}],
+        caption: "Solid Blue ( The color of peace)"
+    },
+    {
+        src: "https://devjokes.s3.amazonaws.com/background/green.jpg",
+        thumbnail: "https://devjokes.s3.amazonaws.com/background/green.jpg",
+        thumbnailWidth: 200,
+        thumbnailHeight: 200,
+    },
+    {
+        src: "https://devjokes.s3.amazonaws.com/background/light-green.jpg",
+        thumbnail: "https://devjokes.s3.amazonaws.com/background/light-green.jpg",
+        thumbnailWidth: 200,
+        thumbnailHeight: 200,
+    },
+    {
+        src: "https://devjokes.s3.amazonaws.com/background/pink.jpg",
+        thumbnail: "https://devjokes.s3.amazonaws.com/background/pink.jpg",
+        thumbnailWidth: 200,
+        thumbnailHeight: 200,
+    },
+    {
+        src: "https://devjokes.s3.amazonaws.com/background/red.jpg",
+        thumbnail: "https://devjokes.s3.amazonaws.com/background/red.jpg",
+        thumbnailWidth: 200,
+        thumbnailHeight: 200,
+    },
+    {
+        src: "https://devjokes.s3.amazonaws.com/background/skin.jpg",
+        thumbnail: "https://devjokes.s3.amazonaws.com/background/skin.jpg",
+        thumbnailWidth: 200,
+        thumbnailHeight: 200,
+    },
+    {
+        src: "https://devjokes.s3.amazonaws.com/background/white.jpg",
+        thumbnail: "https://devjokes.s3.amazonaws.com/background/white.jpg",
+        thumbnailWidth: 200,
+        thumbnailHeight: 200,
+    },
+    {
+        src: "https://devjokes.s3.amazonaws.com/background/yellow.jpg",
+        thumbnail: "https://devjokes.s3.amazonaws.com/background/yellow.jpg",
+        thumbnailWidth: 200,
+        thumbnailHeight: 200,
+    },
+].splice(0,8);
 
 const useStyles = makeStyles((theme) => ({
     expand: {
@@ -101,10 +155,13 @@ async function getPrintableLines(ctx, phrase, maxPxLength, maxPxHeight, margin, 
     return mp
 }
 
-export default React.forwardRef(function CanvasImage({image, text}, ref) {
-    const bgImagePromise = useMemo(() => imagePromise(image), [image])
+export default React.forwardRef(function CanvasImage({text}, ref) {
+    const [image, setImage] = useState(IMAGES[0]['src'])
     const [color, setColor] = useState('red')
     const [expanded, setExpanded] = React.useState(false);
+    const [expandedBG, setExpandedBG] = React.useState(false);
+    const bgImagePromise = useMemo(() => imagePromise(image), [image])
+
     const margin = 50
     const sideMargin = 5
 
@@ -133,7 +190,7 @@ export default React.forwardRef(function CanvasImage({image, text}, ref) {
                 ctx.strokeText(line, canvas.width / 2, margin+idx*textHeight);
             });
         })()
-    }, [image, ref.current, bgImagePromise, text, color]) // rerender if image, text or canvas size updates
+    }, [image, ref.current, text, color]) // rerender if image, text or canvas size updates
     return (
     <div>
         <canvas ref={ref} width={300} height={200} />
@@ -154,6 +211,24 @@ export default React.forwardRef(function CanvasImage({image, text}, ref) {
             </div>
             <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <CirclePicker onChangeComplete={(clr, evt) => {setColor(clr["hex"])}}/>
+            </Collapse>
+        </div>
+        <div>
+            <div>
+                &nbsp; &nbsp; Background
+                <IconButton
+                className={clsx(classes.expand, {
+                    [classes.expandOpen]: expandedBG,
+                })}
+                onClick={() => setExpandedBG(!expandedBG)}
+                aria-expanded={expandedBG}
+                aria-label="show more"
+                >
+                <ExpandMoreIcon />
+                </IconButton>
+            </div>
+            <Collapse in={expandedBG} timeout="auto" unmountOnExit>
+                <BGGallery IMAGES={IMAGES} setBgImage={setImage}/>
             </Collapse>
         </div>
     </div>

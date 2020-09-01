@@ -248,13 +248,8 @@ export default function PostCard({author, text, isApproved, flagCount, postID, l
       <CardMedia
         className={classes.media}
         image={img}
-        title="Paella dish"
       />
       <CardContent>
-        
-        <Typography variant="body2" color="textSecondary" backcomponent="p">
-          {postText}
-        </Typography>
         
       </CardContent>
       <CardActions disableSpacing>
@@ -309,6 +304,9 @@ export default function PostCard({author, text, isApproved, flagCount, postID, l
         title={author}
         subheader={DateTimeFormat(time, "mmm dS, yyyy ,h:MM TT")}
       />
+      <Typography variant="body2" color="textSecondary" backcomponent="p">
+          {postText}
+        </Typography>
       <TagList tags={postTags} />
       </Collapse>
     </Card>
