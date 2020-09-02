@@ -9,9 +9,8 @@ import MenuIcon from "@material-ui/icons/Menu";
 import CloseIcon from "@material-ui/icons/Close";
 import AppBar from "@material-ui/core/AppBar";
 
-import LogoutButton from "../logoutButton";
-import LoginButton from "../loginButton";
-import SignupButton from "../signupButton";
+import LoginButton from "../auth/loginButton";
+import SignupButton from "../auth/signupButton";
 import { useAuth0 } from "@auth0/auth0-react";
 
 import clsx from "clsx";

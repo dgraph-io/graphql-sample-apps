@@ -1,8 +1,7 @@
-import React, { useRef, useState, useEffect } from "react";
-import { Typography, FormControl } from "@material-ui/core";
+import React from "react";
 
+import { FormControl } from "@material-ui/core";
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-
 import Select from '@material-ui/core/Select';
 import Chip from '@material-ui/core/Chip';
 import Input from '@material-ui/core/Input';

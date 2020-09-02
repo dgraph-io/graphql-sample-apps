@@ -9,6 +9,7 @@ import {GET_UNAPPROVED_POST, GET_TAGS} from "../gql/queryData";
 import useImperativeQuery from "../utils/imperativeQuery"
 
 import { useState, useEffect } from 'react';
+import {g2aTags} from "../utils/utils";
 
 const Approve = () => {
   const [allTags, setAllTags] = useState([]);
@@ -17,11 +18,8 @@ const Approve = () => {
 
   const fetchTags = async () => {
     const {data} = await getTags()
-    var tmp = []
-    data.queryTag.forEach(element => {
-      tmp.push(element["name"])
-    });
-    setAllTags(tmp)
+    const allTags = g2aTags(data.queryTag)
+    setAllTags(allTags)
     console.log("tags fetched...", data.queryTag, "setNames:", allTags)
   }
 

@@ -1,22 +1,18 @@
 import React, {useState, useEffect} from "react";
 import { Link, useHistory, useLocation } from 'react-router-dom';
 
-import {Typography, Grid} from '@material-ui/core';
+import { Grid} from '@material-ui/core';
 import Content from '../components/content';
 import { Navbar } from '../components/navbar';
-import { Search } from "../components/searchbar/search";
-import { Sort } from "../components/searchbar/sort";
-import SearchIcon from '@material-ui/icons/Search';
+import { Sort } from "../components/sort";
 import SearchBar from 'material-ui-search-bar';
 import PostCard from "../components/postCard";
 import TagSelector from "../components/tagSelector";
-import IconButton from '@material-ui/core/IconButton';
 
-
-import { GET_TAGS, GET_RECENT_POSTS, GET_OLDEST_POSTS, GET_APPROVED_POST, SEARCH_POSTS, SEARCH_BY_TEXT_AND_TAGS, SEARCH_POST_BY_TAG } from "../gql/queryData";
+import { GET_TAGS, GET_APPROVED_POST, SEARCH_POSTS, SEARCH_BY_TEXT_AND_TAGS, SEARCH_POST_BY_TAG } from "../gql/queryData";
 import useImperativeQuery from "../utils/imperativeQuery"
-import DateTimeFormat from 'dateformat';
 
+import {g2aTags} from "../utils/utils"
 
 const Home = () => {
   
@@ -30,20 +26,10 @@ const Home = () => {
   const getTags = useImperativeQuery(GET_TAGS);
   const searchByTextAndTags = useImperativeQuery(SEARCH_BY_TEXT_AND_TAGS);
   
-
-  const handleChange = (event) => {
-    
-    setTags(event.target.value);
-    console.log(event.target.value);
-  }
-  
   const fetchTags = async () => {
     const {data} = await getTags()
-    var tmp = []
-    data.queryTag.forEach(element => {
-      tmp.push(element["name"])
-    });
-    setNames(tmp)
+    const allTags = g2aTags(data.queryTag)
+    setNames(allTags)
     console.log("tags fetched...", data.queryTag, "setNames:", names)
   }
 
@@ -57,7 +43,6 @@ const Home = () => {
     setMydata(data)
   }
   
-  
   const handleClick = async () => {
     if ((tags.length == 0) & (textString=="")) {
       return 
@@ -70,13 +55,8 @@ const Home = () => {
       setMydata(data)
       return 
     }
-    var i
-    var tagString = ""
-    for (i=0;i<tags.length;i++){
-      tagString+=" "+tags[i]
-    }
+    const tagString = tags.join(" ")
     if(textString === ""){
-      
       const {data} = await searchPostsByTag({
         input: tagString
       })
@@ -109,7 +89,6 @@ const Home = () => {
     console.log("Search by tag:", formatted_data)
     setMydata(formatted_data)
     return 
-    
   }
 
   const sortBy = async (by) => {
@@ -129,10 +108,9 @@ const Home = () => {
     sortedData = {"queryPost": newData}
     setMydata(sortedData)
     return 
-    
   }
 
-  useEffect( () => {
+  useEffect( async () => {
     getData()
   }, [])
 
@@ -141,15 +119,16 @@ const Home = () => {
     <Content>
       { mydata != null &&
       <>
-      <div style={{"display":"flex", "justify-content":"space-between"}}>
-      <TagSelector names={names} tags={tags} handleChange={handleChange}  />
-      <SearchBar value={textString} label="Search your joke here" 
-        onChange={(newText)=> setTextString(newText) }
-        onRequestSearch={handleClick}
-        />
-      <Sort cb={sortBy}/>
-      </div>
-      <PostList mydata={mydata}/>
+        <div style={{"display":"flex", "justify-content":"space-between"}}>
+          <TagSelector names={names} tags={tags} 
+            handleChange={(e) => setTags(e.target.value)}  />
+          <SearchBar value={textString} label="Search your joke here" 
+            onChange={(newText)=> setTextString(newText) }
+            onRequestSearch={handleClick}
+            />
+          <Sort cb={sortBy}/>
+        </div>
+        <PostList mydata={mydata}/>
       </>
       }
     </Content>
@@ -157,16 +136,11 @@ const Home = () => {
 }
 
 function PostList({mydata}) {
-  let location = useLocation();
+  const location = useLocation();
   return <Grid container spacing={2}>
     {mydata.queryPost.map(post =>
       <Grid item xs={12} sm={6} md={4} lg={3} key={post.id}>
-        <Link to={{
-          pathname: `/post/${post.id}`,
-          state: {background: location } 
-         }}  >
-        <PostCard author={post.createdby.username} text={post.text} postID={post.id} time={post.timeStamp} likes={post.likes} flagCount={post.numFlags} flags={post.flags} tags={post.tags} img={post.img} isApproved={true} id={post.id}/>
-        </Link>
+        <PostCard author={post.createdby.username} text={post.text} postID={post.id} time={post.timeStamp} likes={post.likes} flagCount={post.numFlags} flags={post.flags} tags={post.tags} img={post.img} isApproved={true} id={post.id} location={location}/>
       </Grid>
     )}
   </Grid>;

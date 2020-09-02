@@ -2,7 +2,7 @@ import React from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import Content from '../components/content';
 import { Navbar } from '../components/navbar';
-import LogoutButton from "../components/logoutButton";
+import LogoutButton from "../components/auth/logoutButton";
 
 const Profile = () => {
 
