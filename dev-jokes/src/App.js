@@ -3,7 +3,6 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  useHistory,
   useLocation
 } from "react-router-dom";
 
@@ -64,7 +63,7 @@ function App() {
       }
     };
     initAuth0();
-  }, [isAuthenticated]);
+  }, [isAuthenticated, getIdTokenClaims]);
 
   if (isLoading) {
     return <Loading />;
