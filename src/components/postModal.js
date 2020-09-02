@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 // import material UI
 import { makeStyles } from '@material-ui/core/styles';
@@ -10,7 +10,6 @@ import TextField from "@material-ui/core/TextField";
 
 // import components
 import TagSelector from "../components/tagSelector";
-import { Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -40,11 +39,6 @@ export default function TransitionsModal({open, setOpen, text, setText, tags, se
     setOpen(false)
   }
 
-  const handleChange = (event) => {
-    setTags(event.target.value);
-    console.log("handle", event.target.value, tags)
-  };
-
   return (
       <Modal
         aria-labelledby="transition-modal-title"
@@ -64,7 +58,8 @@ export default function TransitionsModal({open, setOpen, text, setText, tags, se
                 value={text} variant="outlined" fullWidth multiline rows={5}
                 required={true} onChange={e => setText(e.target.value)}
               />
-              <TagSelector names={allTags} tags={tags} handleChange={handleChange}/>
+              <TagSelector names={allTags} tags={tags}
+                handleChange={(e) => setTags(e.target.value)}/>
               <br />
               <Button variant="contained" color="primary" size="small" onClick={onUpdateHandler}>
                 Update

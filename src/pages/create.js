@@ -1,11 +1,11 @@
 import React, { useRef, useState, useEffect } from "react";
 
 //import material UI
-import { Typography, FormControl, Select, Button, TextField, InputLabel, MenuItem, FormHelperText } from "@material-ui/core";
+import { FormControl, Select, Button, TextField, InputLabel, MenuItem, FormHelperText } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
 
 // import components
-import { Navbar, NavbarItem } from "../components/navbar";
+import { Navbar } from "../components/navbar";
 import Content from "../components/content";
 import TagSelector from "../components/tagSelector";
 
@@ -13,7 +13,7 @@ import TagSelector from "../components/tagSelector";
 import { useAuth0 } from "@auth0/auth0-react";
 
 // import GQL
-import { useQuery, useMutation } from "@apollo/react-hooks";
+import { useMutation } from "@apollo/react-hooks";
 import {GET_TAGS ,GET_USER, ADD_POST} from "../gql/queryData"
 import useImperativeQuery from "../utils/imperativeQuery"
 
@@ -24,16 +24,15 @@ import LoadingOverlay from 'react-loading-overlay';
 import CanvasImage from "../components/canvasImage";
 import * as cimg from "../assets/images/background.jpg"
 
+import {g2aTags, a2gTags, dataURItoBlob} from "../utils/utils"
+
 const AWS_ENDPOINT = "https://agfpqpmjc2.execute-api.us-east-1.amazonaws.com/getSignedURL"
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
     minWidth: 120,
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
-  },
+  }
 }));
 
 export const Create = () => {
@@ -61,17 +60,9 @@ export const Create = () => {
 
   const { user } = useAuth0()
 
-  const handleChange = (event) => {
-    setTags(event.target.value);
-  };
-
   const addToDatabase = (data, imgUrl) => {
     // parse the tags into required format
-    var formatted_tags = []
-    tags.forEach(element => {
-      formatted_tags.push({"name": element})
-    });
-
+    const formatted_tags = a2gTags(tags)
     setIsMod(data.getUser.isMod)
     // add post to db
     const newPost = [{
@@ -94,15 +85,6 @@ export const Create = () => {
       }
     })
   }
-
-  const dataURItoBlob = (dataURI) => {
-    var binary = atob(dataURI.split(',')[1]);
-    var array = [];
-    for(var i = 0; i < binary.length; i++) {
-        array.push(binary.charCodeAt(i));
-    }
-    return new Blob([new Uint8Array(array)], {type: 'image/jpeg'});
-}
 
   const handleSubmit = async (evt) => {
       evt.preventDefault();
@@ -166,17 +148,13 @@ export const Create = () => {
 
   const fetchTags = async () => {
     const {data} = await getTags()
-    var tmp = []
-    data.queryTag.forEach(element => {
-      tmp.push(element["name"])
-    });
-    setNames(tmp)
+    const allTags = g2aTags(data.queryTag)
+    setNames(allTags)
     console.log("tags fetched...", data.queryTag, "setNames:", names)
   }
 
   const previewImage = (e) => {
     e.preventDefault();
-
     let reader = new FileReader()
     let file = e.target.files[0]
     reader.onloadend = () => {
@@ -192,54 +170,53 @@ export const Create = () => {
   return (
     <>
       <Navbar title="Create" />
-      <Content>
       <LoadingOverlay
         active={isActive}
         text='Posting the joke...'
         >
-      <div style={{"display":"flex", "justify-content":"space-between"}}>
-      <FormControl className={classes.formControl}>
-        <InputLabel>Joke Type</InputLabel>
-        <Select
-          value={type}
-          onChange={(event) => setType(event.target.value)}
-        >
-          <MenuItem value={'text'}>Text Joke</MenuItem>
-          <MenuItem value={'meme'}>Meme</MenuItem>
-        </Select>
-        <FormHelperText>What kind of joke you have?</FormHelperText>
-      </FormControl>
-      <TagSelector names={names} tags={tags} handleChange={handleChange}/>
-      </div>
-
-        <form autoComplete="off" onSubmit={handleSubmit}>
-          <TextField type="joke" value={postText} required={true}
-            label={type === 'text' ? "Joke": "Description"}
-            name={type === 'text' ? "Joke": "Description"}
-            onChange={e => setPostText(e.target.value)}
-            margin="normal" variant="outlined" 
-            fullWidth multiline rows={5}
-            inputProps={{ maxLength: 250}}
-          />
-          {
-            type === 'text' ?
-            <CanvasImage image={cimg} text={postText} ref={refCanvas}/> : <>
-            {imagePreviewURL === null ? <></> :
-              <img src={imagePreviewURL} height={200} width={300}/> }
+        <Content>
+          <div style={{"display":"flex", "justify-content":"space-between"}}>
+            <FormControl className={classes.formControl}>
+              <InputLabel>Joke Type</InputLabel>
+              <Select
+                value={type}
+                onChange={(event) => setType(event.target.value)}
+              >
+                <MenuItem value={'text'}>Text Joke</MenuItem>
+                <MenuItem value={'meme'}>Meme</MenuItem>
+              </Select>
+              <FormHelperText>What kind of joke you have?</FormHelperText>
+            </FormControl>
+            <TagSelector names={names} tags={tags} 
+              handleChange={(e) => setTags(e.target.value)}/>
+          </div>
+          <form autoComplete="off" onSubmit={handleSubmit}>
+            <TextField type="joke" value={postText} required={true}
+              label={type === 'text' ? "Joke": "Description"}
+              name={type === 'text' ? "Joke": "Description"}
+              onChange={e => setPostText(e.target.value)}
+              margin="normal" variant="outlined" 
+              fullWidth multiline rows={5}
+              inputProps={{ maxLength: 250}}/>
+            {
+              type === 'text' ?
+              <CanvasImage image={cimg} text={postText} ref={refCanvas}/> : <>
+              {imagePreviewURL === null ? <></> :
+                <img src={imagePreviewURL} height={200} width={300}/> }
+              <br/>
+              <input ref={(ref) => { uploadInput = ref; }}
+                type="file" accept="image/*"
+                onChange={previewImage}
+              />
+              </>
+            }
             <br/>
-            <input ref={(ref) => { uploadInput = ref; }}
-              type="file" accept="image/*"
-              onChange={previewImage}
-            />
-            </>
-          }
-          <br/>
-          <Button type="submit" variant="contained" color="primary" size="large">
-            Post
-          </Button>
-        </form>
+            <Button type="submit" variant="contained" color="primary" size="large">
+              Post
+            </Button>
+          </form>
+        </Content>
       </LoadingOverlay>
-      </Content>
     </>
   );
 };

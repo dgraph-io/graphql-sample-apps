@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
+import { Link, useHistory, useLocation } from 'react-router-dom';
+
 // import styles
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
@@ -13,7 +15,6 @@ import Box from '@material-ui/core/Box';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
-import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
@@ -38,6 +39,8 @@ import { DELETE_POST, APPROVE_POST, LIKE_POST, UNLIKE_POST, FLAG_POST, UNFLAG_PO
 
 // import auth0
 import { useAuth0 } from '@auth0/auth0-react';
+import { a2gTags, g2aTags } from '../utils/utils';
+import { element } from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -69,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PostCard({author, text, isApproved, flagCount, postID, likes, time,tags, flags, img, allTags, updateCache}) {
+export default function PostCard({author, text, isApproved, flagCount, postID, likes, time,tags, flags, img, allTags, updateCache, id, location}) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const { isLoading, user } = useAuth0()
@@ -91,11 +94,10 @@ export default function PostCard({author, text, isApproved, flagCount, postID, l
   const [unflagPost] = useMutation(UNFLAG_POST);
   const [editPost] = useMutation(EDIT_POST);
 
-  var i;
   var flagList=[];
-  for (i = 0; i < flags.length;i++) {
-    flagList.push({username: flags[i]["username"]})
-  }
+  flags.forEach((element) => {
+    flagList.push({username: element["username"]})
+  })
  
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -184,14 +186,8 @@ export default function PostCard({author, text, isApproved, flagCount, postID, l
     var removeTags = postTags.filter(x => !newTags.includes(x));
     var addTags = newTags.filter(x => !postTags.includes(x));
 
-    var ptags = []
-    removeTags.forEach(element => {
-      ptags.push({"name": element})
-    });
-    var ntags = []
-    addTags.forEach(element => {
-      ntags.push({"name": element})
-    });
+    var ptags = a2gTags(removeTags)
+    var ntags = a2gTags(addTags)
     await editPost({
       variables: {
         input: postID,
@@ -229,10 +225,7 @@ export default function PostCard({author, text, isApproved, flagCount, postID, l
 
   // set Tags
   useEffect( () => {
-    var formatted_tags = []
-    tags.forEach(element => {
-      formatted_tags.push(element["name"])
-    });
+    const formatted_tags = g2aTags(tags)
     setPostTags(formatted_tags)
     setTags(formatted_tags)
   }, [])
@@ -246,10 +239,15 @@ export default function PostCard({author, text, isApproved, flagCount, postID, l
 
   return (
     <Card className={classes.root}>
-      <CardMedia
-        className={classes.media}
-        image={img}
-      />
+      <Link to={{
+        pathname: `/post/${id}`,
+        state: {background: location } 
+        }}  >
+        <CardMedia
+          className={classes.media}
+          image={img}
+        />
+      </Link>
       <CardActions disableSpacing>
         {
           isApproved ?
