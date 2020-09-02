@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import { Grid} from '@material-ui/core';
 import Content from '../components/content';
@@ -44,10 +44,10 @@ const Home = () => {
   }
   
   const handleClick = async () => {
-    if ((tags.length == 0) & (textString=="")) {
+    if ((tags.length === 0) & (textString==="")) {
       return 
     }
-    if (tags.length==0){
+    if (tags.length===0){
       const {data} = await searchPosts({
           text: textString
       })

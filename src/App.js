@@ -3,10 +3,8 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
   useHistory,
-  useLocation,
-  useParams
+  useLocation
 } from "react-router-dom";
 
 import history from "./utils/history";
@@ -54,7 +52,7 @@ function App() {
   const [role, setRole] = useState('USER');
 
   const classes = useStyles();
-  const { isLoading, isAuthenticated, user, getIdTokenClaims } = useAuth0();
+  const { isLoading, isAuthenticated, getIdTokenClaims } = useAuth0();
 
   useEffect(() => {
     const initAuth0 = async () => {
