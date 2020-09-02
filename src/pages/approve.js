@@ -57,7 +57,7 @@ function UnApprovedList({loading, error, data, allTags}) {
   return <Grid container spacing={2}>
     {data.queryPost.map(post =>
       <Grid item xs={12} sm={6} md={4} lg={3} key={post.text}>
-        <PostCard author={post.createdby.username} text={post.text} isApproved={false} postID={post.id} likes={post.likes} tags={post.tags} flags={post.flags} img={post.img} updateCache={updateCache} allTags={allTags}/>
+        <PostCard size={"345px"} author={post.createdby.username} text={post.text} isApproved={false} postID={post.id} likes={post.likes} tags={post.tags} flags={post.flags} img={post.img} updateCache={updateCache} allTags={allTags}/>
       </Grid>
     )}
   </Grid>;
