@@ -25,15 +25,23 @@ const Home = () => {
   const getPosts = useImperativeQuery(GET_APPROVED_POST);
   const getTags = useImperativeQuery(GET_TAGS);
   const searchByTextAndTags = useImperativeQuery(SEARCH_BY_TEXT_AND_TAGS);
+  
+  const fetchTags = async () => {
+    const {data} = await getTags()
+    const allTags = g2aTags(data.queryTag)
+    setNames(allTags)
+    console.log("tags fetched...", data.queryTag, "setNames:", names)
+  }
 
-  useEffect(() => {
-    (async () => {
-      const {data} = await getTags()
-      const allTags = g2aTags(data.queryTag)
-      setNames(allTags)
-      console.log("tags fetched...", data.queryTag, "setNames:", names)
-    })()
-  }, [names, getTags])
+  useEffect( () => {
+    fetchTags()
+  }, [])
+
+  const getData = async () => {
+    const {data} = await getPosts();
+    console.log(data)
+    setMydata(data)
+  }
   
   const handleClick = async () => {
     if ((tags.length === 0) & (textString==="")) {
@@ -102,13 +110,9 @@ const Home = () => {
     return 
   }
 
-  useEffect( () => {
-    (async () => {
-      const {data} = await getPosts();
-      console.log(data)
-      setMydata(data)
-    })()
-  }, [getPosts])
+  useEffect( async () => {
+    getData()
+  }, [])
 
   return <>
     <Navbar title="Home" color="primary" />

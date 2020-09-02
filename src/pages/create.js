@@ -146,6 +146,13 @@ export const Create = () => {
       })
   }
 
+  const fetchTags = async () => {
+    const {data} = await getTags()
+    const allTags = g2aTags(data.queryTag)
+    setNames(allTags)
+    console.log("tags fetched...", data.queryTag, "setNames:", names)
+  }
+
   const previewImage = (e) => {
     e.preventDefault();
     let reader = new FileReader()
@@ -156,14 +163,9 @@ export const Create = () => {
     reader.readAsDataURL(file)
   }
 
-  useEffect(() => {
-    (async () => {
-      const {data} = await getTags()
-      const allTags = g2aTags(data.queryTag)
-      setNames(allTags)
-      console.log("tags fetched...", data.queryTag, "setNames:", names)
-    })()
-  }, [names, getTags])
+  useEffect( () => {
+    fetchTags()
+  }, [])
 
   return (
     <>
@@ -200,7 +202,7 @@ export const Create = () => {
               type === 'text' ?
               <CanvasImage image={cimg} text={postText} ref={refCanvas}/> : <>
               {imagePreviewURL === null ? <></> :
-                <img src={imagePreviewURL} height={200} width={300} alt={"preview"}/> }
+                <img src={imagePreviewURL} height={200} width={300}/> }
               <br/>
               <input ref={(ref) => { uploadInput = ref; }}
                 type="file" accept="image/*"
