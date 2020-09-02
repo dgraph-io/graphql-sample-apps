@@ -16,16 +16,14 @@ const Approve = () => {
   const { loading, error, data } = useQuery(GET_UNAPPROVED_POST);
   const getTags = useImperativeQuery(GET_TAGS)
 
-  const fetchTags = async () => {
-    const {data} = await getTags()
-    const allTags = g2aTags(data.queryTag)
-    setAllTags(allTags)
-    console.log("tags fetched...", data.queryTag, "setNames:", allTags)
-  }
-
-  useEffect( () => {
-    fetchTags()
-  }, [])
+  useEffect(() => {
+    (async () => {
+      const {data} = await getTags()
+      const allTags = g2aTags(data.queryTag)
+      setAllTags(allTags)
+      console.log("tags fetched...", data.queryTag, "setNames:", allTags)
+    })()
+  }, [allTags, getTags])
 
   return <>
     <Navbar title="Approve" color="primary" />

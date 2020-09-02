@@ -13,18 +13,16 @@ const CardModal = (props) => {
     const [open, setOpen] = useState(true);
     const getPostById = useImperativeQuery(GET_POST_BY_ID);
     
-    const fetchPostbyId = async () => {
-      const {data} = await getPostById({
-          postId: postId
-      })
-      console.log(data)
-      console.log(data["getPost"])
-      setPost(data["getPost"])
-    };
-
     useEffect( () => {
-      fetchPostbyId()
-    }, [])
+      (async () => {
+        const {data} = await getPostById({
+          postId: postId
+        })
+        console.log(data)
+        console.log(data["getPost"])
+        setPost(data["getPost"])
+      })()
+    }, [getPostById, postId])
 
     const handleClose = () => {
       setOpen(false);
