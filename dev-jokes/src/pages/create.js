@@ -51,7 +51,7 @@ export const Create = () => {
     setPostText("")
     setTags([])
     setIsActive(false)
-    {isMod ? alert("Joke posted!!") :alert("Joke submitted for review!!")}
+    isMod ? alert("Joke posted!!") :alert("Joke submitted for review!!")
   }
 
   const [addPost] = useMutation(ADD_POST, {onCompleted: printMessage});
@@ -97,7 +97,7 @@ export const Create = () => {
         file = dataURItoBlob(dataUrl);
         fileType = "png"
       } else if (type === 'meme'){
-          if(uploadInput.files.length == 0){
+          if(uploadInput.files.length === 0){
             alert('Forgot to upload the meme?')
             return
           }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 // import styles
 import { makeStyles } from '@material-ui/core/styles';
@@ -20,7 +20,7 @@ import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import { red, blue, grey, pink, orange, deepOrange, yellow } from '@material-ui/core/colors';
+import { red, blue, grey, orange} from '@material-ui/core/colors';
 import EmojiEmotionsIcon from '@material-ui/icons/EmojiEmotions';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CancelIcon from '@material-ui/icons/Cancel';
@@ -34,13 +34,12 @@ import DateTimeFormat from 'dateformat';
 import {TwitterShareButton} from 'react-share';
 
 // import GQL
-import { useQuery, useMutation } from "@apollo/react-hooks";
+import { useMutation } from "@apollo/react-hooks";
 import { DELETE_POST, APPROVE_POST, LIKE_POST, UNLIKE_POST, FLAG_POST, UNFLAG_POST, EDIT_POST} from "../gql/queryData"
 
 // import auth0
 import { useAuth0 } from '@auth0/auth0-react';
 import { a2gTags, g2aTags } from '../utils/utils';
-import { element } from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
   root: {

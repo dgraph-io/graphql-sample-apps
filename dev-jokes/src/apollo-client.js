@@ -1,10 +1,11 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { createHttpLink } from "apollo-link-http";
 import { setContext } from "apollo-link-context";
+import config from "./config"
 
 const createApolloClient = (token) => {
     const httpLink = createHttpLink({
-      uri: process.env.REACT_APP_GRAPHQL_ENDPOINT,
+      uri: process.env.REACT_APP_GRAPHQL_ENDPOINT || config["REACT_APP_GRAPHQL_ENDPOINT"],
       options: {
         reconnect: true,
       },

@@ -115,9 +115,9 @@ async function getLines(ctx, phrase, maxPxLength, maxPxHeight, height, margin, s
 
         for (var i=0; i < wa.length; i++) {
             var w = wa[i];
-            measure = ctx.measureText(lastPhrase + (i==0?"":splitChar) + w).width;
+            measure = ctx.measureText(lastPhrase + (i===0?"":splitChar) + w).width;
             if (measure < maxPxLength - 2*sideMargin) {
-                lastPhrase += ((i==0?"":splitChar) + w);
+                lastPhrase += ((i===0?"":splitChar) + w);
             } else {
                 phraseArray.push(lastPhrase);
                 lastPhrase=w;
@@ -143,9 +143,9 @@ async function getPrintableLines(ctx, phrase, maxPxLength, maxPxHeight, margin, 
     var lines = arr.get('lines')
     var check = arr.get('check')
 
-    while(check == false && height > 1) {
+    while(check === false && height > 1) {
         height--
-        var arr = await getLines(ctx, phrase, maxPxLength, maxPxHeight, height, margin, sideMargin)
+        arr = await getLines(ctx, phrase, maxPxLength, maxPxHeight, height, margin, sideMargin)
         lines = arr.get('lines')
         check = arr.get('check')
     }
