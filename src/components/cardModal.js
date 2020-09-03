@@ -2,29 +2,24 @@ import React, {useState, useEffect} from 'react';
 import { useHistory } from "react-router-dom";
 import PostCard from "../components/postCard";
 import Modal from '@material-ui/core/Modal';
-import useImperativeQuery from "../utils/imperativeQuery"
 import {GET_POST_BY_ID } from "../gql/queryData.js";
 import Fade from '@material-ui/core/Fade';
+import { useQuery } from '@apollo/client';
 
 const CardModal = (props) => {
     const history = useHistory();
     const postId = props.match.params.postId
     const [post, setPost] = useState(null);
     const [open, setOpen] = useState(true);
-    const getPostById = useImperativeQuery(GET_POST_BY_ID);
+    const {data, loading, error} = useQuery(GET_POST_BY_ID,
+      {
+        variables: {postId: postId}
+      });
     
-    const fetchPostbyId = async () => {
-      const {data} = await getPostById({
-          postId: postId
-      })
-      console.log(data)
+    useEffect( () => {
       console.log(data["getPost"])
       setPost(data["getPost"])
-    };
-
-    useEffect( () => {
-      fetchPostbyId()
-    }, [])
+    }, [data, loading, error])
 
     const handleClose = () => {
       setOpen(false);

@@ -13,6 +13,7 @@ import { GET_TAGS, GET_APPROVED_POST, SEARCH_POSTS, SEARCH_BY_TEXT_AND_TAGS, SEA
 import useImperativeQuery from "../utils/imperativeQuery"
 
 import {g2aTags} from "../utils/utils"
+import { useQuery } from "@apollo/react-hooks";
 
 const Home = () => {
   
@@ -22,27 +23,23 @@ const Home = () => {
   const [textString, setTextString] = useState("")
   const searchPosts = useImperativeQuery(SEARCH_POSTS)
   const searchPostsByTag = useImperativeQuery(SEARCH_POST_BY_TAG)
-  const getPosts = useImperativeQuery(GET_APPROVED_POST);
-  const getTags = useImperativeQuery(GET_TAGS);
+  const {data: postData, loading: ploading, error: perror} = useQuery(GET_APPROVED_POST);
+  const {data: tagsData, loading: tloading, error: terror} = useQuery(GET_TAGS)
   const searchByTextAndTags = useImperativeQuery(SEARCH_BY_TEXT_AND_TAGS);
-  
-  const fetchTags = async () => {
-    const {data} = await getTags()
-    const allTags = g2aTags(data.queryTag)
-    setNames(allTags)
-    console.log("tags fetched...", data.queryTag, "setNames:", names)
-  }
 
-  useEffect( () => {
-    fetchTags()
-  }, [])
+  useEffect (() => {
+    if(!tloading && !terror){
+      setNames(g2aTags(tagsData.queryTag));
+    }
+  }, [tagsData, tloading, terror])
 
-  const getData = async () => {
-    const {data} = await getPosts();
-    console.log(data)
-    setMydata(data)
-  }
-  
+  useEffect (() => {
+    if(!ploading && !perror){
+      setMydata(postData);
+      console.log(postData)
+    }
+  }, [postData, ploading, perror])
+
   const handleClick = async () => {
     if ((tags.length === 0) & (textString==="")) {
       return 
@@ -110,16 +107,12 @@ const Home = () => {
     return 
   }
 
-  useEffect( async () => {
-    getData()
-  }, [])
-
   return <>
     <Navbar title="Home" color="primary" />
     <Content>
       { mydata != null &&
       <>
-        <div style={{"display":"flex", "justify-content":"space-between"}}>
+        <div style={{"display":"flex", "justifyContent":"space-between"}}>
           <TagSelector names={names} tags={tags} 
             handleChange={(e) => setTags(e.target.value)}  />
           <SearchBar value={textString} label="Search your joke here" 

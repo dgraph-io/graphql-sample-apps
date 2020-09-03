@@ -13,7 +13,7 @@ import TagSelector from "../components/tagSelector";
 import { useAuth0 } from "@auth0/auth0-react";
 
 // import GQL
-import { useMutation } from "@apollo/react-hooks";
+import { useMutation, useQuery } from "@apollo/react-hooks";
 import {GET_TAGS ,GET_USER, ADD_POST} from "../gql/queryData"
 import useImperativeQuery from "../utils/imperativeQuery"
 
@@ -56,7 +56,7 @@ export const Create = () => {
 
   const [addPost] = useMutation(ADD_POST, {onCompleted: printMessage});
   const getUsers = useImperativeQuery(GET_USER)
-  const getTags = useImperativeQuery(GET_TAGS)
+  const {data: tagsData, loading: tloading, error: terror} = useQuery(GET_TAGS)
 
   const { user } = useAuth0()
 
@@ -146,13 +146,6 @@ export const Create = () => {
       })
   }
 
-  const fetchTags = async () => {
-    const {data} = await getTags()
-    const allTags = g2aTags(data.queryTag)
-    setNames(allTags)
-    console.log("tags fetched...", data.queryTag, "setNames:", names)
-  }
-
   const previewImage = (e) => {
     e.preventDefault();
     let reader = new FileReader()
@@ -163,9 +156,11 @@ export const Create = () => {
     reader.readAsDataURL(file)
   }
 
-  useEffect( () => {
-    fetchTags()
-  }, [])
+  useEffect (() => {
+    if(!tloading && !terror){
+      setNames(g2aTags(tagsData.queryTag));
+    }
+  }, [tagsData, tloading, terror])
 
   return (
     <>
@@ -202,7 +197,7 @@ export const Create = () => {
               type === 'text' ?
               <CanvasImage image={cimg} text={postText} ref={refCanvas}/> : <>
               {imagePreviewURL === null ? <></> :
-                <img src={imagePreviewURL} height={200} width={300}/> }
+                <img src={imagePreviewURL} height={200} width={300} alt={"preview"}/> }
               <br/>
               <input ref={(ref) => { uploadInput = ref; }}
                 type="file" accept="image/*"

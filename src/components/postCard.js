@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 // import styles
 import { makeStyles } from '@material-ui/core/styles';
@@ -209,7 +209,7 @@ export default function PostCard({size, author, text, isApproved, flagCount, pos
       }    
     })
     setnumlikes(likes.length)
-  },[user])
+  },[user, likes])
 
   // set flags
   useEffect(() => {
@@ -220,21 +220,18 @@ export default function PostCard({size, author, text, isApproved, flagCount, pos
         setFlagged(true)
       }    
     })
-  },[user])
+  },[user, flags])
 
   // set Tags
   useEffect( () => {
     const formatted_tags = g2aTags(tags)
     setPostTags(formatted_tags)
     setTags(formatted_tags)
-  }, [])
+  }, [tags])
 
   if(isLoading) {
     return <Loading />
   }
-
-  if(img != null)
-    console.log("url:", img)
 
   return (
     <Card className={classes.root} style={{width: size}}>

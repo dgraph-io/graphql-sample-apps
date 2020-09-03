@@ -6,7 +6,6 @@ import Content from '../components/content';
 import { Navbar } from '../components/navbar';
 import PostCard from "../components/postCard";
 import {GET_UNAPPROVED_POST, GET_TAGS} from "../gql/queryData";
-import useImperativeQuery from "../utils/imperativeQuery"
 
 import { useState, useEffect } from 'react';
 import {g2aTags} from "../utils/utils";
@@ -14,18 +13,13 @@ import {g2aTags} from "../utils/utils";
 const Approve = () => {
   const [allTags, setAllTags] = useState([]);
   const { loading, error, data } = useQuery(GET_UNAPPROVED_POST);
-  const getTags = useImperativeQuery(GET_TAGS)
+  const {data: tagsData, loading: tloading, error: terror} = useQuery(GET_TAGS)
 
-  const fetchTags = async () => {
-    const {data} = await getTags()
-    const allTags = g2aTags(data.queryTag)
-    setAllTags(allTags)
-    console.log("tags fetched...", data.queryTag, "setNames:", allTags)
-  }
-
-  useEffect( () => {
-    fetchTags()
-  }, [])
+  useEffect (() => {
+    if(!tloading && !terror){
+      setAllTags(g2aTags(tagsData.queryTag));
+    }
+  }, [tagsData, tloading, terror])
 
   return <>
     <Navbar title="Approve" color="primary" />
