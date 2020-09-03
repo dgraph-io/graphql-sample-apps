@@ -1,10 +1,4 @@
 # DevJokes
-<<<<<<< HEAD
-Slash powered DevJokes application
-
-## Available Scripts
-=======
->>>>>>> ad5c8a5e4dfa0670a58eb6c6da4acc5af226f208
 
 A simple fun applications to post and view all your developer jokes. Code respository is [here](https://github.com/dgraph/DevJokes).
 
@@ -19,13 +13,9 @@ A simple fun applications to post and view all your developer jokes. Code respos
 - Logged in users can like and share the jokes.
 - Community moderation enabled through flagging.
 
-<<<<<<< HEAD
-You would need to have the following environment variables set (maybe in a `.env` file):
-=======
 ## Demo
 *Todo: Add GIFs*
 ### Creating a Joke
->>>>>>> ad5c8a5e4dfa0670a58eb6c6da4acc5af226f208
 
 ### Moderator Access
 
@@ -51,14 +41,6 @@ After configuring S3 Console, update the API Endpoint in `src/config.js`.
 ```zsh
 npm install && npm start
 ```
-<<<<<<< HEAD
-REACT_APP_AUTH0_DOMAIN="<auth0 domain>"
-REACT_APP_AUTH0_CLIENT_ID="<auth0 clientID>"
-REACT_APP_GRAPHQL_ENDPOINT="<slash endpoint>"
-```
-
-You may contact the current contributors to provide you the current credentials in use.
-=======
 
 ## Contribution guidelines
 This is an open source project, and we welcome contributions. Please open an issue if you have a feature request or better still if you have a PR for us to review. 
@@ -73,4 +55,3 @@ All active development of this project happens on GitHub. We actively welcome yo
 ## License
 
 [Apache License 2.0](LICENSE)
->>>>>>> ad5c8a5e4dfa0670a58eb6c6da4acc5af226f208

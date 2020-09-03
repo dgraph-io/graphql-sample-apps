@@ -30,10 +30,7 @@
     "react-canvas-draw": "^1.1.1",
     "react-color": "^2.18.1",
     "react-dom": "^16.13.1",
-<<<<<<< HEAD
-=======
     "react-ga": "^3.1.2",
->>>>>>> ad5c8a5e4dfa0670a58eb6c6da4acc5af226f208
     "react-grid-gallery": "^0.5.5",
     "react-image-resizer": "^1.3.0",
     "react-loading-overlay": "^1.0.1",
