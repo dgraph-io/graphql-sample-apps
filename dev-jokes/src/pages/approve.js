@@ -1,10 +1,18 @@
 import React from "react";
+<<<<<<< HEAD
 import {Typography, Grid} from '@material-ui/core';
+=======
+import {Typography} from '@material-ui/core';
+>>>>>>> ad5c8a5e4dfa0670a58eb6c6da4acc5af226f208
 import { useQuery } from '@apollo/client'
 
 import Content from '../components/content';
 import { Navbar } from '../components/navbar';
+<<<<<<< HEAD
 import PostCard from "../components/postCard";
+=======
+import MasonaryGrid from "../components/masonryGrid";
+>>>>>>> ad5c8a5e4dfa0670a58eb6c6da4acc5af226f208
 import {GET_UNAPPROVED_POST, GET_TAGS} from "../gql/queryData";
 
 import { useState, useEffect } from 'react';
@@ -50,6 +58,7 @@ function UnApprovedList({loading, error, data, allTags}) {
       Something Went Wrong. Did you remember to set the REACT_APP_GRAPHQL_ENDPOINT environment variable?
     </Typography>
   }
+<<<<<<< HEAD
   return <Grid container spacing={2}>
     {data.queryPost.map(post =>
       <Grid item xs={12} sm={6} md={4} lg={3} key={post.text}>
@@ -57,6 +66,9 @@ function UnApprovedList({loading, error, data, allTags}) {
       </Grid>
     )}
   </Grid>;
+=======
+  return <MasonaryGrid data={data} isApproved={false} updateCache={updateCache} allTags={allTags}/>
+>>>>>>> ad5c8a5e4dfa0670a58eb6c6da4acc5af226f208
 }
 
 export default Approve;

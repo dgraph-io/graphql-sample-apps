@@ -12,52 +12,92 @@ import BGGallery from "./bgGallery";
 
 const IMAGES =  [
     {
+<<<<<<< HEAD
         src: "https://devjokes.s3.amazonaws.com/background/blue.jpg",
         thumbnail: "https://devjokes.s3.amazonaws.com/background/blue.jpg",
+=======
+        src: "/background/blue.jpg",
+        thumbnail: "/background/blue.jpg",
+>>>>>>> ad5c8a5e4dfa0670a58eb6c6da4acc5af226f208
         thumbnailWidth: 200,
         thumbnailHeight: 200,
         tags: [{value: "Blue", title: "Blue"}, {value: "Solid", title: "Solid"}],
         caption: "Solid Blue ( The color of peace)"
     },
     {
+<<<<<<< HEAD
         src: "https://devjokes.s3.amazonaws.com/background/green.jpg",
         thumbnail: "https://devjokes.s3.amazonaws.com/background/green.jpg",
+=======
+        src: "/background/green.jpg",
+        thumbnail: "/background/green.jpg",
+>>>>>>> ad5c8a5e4dfa0670a58eb6c6da4acc5af226f208
         thumbnailWidth: 200,
         thumbnailHeight: 200,
     },
     {
+<<<<<<< HEAD
         src: "https://devjokes.s3.amazonaws.com/background/light-green.jpg",
         thumbnail: "https://devjokes.s3.amazonaws.com/background/light-green.jpg",
+=======
+        src: "/background/light-green.jpg",
+        thumbnail: "/background/light-green.jpg",
+>>>>>>> ad5c8a5e4dfa0670a58eb6c6da4acc5af226f208
         thumbnailWidth: 200,
         thumbnailHeight: 200,
     },
     {
+<<<<<<< HEAD
         src: "https://devjokes.s3.amazonaws.com/background/pink.jpg",
         thumbnail: "https://devjokes.s3.amazonaws.com/background/pink.jpg",
+=======
+        src: "/background/pink.jpg",
+        thumbnail: "/background/pink.jpg",
+>>>>>>> ad5c8a5e4dfa0670a58eb6c6da4acc5af226f208
         thumbnailWidth: 200,
         thumbnailHeight: 200,
     },
     {
+<<<<<<< HEAD
         src: "https://devjokes.s3.amazonaws.com/background/red.jpg",
         thumbnail: "https://devjokes.s3.amazonaws.com/background/red.jpg",
+=======
+        src: "/background/red.jpg",
+        thumbnail: "/background/red.jpg",
+>>>>>>> ad5c8a5e4dfa0670a58eb6c6da4acc5af226f208
         thumbnailWidth: 200,
         thumbnailHeight: 200,
     },
     {
+<<<<<<< HEAD
         src: "https://devjokes.s3.amazonaws.com/background/skin.jpg",
         thumbnail: "https://devjokes.s3.amazonaws.com/background/skin.jpg",
+=======
+        src: "/background/skin.jpg",
+        thumbnail: "/background/skin.jpg",
+>>>>>>> ad5c8a5e4dfa0670a58eb6c6da4acc5af226f208
         thumbnailWidth: 200,
         thumbnailHeight: 200,
     },
     {
+<<<<<<< HEAD
         src: "https://devjokes.s3.amazonaws.com/background/white.jpg",
         thumbnail: "https://devjokes.s3.amazonaws.com/background/white.jpg",
+=======
+        src: "/background/white.jpg",
+        thumbnail: "/background/white.jpg",
+>>>>>>> ad5c8a5e4dfa0670a58eb6c6da4acc5af226f208
         thumbnailWidth: 200,
         thumbnailHeight: 200,
     },
     {
+<<<<<<< HEAD
         src: "https://devjokes.s3.amazonaws.com/background/yellow.jpg",
         thumbnail: "https://devjokes.s3.amazonaws.com/background/yellow.jpg",
+=======
+        src: "/background/yellow.jpg",
+        thumbnail: "/background/yellow.jpg",
+>>>>>>> ad5c8a5e4dfa0670a58eb6c6da4acc5af226f208
         thumbnailWidth: 200,
         thumbnailHeight: 200,
     },
