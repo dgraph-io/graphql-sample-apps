@@ -1,0 +1,35 @@
+mutation initData {
+  # Add Tags
+  addTag(input:[
+    {name: "cloud"},
+    {name: "windows"},
+    {name: "java"},
+    {name: "graph"}
+  ]){
+    tag{
+      name
+    }
+  }
+  
+  # Add dummy user
+  addUser(input:[
+    {username: "naman@dgraph.io", name: "Naman"}
+  ]){
+    user {
+      username
+    }
+  }
+  
+  # Add sample jokes
+  addPost(input:[
+    {text: "Why do they call it hyper text?\n\nToo much JAVA.", img:"https://devjokes.s3.amazonaws.com/92af91f0-aeb0-4d87-8ba1-dcf1027a35a3", createdby: {username:"naman@dgraph.io"}, tags: [{name:"java"}], timeStamp: "2020-08-28T18:57:19.559Z"},
+    {text: "\"Knock, knock. Who's there?\"\nvery long pause...\n\n\"Java.\"", img:"https://devjokes.s3.amazonaws.com/48dc5e0f-ec62-4583-adcf-07100c21f9f2", createdby: {username:"naman@dgraph.io"}, tags: [{name:"java"}], timeStamp: "2020-08-31T18:57:19.559Z"},
+    {text: "Ever tried windows troubleshoot?\n\nIt sleeps and says \"Nothing found.\"", img:"https://devjokes.s3.amazonaws.com/731f071b-d803-4316-8464-8ffcdb5b1b66", createdby: {username:"naman@dgraph.io"}, tags: [{name:"windows"}, {name:"cloud"}], timeStamp: "2020-08-30T18:57:19.559Z"},
+    {text: "There are only two hard things in computer science:\n\ncache invalidation, naming things, and off-by-one errors.", img:"https://devjokes.s3.amazonaws.com/fcdce086-e208-4680-a2c7-6ea11e5a4594", createdby: {username:"naman@dgraph.io"}, tags: [], timeStamp: "2020-07-31T18:57:19.559Z"},
+  ]){
+    post {
+      text
+      img
+    }
+  }
+}
