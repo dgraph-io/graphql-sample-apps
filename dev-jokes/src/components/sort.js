@@ -33,7 +33,7 @@ export function Sort({cb}) {
   };
 
   return (
-    <FormControl variant="outlined" className={classes.formControl}>
+    <FormControl className={classes.formControl}>
       <InputLabel htmlFor="outlined-age-native-simple">Sort By</InputLabel>
       <Select
         native

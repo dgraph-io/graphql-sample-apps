@@ -89,7 +89,7 @@ export function Navbar({title, searchBar, children = [], color = "primary"}) {
     <AppBar position="fixed" className={clsx(classes.appBar, classes.appBarShift)} color={color}>
       <div className={classes.nav} >
         <div className={classes.navLeft}>
-          <Typography variant="h6">{title}</Typography>
+          <Typography variant="h6" className={classes.headerTitle}>{title}</Typography>
           {getSearchBar("web")}
         </div>
 
