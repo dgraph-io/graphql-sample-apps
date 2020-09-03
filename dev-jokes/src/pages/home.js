@@ -13,6 +13,7 @@ import { GET_TAGS, GET_APPROVED_POST, SEARCH_POSTS, SEARCH_BY_TEXT_AND_TAGS, SEA
 import useImperativeQuery from "../utils/imperativeQuery"
 
 import {g2aTags} from "../utils/utils"
+import { useQuery } from "@apollo/react-hooks";
 
 const Home = () => {
   
@@ -22,19 +23,23 @@ const Home = () => {
   const [textString, setTextString] = useState("")
   const searchPosts = useImperativeQuery(SEARCH_POSTS)
   const searchPostsByTag = useImperativeQuery(SEARCH_POST_BY_TAG)
-  const getPosts = useImperativeQuery(GET_APPROVED_POST);
-  const getTags = useImperativeQuery(GET_TAGS);
+  const {data: postData, loading: ploading, error: perror} = useQuery(GET_APPROVED_POST);
+  const {data: tagsData, loading: tloading, error: terror} = useQuery(GET_TAGS)
   const searchByTextAndTags = useImperativeQuery(SEARCH_BY_TEXT_AND_TAGS);
 
-  useEffect(() => {
-    (async () => {
-      const {data} = await getTags()
-      const allTags = g2aTags(data.queryTag)
-      setNames(allTags)
-      console.log("tags fetched...", data.queryTag, "setNames:", names)
-    })()
-  }, [names, getTags])
-  
+  useEffect (() => {
+    if(!tloading && !terror){
+      setNames(g2aTags(tagsData.queryTag));
+    }
+  }, [tagsData, tloading, terror])
+
+  useEffect (() => {
+    if(!ploading && !perror){
+      setMydata(postData);
+      console.log(postData)
+    }
+  }, [postData, ploading, perror])
+
   const handleClick = async () => {
     if ((tags.length === 0) & (textString==="")) {
       return 
@@ -115,7 +120,7 @@ const Home = () => {
     <Content>
       { mydata != null &&
       <>
-        <div style={{"display":"flex", "justify-content":"space-between"}}>
+        <div style={{"display":"flex", "justifyContent":"space-between"}}>
           <TagSelector names={names} tags={tags} 
             handleChange={(e) => setTags(e.target.value)}  />
           <SearchBar value={textString} label="Search your joke here" 
@@ -136,7 +141,7 @@ function PostList({mydata}) {
   return <Grid container spacing={2}>
     {mydata.queryPost.map(post =>
       <Grid item xs={12} sm={6} md={4} lg={3} key={post.id}>
-        <PostCard author={post.createdby.username} text={post.text} postID={post.id} time={post.timeStamp} likes={post.likes} flagCount={post.numFlags} flags={post.flags} tags={post.tags} img={post.img} isApproved={true} id={post.id} location={location}/>
+        <PostCard size={"345px"} author={post.createdby.username} text={post.text} postID={post.id} time={post.timeStamp} likes={post.likes} flagCount={post.numFlags} flags={post.flags} tags={post.tags} img={post.img} isApproved={true} id={post.id} location={location}/>
       </Grid>
     )}
   </Grid>;

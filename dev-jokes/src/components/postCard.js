@@ -43,7 +43,7 @@ import { a2gTags, g2aTags } from '../utils/utils';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    maxWidth: 345,
+    width: 345,
   },
   media: {
     height: '100%',
@@ -71,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PostCard({author, text, isApproved, flagCount, postID, likes, time,tags, flags, img, allTags, updateCache, id, location}) {
+export default function PostCard({size, author, text, isApproved, flagCount, postID, likes, time,tags, flags, img, allTags, updateCache, id, location}) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const { isLoading, user } = useAuth0()
@@ -233,11 +233,8 @@ export default function PostCard({author, text, isApproved, flagCount, postID, l
     return <Loading />
   }
 
-  if(img != null)
-    console.log("url:", img)
-
   return (
-    <Card className={classes.root}>
+    <Card className={classes.root} style={{width: size}}>
       <Link to={{
         pathname: `/post/${id}`,
         state: {background: location } 

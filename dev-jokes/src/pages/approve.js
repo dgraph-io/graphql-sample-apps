@@ -6,7 +6,6 @@ import Content from '../components/content';
 import { Navbar } from '../components/navbar';
 import PostCard from "../components/postCard";
 import {GET_UNAPPROVED_POST, GET_TAGS} from "../gql/queryData";
-import useImperativeQuery from "../utils/imperativeQuery"
 
 import { useState, useEffect } from 'react';
 import {g2aTags} from "../utils/utils";
@@ -14,16 +13,13 @@ import {g2aTags} from "../utils/utils";
 const Approve = () => {
   const [allTags, setAllTags] = useState([]);
   const { loading, error, data } = useQuery(GET_UNAPPROVED_POST);
-  const getTags = useImperativeQuery(GET_TAGS)
+  const {data: tagsData, loading: tloading, error: terror} = useQuery(GET_TAGS)
 
-  useEffect(() => {
-    (async () => {
-      const {data} = await getTags()
-      const allTags = g2aTags(data.queryTag)
-      setAllTags(allTags)
-      console.log("tags fetched...", data.queryTag, "setNames:", allTags)
-    })()
-  }, [allTags, getTags])
+  useEffect (() => {
+    if(!tloading && !terror){
+      setAllTags(g2aTags(tagsData.queryTag));
+    }
+  }, [tagsData, tloading, terror])
 
   return <>
     <Navbar title="Approve" color="primary" />
@@ -57,7 +53,7 @@ function UnApprovedList({loading, error, data, allTags}) {
   return <Grid container spacing={2}>
     {data.queryPost.map(post =>
       <Grid item xs={12} sm={6} md={4} lg={3} key={post.text}>
-        <PostCard author={post.createdby.username} text={post.text} isApproved={false} postID={post.id} likes={post.likes} tags={post.tags} flags={post.flags} img={post.img} updateCache={updateCache} allTags={allTags}/>
+        <PostCard size={"345px"} author={post.createdby.username} text={post.text} isApproved={false} postID={post.id} likes={post.likes} tags={post.tags} flags={post.flags} img={post.img} updateCache={updateCache} allTags={allTags}/>
       </Grid>
     )}
   </Grid>;

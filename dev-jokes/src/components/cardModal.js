@@ -2,27 +2,24 @@ import React, {useState, useEffect} from 'react';
 import { useHistory } from "react-router-dom";
 import PostCard from "../components/postCard";
 import Modal from '@material-ui/core/Modal';
-import useImperativeQuery from "../utils/imperativeQuery"
 import {GET_POST_BY_ID } from "../gql/queryData.js";
 import Fade from '@material-ui/core/Fade';
+import { useQuery } from '@apollo/client';
 
 const CardModal = (props) => {
     const history = useHistory();
     const postId = props.match.params.postId
     const [post, setPost] = useState(null);
     const [open, setOpen] = useState(true);
-    const getPostById = useImperativeQuery(GET_POST_BY_ID);
+    const {data, loading, error} = useQuery(GET_POST_BY_ID,
+      {
+        variables: {postId: postId}
+      });
     
     useEffect( () => {
-      (async () => {
-        const {data} = await getPostById({
-          postId: postId
-        })
-        console.log(data)
-        console.log(data["getPost"])
-        setPost(data["getPost"])
-      })()
-    }, [getPostById, postId])
+      console.log(data["getPost"])
+      setPost(data["getPost"])
+    }, [data, loading, error])
 
     const handleClose = () => {
       setOpen(false);
@@ -41,7 +38,7 @@ const CardModal = (props) => {
               }}
               >
               {post && 
-                  <PostCard author={post.createdby.username} text={post.text} postID={post.id} time={post.timeStamp} likes={post.likes} flagCount={post.numFlags} flags={post.flags} tags={post.tags} img={post.img} isApproved={true} id={post.id} />
+                  <PostCard size={"500px"} author={post.createdby.username} text={post.text} postID={post.id} time={post.timeStamp} likes={post.likes} flagCount={post.numFlags} flags={post.flags} tags={post.tags} img={post.img} isApproved={true} id={post.id} />
               }
             </div>
          </Fade>
