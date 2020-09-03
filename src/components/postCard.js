@@ -12,9 +12,7 @@ import TransitionModal from "./postModal";
 
 // import material UI
 import Box from "@material-ui/core/Box";
-import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import CardMedia from "@material-ui/core/CardMedia";
 import CardActions from "@material-ui/core/CardActions";
 import Collapse from "@material-ui/core/Collapse";
 import Avatar from "@material-ui/core/Avatar";
@@ -263,7 +261,7 @@ export default function PostCard({
           state: { background: location },
         }}
       >
-        <img src={img} className="pic" />
+        <img src={img} className="pic" alt={"preview"}/>
       </Link>
       <CardActions disableSpacing style={{padding: "0"}}>
         {isApproved ? (

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-import { Grid } from "@material-ui/core";
 import Content from "../components/content";
 import { Navbar } from "../components/navbar";
 import { Sort } from "../components/sort";
