@@ -242,6 +242,7 @@ export default function PostCard({size, author, text, isApproved, flagCount, pos
         <CardMedia
           className={classes.media}
           image={img}
+          style={{"background-size": "contain"}}
         />
       </Link>
       <CardActions disableSpacing>
