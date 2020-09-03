@@ -12,17 +12,21 @@
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
+    "add": "^2.0.6",
     "cross-fetch": "^3.0.5",
     "faker": "^4.1.0",
     "graphql": "^15.1.0",
     "luxon": "^1.24.1",
+    "postcss-import": "^12.0.1",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.88.2",
-    "typescript": "~3.7.2"
+    "tailwindcss": "^1.7.6",
+    "typescript": "~3.7.2",
+    "yarn": "^1.22.5"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -1,5 +1,8 @@
 body {
-  margin: 0;
+  margin: 1rem;
+  padding: 5px;
+  background-clip: content-box;
+  box-shadow: inset 0 0 0 10px #eaeaea;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
