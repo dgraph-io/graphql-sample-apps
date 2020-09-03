@@ -127,19 +127,21 @@ const Home = () => {
       <Content>
         {mydata != null && (
           <>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <TagSelector
-                names={names}
-                tags={tags}
-                handleChange={(e) => setTags(e.target.value)}
-              />
+            <div style={{ display: "flex", alignItems: "center" }}>
               <SearchBar
                 value={textString}
                 label="Search your joke here"
                 onChange={(newText) => setTextString(newText)}
                 onRequestSearch={handleClick}
               />
-              <Sort cb={sortBy} />
+              <TagSelector
+                names={names}
+                tags={tags}
+                handleChange={(e) => setTags(e.target.value)}
+              />
+              <div style={{ marginLeft: "auto", alignItems: "center" }}>
+                <Sort cb={sortBy} />
+              </div>
             </div>
             <PostList mydata={mydata} />
           </>

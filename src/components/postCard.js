@@ -60,13 +60,13 @@ const useStyles = makeStyles((theme) => ({
   },
   expand: {
     transform: "rotate(0deg)",
-    marginLeft: "auto",
+    // marginLeft: "auto",
     transition: theme.transitions.create("transform", {
       duration: theme.transitions.duration.shortest,
     }),
   },
   share: {
-    marginLeft: "50%",
+    marginLeft: "auto",
   },
   likeCount: {
     fontSize: "large",
@@ -263,11 +263,22 @@ export default function PostCard({
           state: { background: location },
         }}
       >
-        <img src={img} className="pic"/>
+        <img src={img} className="pic" />
       </Link>
-      <CardActions disableSpacing>
+      <CardActions disableSpacing style={{padding: "0"}}>
         {isApproved ? (
           <>
+            <IconButton
+              aria-label="add to favorites"
+              style={{
+                color: liked ? orange[500] : grey[500],
+                paddingRight: "4px",
+              }}
+              onClick={handleLike}
+              selected={liked}
+            >
+              <EmojiEmotionsIcon fontSize="small" />
+            </IconButton>
             <Typography
               variant="button"
               style={{
@@ -280,14 +291,6 @@ export default function PostCard({
             >
               {numlikes}
             </Typography>
-            <IconButton
-              aria-label="add to favorites"
-              style={{ color: liked ? orange[500] : grey[500] }}
-              onClick={handleLike}
-              selected={liked}
-            >
-              <EmojiEmotionsIcon fontSize="small" />
-            </IconButton>
             <IconButton
               aria-label="flag"
               value="check"
