@@ -107,14 +107,6 @@ const Home = () => {
     return 
   }
 
-  useEffect( () => {
-    (async () => {
-      const {data} = await getPosts();
-      console.log(data)
-      setMydata(data)
-    })()
-  }, [getPosts])
-
   return <>
     <Navbar title="Home" color="primary" />
     <Content>
