@@ -15,7 +15,7 @@ import { Auth0Provider } from "@auth0/auth0-react"
 const client = new ApolloClient({
   cache: new InMemoryCache(),
   link: new HttpLink({
-    uri: "http://localhost:8080/graphql",
+    uri: process.env.REACT_APP_GRAPHQL_ENDPOINT || "http://localhost:8080/graphql",
   }),
 })
 
@@ -23,7 +23,7 @@ ReactDOM.render(
   <Auth0Provider
     domain="dev-x44cgu-8.auth0.com"
     clientId="f9l2o1N0ocIUNlb62KmQxCJ5QM8WurWI"
-    redirectUri="http://localhost:3000/"
+    redirectUri={window.location.origin}
   >
     <ApolloProvider client={client}>
       <App />

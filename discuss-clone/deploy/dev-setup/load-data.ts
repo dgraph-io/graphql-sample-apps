@@ -19,7 +19,7 @@ import { lorem } from 'faker';
 const client = new ApolloClient({
   cache: new InMemoryCache(),
   link: new HttpLink({
-    uri: "http://localhost:8080/graphql",
+    uri: process.env.REACT_APP_GRAPHQL_ENDPOINT || "http://localhost:8080/graphql",
     fetch: fetch,
   }),
 })
