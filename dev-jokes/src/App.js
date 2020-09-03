@@ -5,6 +5,7 @@ import {
   Route,
   useLocation
 } from "react-router-dom";
+import ReactGA from 'react-ga';
 
 import history from "./utils/history";
 
@@ -64,6 +65,11 @@ function App() {
     };
     initAuth0();
   }, [isAuthenticated, getIdTokenClaims]);
+
+  useEffect(() => {
+    ReactGA.initialize('UA-177248464-1');
+    ReactGA.pageview(window.location.pathname);
+  }, [])
 
   if (isLoading) {
     return <Loading />;

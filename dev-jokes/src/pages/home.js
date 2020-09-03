@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
 
 import Content from "../components/content";
 import { Navbar } from "../components/navbar";
 import { Sort } from "../components/sort";
 import SearchBar from "material-ui-search-bar";
-import PostCard from "../components/postCard";
 import TagSelector from "../components/tagSelector";
-import Masonry from "react-masonry-css";
+import MasonartGrid from "../components/masonryGrid";
 
 import {
   GET_TAGS,
@@ -142,41 +140,12 @@ const Home = () => {
                 <Sort cb={sortBy} />
               </div>
             </div>
-            <PostList mydata={mydata} />
+            <MasonartGrid data={mydata} isApproved={true}/>
           </>
         )}
       </Content>
     </>
   );
 };
-
-function PostList({ mydata }) {
-  const location = useLocation();
-  return (
-    <Masonry
-      breakpointCols={4}
-      className="my-masonry-grid"
-      columnClassName="my-masonry-grid_column"
-    >
-      {mydata.queryPost.map((post) => (
-        <PostCard
-          size={"345px"}
-          author={post.createdby.username}
-          text={post.text}
-          postID={post.id}
-          time={post.timeStamp}
-          likes={post.likes}
-          flagCount={post.numFlags}
-          flags={post.flags}
-          tags={post.tags}
-          img={post.img}
-          isApproved={true}
-          id={post.id}
-          location={location}
-        />
-      ))}
-    </Masonry>
-  );
-}
 
 export default Home;
