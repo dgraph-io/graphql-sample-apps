@@ -1,0 +1,48 @@
+body {
+  margin: 0;
+  height: 100%;
+}
+
+#graphiql {
+  height: 100%;
+  min-height: 500px;
+  display: flex;
+  flex-direction: row;
+}
+
+.query-panel {
+  width: 20%;
+  min-width: 100px;
+  align-self: stretch;
+  box-sizing: border-box;
+  background-color: gainsboro;
+  padding: 10px 0;
+}
+
+.query-item {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 800;
+  box-sizing: border-box;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+.query-item:hover {
+  background-color: grey;
+}
+
+.query-item.active {
+  background-color: orange;
+  color: white;
+}
+
+.graphiql-panel {
+  width: 80%;
+  align-self: stretch;
+  box-sizing: border-box;
+}
+
+.graphiql-container .toolbar {
+  display: none !important;
+}

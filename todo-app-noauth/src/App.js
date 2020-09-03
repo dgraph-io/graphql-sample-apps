@@ -6,12 +6,11 @@ import { ApolloProvider } from "@apollo/react-hooks";
 import { createHttpLink } from "apollo-link-http";
 
 import TodoApp from "./TodoApp";
-import config from "./config.json";
 import './App.css';
 
 const createApolloClient = () => {
   const httpLink = createHttpLink({
-    uri: config.graphqlUrl,
+    uri: process.env.REACT_APP_GRAPHQL_ENDPOINT,
     options: {
       reconnect: true,
     },

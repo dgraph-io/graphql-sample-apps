@@ -1,0 +1,31 @@
+version: 2.1
+parameters:
+  project:
+    type: string
+    default: noop
+  bucket:
+    type: string
+    default: noop
+  subdomain:
+    type: string
+    default: noop
+  graphql-endpoint:
+    type: string
+    default: noop
+jobs:
+  build:
+    docker:
+      - image: circleci/node:12
+    environment:
+      PROJECT: << pipeline.parameters.project >>
+      REACT_APP_GRAPHQL_ENDPOINT: << pipeline.parameters.graphql-endpoint >>
+    steps:
+      - run: sudo apt-get install awscli -qq
+      - checkout
+      - run: ./bin/bd.sh
+      - run: ls << pipeline.parameters.project >>/build/ && aws s3 sync --acl bucket-owner-full-control --acl public-read << pipeline.parameters.project >>/build/ s3://<< pipeline.parameters.bucket >>/<< pipeline.parameters.subdomain >>/ || true
+workflows:
+  build:
+    jobs:
+      - build:
+          context: Slash GraphQL OneClick
