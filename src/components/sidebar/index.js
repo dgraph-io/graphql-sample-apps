@@ -68,7 +68,6 @@ export const Sidebar = ({children = []}) => {
           <img src={Logo} alt="logo" style={{"max-width":"-webkit-fill-available"}}/>
         </div>
         <Divider />
-        <Divider />
         <List>
           {children.map((child, index) => React.cloneElement(child, {
             key: index,

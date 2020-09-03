@@ -104,7 +104,14 @@ const useStyles = makeStyles((theme) => ({
       width: '20ch',
     },
   },
+  headerTitle: {
+    color: "#424242"
+  },
   appBar: {
+    background: "white",
+    color: "#424242",
+    boxShadow: "none",
+    borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
     transition: theme.transitions.create(["margin", "width"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
