@@ -101,7 +101,7 @@ function ModalSwitch(){
   let location = useLocation();
   let background = location.state && location.state.background;
   return (
-    <div>
+    <div className="page-container">
       <Switch location={background || location}>
       <Route path="/" exact={true} component={Home} />
         <PrivateRoute path="/profile" exact={true} component={Profile} />

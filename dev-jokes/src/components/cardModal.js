@@ -17,8 +17,10 @@ const CardModal = (props) => {
       });
     
     useEffect( () => {
-      console.log(data["getPost"])
-      setPost(data["getPost"])
+      if(!loading && !error) {
+        console.log(data["getPost"])
+        setPost(data["getPost"])
+      }
     }, [data, loading, error])
 
     const handleClose = () => {
