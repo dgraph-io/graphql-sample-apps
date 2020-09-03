@@ -47,3 +47,11 @@ a {
   background: whitesmoke;
   width: 100%;
 }
+
+.spinner{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 12px;
+}
