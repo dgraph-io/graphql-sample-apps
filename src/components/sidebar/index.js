@@ -12,6 +12,7 @@ import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 
 import Logo from "../../assets/images/logo.svg";
+import Slash from "../../assets/images/slash.png"
 import useStyles from "./sidebar.style"
 
 export const SidebarItem = ({ key, label, icon: Icon, open, className, onClick, link, children = [] }) => {
@@ -64,7 +65,7 @@ export const Sidebar = ({children = []}) => {
         }}
       >
         <div className={classes.logo}>
-          <img src={Logo} alt="logo" />
+          <img src={Logo} alt="logo" style={{"max-width":"-webkit-fill-available"}}/>
         </div>
         <Divider />
         <Divider />
@@ -75,6 +76,9 @@ export const Sidebar = ({children = []}) => {
             onClick: () => handleClick(index),
           }))}
         </List>
+        <div className={classes.logo}>
+          <img src={Slash} alt="powered-by-slash" style={{"max-width":"-webkit-fill-available"}}/>
+        </div>
       </Drawer>
   );
 };
