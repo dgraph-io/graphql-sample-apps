@@ -191,7 +191,7 @@ export default React.forwardRef(function CanvasImage({text}, ref) {
                 ctx.strokeText(line, canvas.width / 2, head+idx*textHeight);
             });
         })()
-    }, [image, text, color, bgImagePromise, ref]) // rerender if image, text or canvas size updates
+    }, [image, bgImagePromise, ref, text, color]) // rerender if image, text or canvas size updates
     return (
     <div>
         <canvas ref={ref} width={300} height={200} />
