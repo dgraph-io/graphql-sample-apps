@@ -23,10 +23,11 @@ import {v4 as uuid} from 'uuid';
 import LoadingOverlay from 'react-loading-overlay';
 import CanvasImage from "../components/canvasImage";
 import * as cimg from "../assets/images/background.jpg"
+import config from "../config"
 
 import {g2aTags, a2gTags, dataURItoBlob} from "../utils/utils"
 
-const AWS_ENDPOINT = "https://agfpqpmjc2.execute-api.us-east-1.amazonaws.com/getSignedURL"
+const AWS_ENDPOINT = process.env.AWS_ENDPOINT || config['AWS_ENDPOINT']
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
