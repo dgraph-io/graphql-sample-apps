@@ -46,7 +46,7 @@ export function Post() {
     <div style={{ margin: "1rem 7rem 7rem 7rem" }}>
       <div>
         <Header as="h1">{data.getPost.title} </Header>
-        <a className="ui red empty mini circular label"></a>
+        <span className="ui red empty mini circular label"></span>
         {" " + data.getPost?.category.name}
         <Label as="a" basic color="grey" style={{ marginLeft: "5px" }}>
           {data.getPost?.category.name}

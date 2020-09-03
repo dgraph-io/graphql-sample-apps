@@ -6,7 +6,6 @@ import {
   Label,
   Loader,
   Image,
-  Popup,
   Table,
   Dropdown,
   Input,
@@ -14,7 +13,6 @@ import {
   TextArea,
 } from "semantic-ui-react";
 import { useAllPostsQuery } from "./types/operations";
-import { DateTime } from "luxon";
 
 export function PostFeed() {
   const { data, loading, error } = useAllPostsQuery();
@@ -118,27 +116,7 @@ export function PostFeed() {
   );
 
   const items = data?.queryPost?.map((post) => {
-    let dateStr = "date unknown";
-    if (post?.datePublished) {
-      dateStr = DateTime.fromISO(post.datePublished).toRelative() ?? dateStr;
-    }
-
     const likes = post?.likes ?? 0;
-
-    const avatar = post?.author.avatarImg ? (
-      <Image src={post.author.avatarImg} />
-    ) : (
-      <Popup
-        as="a"
-        trigger={
-          <Image
-            src="https://img.icons8.com/dotty/80/000000/question.png"
-            href="https://icons8.com/icon/44088/puzzled"
-          />
-        }
-        content="We couldn't find and icon for this user.  This placeholder is a link to the source: Puzzled icon by Icons8"
-      />
-    );
 
     return (
       // <Feed.Event key={post?.id}>
@@ -177,7 +155,7 @@ export function PostFeed() {
           </a>
         </Table.Cell>
         <Table.Cell>
-          <a className="ui red empty mini circular label"></a>{" "}
+          <span className="ui red empty mini circular label"></span>{" "}
           {" " + post?.category.name}
         </Table.Cell>
         <Table.Cell>

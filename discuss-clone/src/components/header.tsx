@@ -1,6 +1,5 @@
 import React from "react";
-import { Container, Image, Menu, Icon } from "semantic-ui-react";
-import { Link } from "react-router-dom";
+import { Image } from "semantic-ui-react";
 import { useAuth0 } from "@auth0/auth0-react";
 
 export function AppHeader() {
