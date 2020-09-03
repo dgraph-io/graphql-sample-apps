@@ -77,7 +77,7 @@ export const Sidebar = ({children = []}) => {
           }))}
         </List>
         <div className={classes.logo}>
-          <img src={Slash} alt="powered-by-slash" style={{"max-width":"-webkit-fill-available"}}/>
+          <img src={Slash} alt="powered-by-slash" style={{"max-width":"-webkit-fill-available", "position":"absolute", "bottom":"10px"}}/>
         </div>
       </Drawer>
   );
