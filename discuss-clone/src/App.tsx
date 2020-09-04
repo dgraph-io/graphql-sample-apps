@@ -1,8 +1,8 @@
-import React from "react"
-import "./App.css"
-// import "./tailwind.css";
-import { AppHeader, Home, Post } from "./components"
-import { BrowserRouter, Switch, Route } from "react-router-dom"
+import React from "react";
+import "./App.css";
+import { Image } from "semantic-ui-react";
+import { AppHeader, Home, Post } from "./components";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 
 export function App() {
   return (
@@ -16,7 +16,17 @@ export function App() {
           backgroundColor: "#eaeaea",
         }}
       >
-        Powered by Slash
+        <div style={{ display: "inline-flex" }}>
+          <span>
+            Powered by {" "}
+             <a href="https://slash.dgraph.io" target="__blank">
+            <strong>
+                 Slash GraphQL
+            </strong>
+            </a>
+          </span>
+          <Image size="mini" src="/lighting.svg" style={{ height: "25px" }} />
+        </div>
       </div>
       <div className="App">
         <BrowserRouter>

@@ -43,7 +43,7 @@ export function Post() {
   const paras = data.getPost.text.split("\n").map((str) => <p>{str}</p>);
 
   return (
-    <div style={{ margin: "1rem 7rem 7rem 7rem" }}>
+    <div style={{ margin: "2.5rem 7rem 7rem 7rem" }}>
       <div>
         <Header as="h1">{data.getPost.title} </Header>
         <span className="ui red empty mini circular label"></span>

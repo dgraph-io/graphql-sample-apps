@@ -12,6 +12,7 @@ import {
   Form,
   TextArea,
 } from "semantic-ui-react";
+import { useAuth0 } from "@auth0/auth0-react";
 import { useAllPostsQuery } from "./types/operations";
 
 export function PostFeed() {
@@ -37,6 +38,7 @@ export function PostFeed() {
     { key: "ui", text: "UI Design", value: "ui" },
     { key: "ux", text: "User Experience", value: "ux" },
   ];
+  const { isAuthenticated } = useAuth0();
 
   if (loading) return <Loader />;
   if (error) return `Error! ${error.message}`;
@@ -211,7 +213,7 @@ export function PostFeed() {
             backgroundColor: "#f3f3f3",
           }}
         />
-        <button
+        {isAuthenticated && <button
           className="ui button"
           style={{
             background: "linear-gradient(135deg, #ff1800, #ff009b)",
@@ -220,7 +222,7 @@ export function PostFeed() {
           onClick={() => setCreatePost(true)}
         >
           Create a New Post
-        </button>
+        </button>}
       </div>
       <Table basic="very" collapsing style={{ width: "100%" }}>
         <Table.Header>
