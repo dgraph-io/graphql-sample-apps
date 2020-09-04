@@ -16,7 +16,6 @@ export const GET_USER = gql`
     getUser(username: $username) {
       username
       name
-      isMod
     }
   }
 `;
@@ -193,8 +192,6 @@ mutation updatePost($input:ID!,$flagArray:[UserRef!]!){
 }
 `;
 
-
-
 export const LIKE_POST = gql`
 mutation updatePost($input:ID!,$likes:[UserRef!]!){
     updatePost(input:{
@@ -355,7 +352,6 @@ query($tags: String!, $text: String!){
   }
 }
 `;
-
 
 export const GET_POST_BY_ID = gql`
   query($postId:ID! ){

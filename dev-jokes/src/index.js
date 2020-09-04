@@ -6,7 +6,7 @@ import './index.css';
 import App from './App';
 import themes from './theme';
 
-import Auth0ProviderWithHistory from './auth0-provider-with-history';
+import Auth0ProviderWithHistory from './utils/auth0-provider-with-history';
 
 const theme = createMuiTheme(themes);
 

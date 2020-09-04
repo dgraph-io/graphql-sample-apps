@@ -2,10 +2,13 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 import Masonry from "react-masonry-css";
 
-import PostCard from "./postCard";
+import PostCard from "./card/postCard";
 
 const MasonaryGrid = ({data, isApproved, allTags, updateCache}) => {
   const location = useLocation();
+  const getShortName = (username) => {
+    return username.split('@')[0]
+  }
   return(
     <Masonry
       breakpointCols={4}
@@ -15,7 +18,7 @@ const MasonaryGrid = ({data, isApproved, allTags, updateCache}) => {
       {data.queryPost.map((post) => (
         <PostCard
           size={"345px"}
-          author={post.createdby.username}
+          author={getShortName(post.createdby.username)}
           text={post.text}
           postID={post.id}
           time={post.timeStamp}

@@ -6,7 +6,7 @@ const NotFound = () => {
   return <>
     <Content>
       <Typography>
-        That page wasn't found. Did you forget to remove this link from the sidebar?
+        That page wasn't found.
       </Typography>
     </Content>
   </>
