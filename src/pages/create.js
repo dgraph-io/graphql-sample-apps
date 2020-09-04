@@ -14,8 +14,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 // import GQL
 import { useMutation, useQuery } from "@apollo/react-hooks";
-import {GET_TAGS ,GET_USER, ADD_POST} from "../gql/queryData"
-import useImperativeQuery from "../utils/imperativeQuery"
+import {GET_TAGS , ADD_POST} from "../gql/queryData"
 
 // imports for image uploading
 import axios from 'axios';
@@ -43,7 +42,7 @@ export const Create = () => {
   const [names, setNames] = useState([]);
   const [type, setType] = useState('text');
   const [postText, setPostText] = useState("");
-  const [isMod, setIsMod] = useState(false);
+  const [role, setRole] = useState('USER');
   const [isActive, setIsActive] = useState(false);
   const [imagePreviewURL, setImagePreviewURL] = useState(null);
 
@@ -54,17 +53,27 @@ export const Create = () => {
     setPostText("")
     setTags([])
     setIsActive(false)
-    isMod ? alert("Joke posted!!") :alert("Joke submitted for review!!")
+    role === "ADMIN" ? alert("Joke posted!!") :alert("Joke submitted for review!!")
   }
 
-  const getUsers = useImperativeQuery(GET_USER)
   const {data: tagsData, loading: tloading, error: terror} = useQuery(GET_TAGS)
   const [addPost] = useMutation(ADD_POST, {onCompleted: printMessage});
 
   const { user } = useAuth0()
 
-  const addToDatabase = (data, imgUrl) => {
-    setIsMod(data.getUser.isMod)
+  const { isAuthenticated, getIdTokenClaims } = useAuth0();
+
+  useEffect(() => {
+    const initAuth0 = async () => {
+      if (isAuthenticated) {
+        const idTokenClaims = await getIdTokenClaims();
+        setRole(idTokenClaims['https://dgraph.io/jwt/claims']['ROLE'])
+      }
+    };
+    initAuth0();
+  }, [isAuthenticated, getIdTokenClaims]);
+
+  const addToDatabase = (imgUrl) => {
     // add post to db
     const newPost = [{
       text: postText,
@@ -73,7 +82,7 @@ export const Create = () => {
       },
       tags: a2gTags(tags),
       timeStamp: new Date().toISOString(),
-      isApproved: data.getUser.isMod ? true : false,
+      isApproved: role === 'ADMIN' ? true : false,
       numFlags: 0,
       img: imgUrl
     }];
@@ -105,11 +114,6 @@ export const Create = () => {
       fileType = uploadInput.files[0].name.split('.')[1];
     }
 
-    // user must exist
-    const { data } = await getUsers({
-      username: user.email
-    });
-
     // upload the image
     console.log("Preparing the upload");
     axios.post(AWS_ENDPOINT, {
@@ -131,7 +135,7 @@ export const Create = () => {
       axios.put(signedRequest,file,options)
       .then(result => {
         console.log("Response from s3: ", result)
-        addToDatabase(data, url)
+        addToDatabase(url)
       })
       .catch(error => {
         setIsActive(false)

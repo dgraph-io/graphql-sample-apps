@@ -3,7 +3,6 @@ type User {
     username: String! @id
     name: String
     posts: [Post] @hasInverse(field: createdby)
-    isMod: Boolean
     likedPost: [Post]
     flaggedPost: [Post]
 }
@@ -72,7 +71,6 @@ type User @auth(
     username: String! @id
     name: String
     posts: [Post] @hasInverse(field: createdby)
-    isMod: Boolean
     likedPost: [Post]
     flaggedPost: [Post]
 }

@@ -16,7 +16,6 @@ export const GET_USER = gql`
     getUser(username: $username) {
       username
       name
-      isMod
     }
   }
 `;
