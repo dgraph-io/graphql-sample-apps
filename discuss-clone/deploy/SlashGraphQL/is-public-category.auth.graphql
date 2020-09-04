@@ -1,0 +1,5 @@
+query isPublicCategory {
+  queryCategory(filter: { isPublic: true }) {
+    id
+  }
+}

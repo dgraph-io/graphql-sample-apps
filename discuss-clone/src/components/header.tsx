@@ -3,7 +3,7 @@ import { Image } from "semantic-ui-react";
 import { useAuth0 } from "@auth0/auth0-react";
 
 export function AppHeader() {
-  const { loginWithRedirect, logout, user, isAuthenticated } = useAuth0();
+  const { loginWithRedirect, logout, user, isAuthenticated } = useAuth0()
 
   const userItem = isAuthenticated ? (
     <span>

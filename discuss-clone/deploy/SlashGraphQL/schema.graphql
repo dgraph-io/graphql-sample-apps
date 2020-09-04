@@ -1,0 +1,72 @@
+type User @auth(
+  # query : anyone can query 
+  add: { rule: "<<is-this-user>>" },
+  update: { rule: "<<is-this-user>>" },
+  delete: { rule: "{$role: {eq: \"Admin\"}}" }
+){
+  username: String! @id
+  displayName: String
+  avatarImg: String
+  posts: [Post] @hasInverse(field: author)
+  roles: [Permission] @hasInverse(field: user)
+}
+
+# FIXME:
+# query: 
+#   * only if it's you
+#   * or you the site admin
+#   * or you are the admin for the same category
+# add:
+#   * you the site admin
+#   * or you are the admin for the same category
+# update:  NO
+# delete:
+#   * you the site admin
+#   * or you are the admin for the same category
+type Permission {
+  user: User!
+  role: Role! @search
+  forCategory: Category
+}
+
+enum Role {
+  READER
+  WRITER
+  ADMINISTRATOR
+}
+
+type Post @auth(
+  query: { rule: "<<has-any-post-permission>>" },
+  add: { rule:  "<<has-write-permission>>" },
+  add: { rule:  "<<its-your-post>>" },
+  delete: { rule:  "<<has-the-posts-category-admin>>" },
+){
+  id: ID!
+  title: String!
+  text: String!
+  datePublished: DateTime
+  likes: Int
+  author: User!
+  tags: [String!]!
+  category: Category! @hasInverse(field: posts)
+}
+
+type Category @auth(
+  query: { or: [
+    { rule: "<<has-any-category-permission>>" },
+    { rule: "<<is-public-category>>" }
+    { rule: "{$role: {eq: \"Admin\"}}" }
+  ]}
+  add: { rule: "{$role: {eq: \"Admin\"}}" },
+  update: { or: [ 
+    { rule: "{$role: {eq: \"Admin\"}}" },
+    { rule: "<<has-category-admin>>" }
+  ] }
+  delete: { rule: "{$role: {eq: \"Admin\"}}" }
+){
+  id: ID!
+  name: String!
+  posts: [Post]
+  isPublic: Boolean @search
+  permissions: [Permission] @hasInverse(field: forCategory)
+}

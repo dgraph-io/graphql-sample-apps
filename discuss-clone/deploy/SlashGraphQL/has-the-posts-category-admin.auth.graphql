@@ -1,0 +1,11 @@
+query hasPostsCategoryAdmin($username: String!) {
+  queryPost {
+    category {
+      permissions(filter: { role: { eq: ADMINISTRATOR }}) {
+        user(filter: { username: { eq: $username } }) {
+          username
+        }
+      }
+    }
+  }
+}

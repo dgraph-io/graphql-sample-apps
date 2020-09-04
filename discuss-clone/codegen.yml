@@ -1,8 +1,8 @@
 overwrite: true
-schema: "http://localhost:8080/graphql"
+schema: "https://discuss-dev.us-west-2.aws.cloud.dgraph.io/graphql"
 documents: 
   - 'src/**/*.graphql'
-  - 'deploy/**/*.graphql'
+  - 'deploy/dev-setup**/*.graphql'
 generates:
   src/types/graphql.ts:
     plugins:

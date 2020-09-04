@@ -6,28 +6,55 @@ import * as serviceWorker from "./serviceWorker"
 import "semantic-ui-css/semantic.min.css"
 import {
   ApolloClient,
-  InMemoryCache,
-  HttpLink,
   ApolloProvider,
+  InMemoryCache,
+  createHttpLink,
 } from "@apollo/client"
-import { Auth0Provider } from "@auth0/auth0-react"
+import { setContext } from "@apollo/client/link/context"
+import { Auth0Provider, useAuth0 } from "@auth0/auth0-react"
 
-const client = new ApolloClient({
-  cache: new InMemoryCache(),
-  link: new HttpLink({
-    uri: process.env.REACT_APP_GRAPHQL_ENDPOINT || "http://localhost:8080/graphql",
-  }),
-})
+const AuthorizedApolloProvider: React.FC = ({ children }) => {
+  const { isAuthenticated, getIdTokenClaims } = useAuth0()
 
+  const httpLink = createHttpLink({
+    uri: process.env.REACT_APP_SLASH_GRAPHQL_ENDPOINT + "/graphql",
+  })
+
+console.log("HERE")
+
+  const authLink = setContext(async (_, { headers }) => {
+    if (!isAuthenticated) {
+      return { headers }
+    }
+
+    const token = await getIdTokenClaims()
+
+    return {
+      headers: {
+        ...headers,
+        Authorization: token ? token.__raw : "",
+      },
+    }
+  })
+
+  const apolloClient = new ApolloClient({
+    link: authLink.concat(httpLink),
+    cache: new InMemoryCache(),
+  })
+
+  return <ApolloProvider client={apolloClient}>{children}</ApolloProvider>
+}
+
+console.log("HERE")
 ReactDOM.render(
   <Auth0Provider
-    domain="dev-x44cgu-8.auth0.com"
-    clientId="f9l2o1N0ocIUNlb62KmQxCJ5QM8WurWI"
+    domain={process.env.REACT_APP_AUTH0_DOMAIN ?? "ERR"}
+    clientId={process.env.REACT_APP_AUTH0_CLIENT_ID ?? "ERR"}
     redirectUri={window.location.origin}
   >
-    <ApolloProvider client={client}>
+    <AuthorizedApolloProvider>
       <App />
-    </ApolloProvider>
+    </AuthorizedApolloProvider>
   </Auth0Provider>,
   document.getElementById("root")
 )

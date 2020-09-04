@@ -24,35 +24,35 @@ const client = new ApolloClient({
   }),
 })
 
-const categories: Array<AddCategoryInput> = [
-  { name: "GraphQL" },
-  { name: "Dgraph" },
-  { name: "React" },
-  { name: "Movies" },
-]
-
 const diggy: AddUserInput = {
-  username: "diggy",
+  username: "diggy@dgraph.io",
   displayName: "Diggy",
   avatarImg: "/diggy.png",
 }
 
 const michael: AddUserInput = {
-  username: "michael",
+  username: "michael@dgraph.io",
   displayName: "Michael",
   avatarImg: "/michael.png",
 }
 
 const virat: AddUserInput = {
-  username: "virat",
+  username: "virat@cricket.com",
   displayName: "Virat",
 }
 
 const anushka: AddUserInput = {
-  username: "anushka",
+  username: "anushka@bollywood.org",
   displayName: "Anushka",
 }
 
+const categories: Array<AddCategoryInput> = [
+  { name: "General", isPublic: true },
+  { name: "GraphQL", perms: { users: [ michael, diggy ] } },
+  { name: "Dgraph", perms: { users: [ michael, diggy ] }  },
+  { name: "React", perms: { users: [ michael, diggy ] }  },
+  { name: "Movies", isPublic: true },
+]
 
 const qsQuote = `
 With Dgraph you design your application in GraphQL. 
@@ -85,6 +85,14 @@ function makePosts(): Array<AddPostInput> {
   lastWeek.setDate(now.getDate() - 7)
 
   return [
+    {
+      title: "I have something auto-generated to say",
+      text: lorem.paragraphs(7),
+      datePublished: tenMinsAgo,
+      likes: 10,
+      category: { name: "General" },
+      author: michael,
+    },
     {
       title: "My first post about Dgraph GraphQL",
       text: qsQuote,
