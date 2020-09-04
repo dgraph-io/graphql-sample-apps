@@ -14,34 +14,42 @@ import {
 } from "semantic-ui-react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useAllPostsQuery } from "./types/operations";
+import { useAllCategoriesQuery } from "./types/operations";
 
 export function PostFeed() {
   const { data, loading, error } = useAllPostsQuery();
+  const { data: categoriesData, loading: catLoading } = useAllCategoriesQuery();
   const [createPost, setCreatePost] = useState(false);
-  const stateOptions: any = [
-    { key: "angular", text: "Angular", value: "angular" },
-    { key: "css", text: "CSS", value: "css" },
-    { key: "design", text: "Graphic Design", value: "design" },
-    { key: "ember", text: "Ember", value: "ember" },
-    { key: "html", text: "HTML", value: "html" },
-    { key: "ia", text: "Information Architecture", value: "ia" },
-    { key: "javascript", text: "Javascript", value: "javascript" },
-    { key: "mech", text: "Mechanical Engineering", value: "mech" },
-    { key: "meteor", text: "Meteor", value: "meteor" },
-    { key: "node", text: "NodeJS", value: "node" },
-    { key: "plumbing", text: "Plumbing", value: "plumbing" },
-    { key: "python", text: "Python", value: "python" },
-    { key: "rails", text: "Rails", value: "rails" },
-    { key: "react", text: "React", value: "react" },
-    { key: "repair", text: "Kitchen Repair", value: "repair" },
-    { key: "ruby", text: "Ruby", value: "ruby" },
-    { key: "ui", text: "UI Design", value: "ui" },
-    { key: "ux", text: "User Experience", value: "ux" },
-  ];
+  const tags: Array<string> = [];
+  const tagsOptions: Array<Object> = [];
+  // const stateOptions: any = [
+  //   { key: "angular", text: "Angular", value: "angular" },
+  //   { key: "css", text: "CSS", value: "css" },
+  //   { key: "design", text: "Graphic Design", value: "design" },
+  //   { key: "ember", text: "Ember", value: "ember" },
+  //   { key: "html", text: "HTML", value: "html" },
+  //   { key: "ia", text: "Information Architecture", value: "ia" },
+  //   { key: "javascript", text: "Javascript", value: "javascript" },
+  //   { key: "mech", text: "Mechanical Engineering", value: "mech" },
+  //   { key: "meteor", text: "Meteor", value: "meteor" },
+  //   { key: "node", text: "NodeJS", value: "node" },
+  //   { key: "plumbing", text: "Plumbing", value: "plumbing" },
+  //   { key: "python", text: "Python", value: "python" },
+  //   { key: "rails", text: "Rails", value: "rails" },
+  //   { key: "react", text: "React", value: "react" },
+  //   { key: "repair", text: "Kitchen Repair", value: "repair" },
+  //   { key: "ruby", text: "Ruby", value: "ruby" },
+  //   { key: "ui", text: "UI Design", value: "ui" },
+  //   { key: "ux", text: "User Experience", value: "ux" },
+  // ];
   const { isAuthenticated } = useAuth0();
 
-  if (loading) return <Loader />;
+  if (loading || catLoading) return <Loader />;
   if (error) return `Error! ${error.message}`;
+
+  const categoriesOptions = categoriesData?.queryCategory?.map((category) => {
+    return { key: category?.id, text: category?.name, value: category?.id };
+  });
 
   const showCreatePost = (
     <Modal
@@ -69,7 +77,7 @@ export function PostFeed() {
                 fluid
                 search
                 selection
-                options={stateOptions}
+                options={categoriesOptions}
                 style={{
                   backgroundColor: "#f3f3f3",
                 }}
@@ -83,7 +91,7 @@ export function PostFeed() {
                 multiple
                 search
                 selection
-                options={stateOptions}
+                options={tagsOptions}
                 style={{
                   backgroundColor: "#f3f3f3",
                 }}
@@ -119,6 +127,11 @@ export function PostFeed() {
 
   const items = data?.queryPost?.map((post) => {
     const likes = post?.likes ?? 0;
+    post?.tags.map((tag) => {
+      if (tags.indexOf(tag) > -1) {
+        tagsOptions.push({ key: tag, text: tag, value: tag })
+      }
+    })
 
     return (
       // <Feed.Event key={post?.id}>
@@ -144,7 +157,7 @@ export function PostFeed() {
       //   </Feed.Content>
       // </Feed.Event>
 
-      <Table.Row>
+      <Table.Row key={post?.id}>
         <Table.Cell>
           <a href={"/post/" + post?.id} style={{ color: "black" }}>
             <Header as="h4" image>
@@ -161,13 +174,16 @@ export function PostFeed() {
           {" " + post?.category.name}
         </Table.Cell>
         <Table.Cell>
-          <Label as="a" basic color="grey">
-            {post?.category.name}
-          </Label>
+          {post?.tags.map((tag) => {
+            return <Label as="a" basic color="grey">
+              {post?.category.name}
+            </Label>
+          })}
         </Table.Cell>
         <Table.Cell>
           <p>
-            <i className="heart outline icon"></i> {likes} Likes
+            <i className="heart outline icon"></i> {likes} Like
+            {likes === 1 ? "" : "s"}
           </p>
           <p>
             {" "}
@@ -193,7 +209,7 @@ export function PostFeed() {
           multiple
           search
           selection
-          options={stateOptions}
+          options={categoriesOptions}
           style={{
             marginRight: "10px",
             width: "20%",
@@ -206,23 +222,25 @@ export function PostFeed() {
           multiple
           search
           selection
-          options={stateOptions}
+          options={tagsOptions}
           style={{
             marginRight: "10px",
             width: "20%",
             backgroundColor: "#f3f3f3",
           }}
         />
-        {isAuthenticated && <button
-          className="ui button"
-          style={{
-            background: "linear-gradient(135deg, #ff1800, #ff009b)",
-            color: "white",
-          }}
-          onClick={() => setCreatePost(true)}
-        >
-          Create a New Post
-        </button>}
+        {isAuthenticated && (
+          <button
+            className="ui button"
+            style={{
+              background: "linear-gradient(135deg, #ff1800, #ff009b)",
+              color: "white",
+            }}
+            onClick={() => setCreatePost(true)}
+          >
+            Create a New Post
+          </button>
+        )}
       </div>
       <Table basic="very" collapsing style={{ width: "100%" }}>
         <Table.Header>

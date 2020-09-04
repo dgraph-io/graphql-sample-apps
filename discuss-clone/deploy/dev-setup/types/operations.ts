@@ -3,7 +3,6 @@ import * as Types from '../../../src/types/graphql';
 import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
-
 export type InitCategoriesMutationVariables = Types.Exact<{
   categories: Array<Types.AddCategoryInput>;
 }>;

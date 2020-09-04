@@ -3,10 +3,9 @@ import * as Types from '../../types/graphql';
 import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
-
 export type PostDataFragment = (
   { __typename?: 'Post' }
-  & Pick<Types.Post, 'id' | 'title' | 'text' | 'datePublished' | 'likes'>
+  & Pick<Types.Post, 'id' | 'title' | 'text' | 'tags' | 'datePublished' | 'likes'>
   & { category: (
     { __typename?: 'Category' }
     & Pick<Types.Category, 'name'>
@@ -40,11 +39,23 @@ export type GetPostQuery = (
   )> }
 );
 
+export type AllCategoriesQueryVariables = Types.Exact<{ [key: string]: never; }>;
+
+
+export type AllCategoriesQuery = (
+  { __typename?: 'Query' }
+  & { queryCategory?: Types.Maybe<Array<Types.Maybe<(
+    { __typename?: 'Category' }
+    & Pick<Types.Category, 'id' | 'name'>
+  )>>> }
+);
+
 export const PostDataFragmentDoc = gql`
     fragment postData on Post {
   id
   title
   text
+  tags
   datePublished
   likes
   category {
@@ -122,3 +133,36 @@ export function useGetPostLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHook
 export type GetPostQueryHookResult = ReturnType<typeof useGetPostQuery>;
 export type GetPostLazyQueryHookResult = ReturnType<typeof useGetPostLazyQuery>;
 export type GetPostQueryResult = ApolloReactCommon.QueryResult<GetPostQuery, GetPostQueryVariables>;
+export const AllCategoriesDocument = gql`
+    query allCategories {
+  queryCategory {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useAllCategoriesQuery__
+ *
+ * To run a query within a React component, call `useAllCategoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAllCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAllCategoriesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAllCategoriesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<AllCategoriesQuery, AllCategoriesQueryVariables>) {
+        return ApolloReactHooks.useQuery<AllCategoriesQuery, AllCategoriesQueryVariables>(AllCategoriesDocument, baseOptions);
+      }
+export function useAllCategoriesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<AllCategoriesQuery, AllCategoriesQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<AllCategoriesQuery, AllCategoriesQueryVariables>(AllCategoriesDocument, baseOptions);
+        }
+export type AllCategoriesQueryHookResult = ReturnType<typeof useAllCategoriesQuery>;
+export type AllCategoriesLazyQueryHookResult = ReturnType<typeof useAllCategoriesLazyQuery>;
+export type AllCategoriesQueryResult = ApolloReactCommon.QueryResult<AllCategoriesQuery, AllCategoriesQueryVariables>;

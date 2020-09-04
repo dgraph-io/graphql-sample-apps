@@ -2,6 +2,7 @@ fragment postData on Post {
   id
   title
   text
+  tags
   datePublished
   likes
   category {
@@ -23,5 +24,12 @@ query allPosts {
 query getPost($id: ID!) {
   getPost(id: $id) {
     ...postData
+  }
+}
+
+query allCategories{
+  queryCategory {
+    id
+    name
   }
 }
