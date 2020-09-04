@@ -19,7 +19,7 @@ import Flagged from "./pages/flagged"
 import PrivateRoute from "./components/privateRoute"
 import {Sidebar, SidebarItem} from './components/sidebar';
 import Loading from "./components/loading"
-import CardModal from "./components/cardModal"
+import CardModal from "./components/card/cardModal"
 
 // imports material UI
 import { makeStyles } from "@material-ui/core/styles";
@@ -38,7 +38,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 // import react-apollo
 import { ApolloProvider } from '@apollo/client';
-import createApolloClient from './apollo-client';
+import createApolloClient from './utils/apollo-client';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -56,7 +56,6 @@ function App() {
 
   useEffect(() => {
     const initAuth0 = async () => {
-      console.log("isAuth:", isAuthenticated)
       if (isAuthenticated) {
         const idTokenClaims = await getIdTokenClaims();
         setIdToken(idTokenClaims.__raw);

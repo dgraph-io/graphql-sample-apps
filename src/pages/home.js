@@ -16,7 +16,7 @@ import {
 } from "../gql/queryData";
 import useImperativeQuery from "../utils/imperativeQuery";
 
-import { g2aTags } from "../utils/utils";
+import { g2aTags, sortBy } from "../utils/utils";
 import { useQuery } from "@apollo/react-hooks";
 
 const Home = () => {
@@ -24,15 +24,16 @@ const Home = () => {
   const [tags, setTags] = useState([]);
   const [names, setNames] = useState([]);
   const [textString, setTextString] = useState("");
+
   const searchPosts = useImperativeQuery(SEARCH_POSTS);
   const searchPostsByTag = useImperativeQuery(SEARCH_POST_BY_TAG);
+  const searchByTextAndTags = useImperativeQuery(SEARCH_BY_TEXT_AND_TAGS);
   const { data: postData, loading: ploading, error: perror } = useQuery(
     GET_APPROVED_POST
   );
   const { data: tagsData, loading: tloading, error: terror } = useQuery(
     GET_TAGS
   );
-  const searchByTextAndTags = useImperativeQuery(SEARCH_BY_TEXT_AND_TAGS);
 
   useEffect(() => {
     if (!tloading && !terror) {
@@ -43,22 +44,23 @@ const Home = () => {
   useEffect(() => {
     if (!ploading && !perror) {
       setMydata(postData);
-      console.log(postData);
     }
   }, [postData, ploading, perror]);
 
   const handleClick = async () => {
+    // No input defined.
     if ((tags.length === 0) & (textString === "")) {
       return;
     }
+    // Search by text
     if (tags.length === 0) {
       const { data } = await searchPosts({
         text: textString,
       });
-      console.log(data);
       setMydata(data);
       return;
     }
+    // Search by tags
     const tagString = tags.join(" ");
     if (textString === "") {
       const { data } = await searchPostsByTag({
@@ -68,53 +70,28 @@ const Home = () => {
       data.queryTag.forEach((element) => {
         queryPost.push(...element["posts"]);
       });
-      console.log("here");
-      console.log(data);
-      console.log(queryPost);
-      let formatted_data = { queryPost: queryPost };
-      console.log("Search by tag:", formatted_data);
-      setMydata(formatted_data);
+      setMydata({ queryPost: queryPost });
       return;
     }
-
-    console.log(textString);
-    console.log(tagString);
+    // search by both
     const { data } = await searchByTextAndTags({
       text: textString,
       tags: tagString,
     });
-    console.log(data);
+
     let queryPost = [];
     data.queryPostByTextAndTags.forEach((element) => {
       queryPost.push(element);
     });
-    console.log(queryPost);
-    let formatted_data = { queryPost: queryPost };
-    console.log("Search by tag:", formatted_data);
-    setMydata(formatted_data);
+    console.log("Search by tag:", queryPost);
+    setMydata({ queryPost: queryPost });
     return;
   };
 
-  const sortBy = async (by) => {
-    let data, sortedData, newData;
-    data = mydata;
-    console.log("triggered", by);
-
-    if (by === "new") {
-      newData = data.queryPost
-        .slice()
-        .sort((a, b) => Date.parse(b.timeStamp) - Date.parse(a.timeStamp));
-    } else if (by === "old") {
-      newData = data.queryPost
-        .slice()
-        .sort((a, b) => Date.parse(a.timeStamp) - Date.parse(b.timeStamp));
-    } else if (by === "liked") {
-      newData = data.queryPost
-        .slice()
-        .sort((a, b) => b.likes.length - a.likes.length);
-    }
-    sortedData = { queryPost: newData };
-    setMydata(sortedData);
+  const SortBy = async (by) => {
+    let data = mydata;
+    console.log("Sorting by:", by);
+    setMydata({ queryPost: sortBy(data.queryPost, by) });
     return;
   };
 
@@ -137,7 +114,7 @@ const Home = () => {
                 handleChange={(e) => setTags(e.target.value)}
               />
               <div style={{ marginLeft: "auto", alignItems: "center" }}>
-                <Sort cb={sortBy} />
+                <Sort cb={SortBy} />
               </div>
             </div>
             <MasonartGrid data={mydata} isApproved={true}/>

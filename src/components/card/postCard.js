@@ -7,7 +7,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 
 // import components
-import Loading from "./loading";
+import Loading from "../loading";
 import TransitionModal from "./postModal";
 
 // import material UI
@@ -41,11 +41,11 @@ import {
   FLAG_POST,
   UNFLAG_POST,
   EDIT_POST,
-} from "../gql/queryData";
+} from "../../gql/queryData";
 
 // import auth0
 import { useAuth0 } from "@auth0/auth0-react";
-import { a2gTags, g2aTags } from "../utils/utils";
+import { a2gTags, g2aTags, isPresentInListOfDict } from "../../utils/utils";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -95,15 +95,15 @@ export default function PostCard({
   location,
 }) {
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
   const { isLoading, user } = useAuth0();
-  const [liked, setLiked] = React.useState(false);
-  const [flagged, setFlagged] = React.useState(false);
-  const [numlikes, setnumlikes] = React.useState(0);
-  const [postText, setPostText] = React.useState(text);
-  const [postTags, setPostTags] = React.useState(null);
-  const [open, setOpen] = React.useState(false);
 
+  const [expanded, setExpanded] = useState(false);
+  const [liked, setLiked] = useState(false);
+  const [flagged, setFlagged] = useState(false);
+  const [numlikes, setnumlikes] = useState(0);
+  const [postText, setPostText] = useState(text);
+  const [postTags, setPostTags] = useState(null);
+  const [open, setOpen] = useState(false);
   const [editText, setText] = useState(text);
   const [editTags, setTags] = useState(null);
 
@@ -119,10 +119,6 @@ export default function PostCard({
   flags.forEach((element) => {
     flagList.push({ username: element["username"] });
   });
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
 
   const handleLike = () => {
     if (!user) {
@@ -224,22 +220,14 @@ export default function PostCard({
   // set likes
   useEffect(() => {
     if (!likes) return;
-    likes.forEach((item) => {
-      if (item["username"] === user.email) {
-        setLiked(true);
-      }
-    });
+    setLiked(isPresentInListOfDict(likes, "username", user.email))
     setnumlikes(likes.length);
   }, [user, likes]);
 
   // set flags
   useEffect(() => {
     if (!flags) return;
-    flags.forEach((item) => {
-      if (item["username"] === user.email) {
-        setFlagged(true);
-      }
-    });
+    setFlagged(isPresentInListOfDict(flags, "username", user.email))
   }, [user, flags]);
 
   // set Tags
@@ -343,7 +331,7 @@ export default function PostCard({
           className={clsx(classes.expand, {
             [classes.expandOpen]: expanded,
           })}
-          onClick={handleExpandClick}
+          onClick={() => setExpanded(!expanded)}
           aria-expanded={expanded}
           aria-label="show more"
         >
@@ -358,7 +346,7 @@ export default function PostCard({
             </Avatar>
           }
           title={author}
-          subheader={DateTimeFormat(time, "mmm dS, yyyy ,h:MM TT")}
+          subheader={DateTimeFormat(time, "mmm dS, h:MM")}
         />
         {isApproved ? (
           <></>

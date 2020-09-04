@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import { useHistory } from "react-router-dom";
-import PostCard from "../components/postCard";
+import PostCard from "./postCard";
 import Modal from '@material-ui/core/Modal';
-import {GET_POST_BY_ID } from "../gql/queryData.js";
+import {GET_POST_BY_ID } from "../../gql/queryData.js";
 import Fade from '@material-ui/core/Fade';
 import { useQuery } from '@apollo/client';
 
@@ -18,7 +18,6 @@ const CardModal = (props) => {
     
     useEffect( () => {
       if(!loading && !error) {
-        console.log(data["getPost"])
         setPost(data["getPost"])
       }
     }, [data, loading, error])

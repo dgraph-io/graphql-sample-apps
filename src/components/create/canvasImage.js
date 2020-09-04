@@ -183,7 +183,6 @@ export default React.forwardRef(function CanvasImage({text}, ref) {
             const arr = await getPrintableLines(ctx, text, canvas.width, canvas.height, margin, sideMargin)
             const lines = arr.get('lines')
             const textHeight = arr.get('textHeight')
-            console.log(lines.length, textHeight)
             ctx.font = textHeight.toString(10) + "px arial";
             let head = (canvas.height/2) - (lines.length/2 - 0.5)*textHeight;
             lines.forEach((line, idx) => {

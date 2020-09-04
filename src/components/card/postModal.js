@@ -9,7 +9,7 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 
 // import components
-import TagSelector from "../components/tagSelector";
+import TagSelector from "../tagSelector";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
