@@ -41,6 +41,6 @@ function enrichJWTFromSlashGraphQL(user, context, callback) {
       callback(err, user, context)
     })
     .catch((error) => {
-      cb(error, user, context)
+      callback(error, user, context)
     })
 }
