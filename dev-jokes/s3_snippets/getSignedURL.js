@@ -1,5 +1,5 @@
 'use strict';
-
+// The lambda function that needs to be executed to get the signed URL
 const AWS = require('aws-sdk');
 AWS.config.update({
   region: 'region', // replace with region e.g. 'us-east-1'

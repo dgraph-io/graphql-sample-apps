@@ -14,14 +14,13 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 // import GQL
 import { useMutation, useQuery } from "@apollo/react-hooks";
-import {GET_TAGS ,GET_USER, ADD_POST} from "../gql/queryData"
-import useImperativeQuery from "../utils/imperativeQuery"
+import {GET_TAGS , ADD_POST} from "../gql/queryData"
 
 // imports for image uploading
 import axios from 'axios';
 import {v4 as uuid} from 'uuid'; 
 import LoadingOverlay from 'react-loading-overlay';
-import CanvasImage from "../components/canvasImage";
+import CanvasImage from "../components/create/canvasImage";
 import * as cimg from "../assets/images/background.jpg"
 import config from "../config"
 
@@ -38,48 +37,57 @@ const useStyles = makeStyles((theme) => ({
 
 export const Create = () => {
   const classes = useStyles();
+
   const [tags, setTags] = useState([]);
   const [names, setNames] = useState([]);
-  const [type, setType] = React.useState('text');
+  const [type, setType] = useState('text');
   const [postText, setPostText] = useState("");
-  const [isMod, setIsMod] = useState(false);
+  const [role, setRole] = useState('USER');
   const [isActive, setIsActive] = useState(false);
   const [imagePreviewURL, setImagePreviewURL] = useState(null);
-  const refCanvas = useRef(null);
-  var uploadInput = null;
 
+  const refCanvas = useRef(null);
+
+  var uploadInput = null;
   const printMessage = () => {
     setPostText("")
     setTags([])
     setIsActive(false)
-    isMod ? alert("Joke posted!!") :alert("Joke submitted for review!!")
+    role === "ADMIN" ? alert("Joke posted!!") :alert("Joke submitted for review!!")
   }
 
-  const [addPost] = useMutation(ADD_POST, {onCompleted: printMessage});
-  const getUsers = useImperativeQuery(GET_USER)
   const {data: tagsData, loading: tloading, error: terror} = useQuery(GET_TAGS)
+  const [addPost] = useMutation(ADD_POST, {onCompleted: printMessage});
 
   const { user } = useAuth0()
 
-  const addToDatabase = (data, imgUrl) => {
-    // parse the tags into required format
-    const formatted_tags = a2gTags(tags)
-    setIsMod(data.getUser.isMod)
+  const { isAuthenticated, getIdTokenClaims } = useAuth0();
+
+  useEffect(() => {
+    const initAuth0 = async () => {
+      if (isAuthenticated) {
+        const idTokenClaims = await getIdTokenClaims();
+        setRole(idTokenClaims['https://dgraph.io/jwt/claims']['ROLE'])
+      }
+    };
+    initAuth0();
+  }, [isAuthenticated, getIdTokenClaims]);
+
+  const addToDatabase = (imgUrl) => {
     // add post to db
     const newPost = [{
       text: postText,
       createdby: {
         username: user.email,
       },
-      tags: formatted_tags,
+      tags: a2gTags(tags),
       timeStamp: new Date().toISOString(),
-      isApproved: data.getUser.isMod ? true : false,
+      isApproved: role === 'ADMIN' ? true : false,
       numFlags: 0,
       img: imgUrl
     }];
 
     console.log("Adding post:", newPost)
-
     addPost({
       variables: {
         post: newPost
@@ -88,63 +96,56 @@ export const Create = () => {
   }
 
   const handleSubmit = async (evt) => {
-      evt.preventDefault();
+    evt.preventDefault();
 
-      setIsActive(true);
-      // Set image properties
-      var dataUrl, file, fileName = uuid(), fileType;
-      if(type === 'text'){
-        dataUrl = refCanvas.current.toDataURL('image/png')
-        file = dataURItoBlob(dataUrl);
-        fileType = "png"
-      } else if (type === 'meme'){
-          if(uploadInput.files.length === 0){
-            alert('Forgot to upload the meme?')
-            return
-          }
-          file = uploadInput.files[0];
-          fileType = uploadInput.files[0].name.split('.')[1];
+    setIsActive(true);
+    // Set image properties
+    var dataUrl, file, fileName = uuid(), fileType;
+    if(type === 'text'){
+      dataUrl = refCanvas.current.toDataURL('image/png')
+      file = dataURItoBlob(dataUrl);
+      fileType = "png"
+    } else if (type === 'meme'){
+      if(uploadInput.files.length === 0){
+        alert('Forgot to upload the meme?')
+        return
       }
+      file = uploadInput.files[0];
+      fileType = uploadInput.files[0].name.split('.')[1];
+    }
 
-      // user must exist
-      const { data } = await getUsers({
-        username: user.email
-      });
+    // upload the image
+    console.log("Preparing the upload");
+    axios.post(AWS_ENDPOINT, {
+      fileName : fileName,
+      fileType : fileType
+    })
+    .then(response => {
+      var returnData = response.data;
+      var signedRequest = returnData.signedRequest;
+      var url = returnData.url;
+      console.log("Recieved a signed request " + signedRequest);
 
-      // upload the image
-      console.log("Preparing the upload");
-      axios.post(AWS_ENDPOINT, {
-        fileName : fileName,
-        fileType : fileType
-      })
-      .then(response => {
-        var returnData = response.data;
-        var signedRequest = returnData.signedRequest;
-        var url = returnData.url;
-        console.log("Recieved a signed request " + signedRequest);
-
-      // Put the fileType in the headers for the upload
-        var options = {
-          headers: {
-            'Content-Type': fileType
-          }
-        };
-        axios.put(signedRequest,file,options)
-        .then(result => {
-          console.log("Response from s3: ", result)
-          console.log(url, data, url)
-          addToDatabase(data, url)
-        })
-        .catch(error => {
-          setIsActive(false)
-          alert("ERROR " + JSON.stringify(error));
-        })
+    // Put the fileType in the headers for the upload
+      var options = {
+        headers: {
+          'Content-Type': fileType
+        }
+      };
+      axios.put(signedRequest,file,options)
+      .then(result => {
+        console.log("Response from s3: ", result)
+        addToDatabase(url)
       })
       .catch(error => {
-        console.log("ERROR:", error, JSON.stringify(error))
         setIsActive(false)
-        alert("ERROR: " + error);
+        alert("ERROR " + JSON.stringify(error));
       })
+    })
+    .catch(error => {
+      setIsActive(false)
+      alert("ERROR: " + error);
+    })
   }
 
   const previewImage = (e) => {

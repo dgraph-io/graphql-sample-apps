@@ -6,13 +6,16 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 const LogoutButton = () => {
   const { logout } = useAuth0();
-  return <Button 
-          variant="contained"
-          color="secondary"
-          startIcon={<ExitToAppIcon/>}
-          onClick={() => logout({returnTo: window.location.origin})}> 
-          Logout 
-        </Button>;
+  return (
+      <Button 
+        variant="contained"
+        color="secondary"
+        startIcon={<ExitToAppIcon/>}
+        onClick={() => logout({returnTo: window.location.origin})}
+      > 
+        Logout 
+      </Button>
+  );
 };
 
 export default LogoutButton;
