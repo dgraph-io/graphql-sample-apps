@@ -1,6 +1,17 @@
-import React from "react";
-import { useParams } from "react-router-dom";
-import { Container, Header, Loader, Image, Label, Form, TextArea } from "semantic-ui-react";
+import React, { useState } from "react";
+import { useParams, useLocation } from "react-router-dom";
+import {
+  Container,
+  Header,
+  Loader,
+  Image,
+  Label,
+  Form,
+  TextArea,
+  Modal,
+  Dropdown,
+  Button,
+} from "semantic-ui-react";
 import { useGetPostQuery } from "./types/operations";
 import { DateTime } from "luxon";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -10,8 +21,17 @@ interface PostParams {
 }
 
 export function Post() {
+  const [title, setTitle] = useState("");
+  const [tags, setTags]: any = useState([]);
+  const [category, setCategory]: any = useState("");
+  const [text, setText]: any = useState("");
+  const [editPost, setEditPost] = useState(false);
+
   const { id } = useParams<PostParams>();
-  const {user, isAuthenticated } = useAuth0();
+  const location = useLocation();
+
+  const { categoriesOptions, tagsOptions }: any = location.state;
+  const { user, isAuthenticated } = useAuth0();
 
   const { data, loading, error } = useGetPostQuery({ variables: { id: id } });
 
@@ -34,6 +54,18 @@ export function Post() {
     );
   }
 
+  const setdata = () => {
+    setEditPost(true);
+    // setTitle(data.getPost?.title);
+    data.getPost?.tags.map((tag) => {
+      setTags((tag: any) => [...tag, tags]);
+    });
+
+    setText(data?.getPost?.text);
+    
+    setCategory(data?.getPost?.category?.id);
+  };
+
   let dateStr = "at some unknown time";
   if (data.getPost.datePublished) {
     dateStr =
@@ -41,6 +73,103 @@ export function Post() {
   }
 
   const paras = data.getPost.text.split("\n").map((str) => <p>{str}</p>);
+  console.log("cat", category)
+
+  const updatePost = () => {
+    setEditPost(false);
+    const post = {
+      text: text,
+      title: title,
+      tags: tags,
+      likes: 0,
+      category: { id: category },
+      author: { username: user.email },
+      datePublished: new Date().toISOString(),
+    };
+    // addPost({ variables: { post: post } });
+  };
+
+  const showEditPost = (
+    <Modal
+      onClose={() => setEditPost(false)}
+      onOpen={() => setEditPost(true)}
+      open={editPost}
+    >
+      <Modal.Header>Edit Post</Modal.Header>
+      <Modal.Content>
+        <Modal.Description>
+          <Form>
+            <Form.Field>
+              <label>Title</label>
+              <input
+                placeholder="Type title..."
+                style={{
+                  backgroundColor: "#f3f3f3",
+                }}
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </Form.Field>
+            <Form.Field>
+              <label>Category</label>
+              <Dropdown
+                placeholder="You must select a category to continue..."
+                fluid
+                search
+                selection
+                defaultValue={category}
+                options={categoriesOptions}
+                style={{
+                  backgroundColor: "#f3f3f3",
+                }}
+                onChange={(e, data) => setCategory(data.value)}
+              />
+            </Form.Field>
+            <Form.Field>
+              <label>Tags (optional)</label>
+              <Dropdown
+                placeholder="Select appropriate tags..."
+                fluid
+                multiple
+                search
+                selection
+                defaultValue={tags}
+                options={tagsOptions}
+                style={{
+                  backgroundColor: "#f3f3f3",
+                }}
+                onChange={(e, data) => setTags(data.value)}
+              />
+            </Form.Field>
+            <Form.Field>
+              <label>Your Message</label>
+              <TextArea
+                rows="3"
+                placholder="Enter your message..."
+                style={{
+                  backgroundColor: "#f3f3f3",
+                }}
+                value={text}
+                onChange={(e, data) => setText(data.value)}
+              />
+            </Form.Field>
+          </Form>
+        </Modal.Description>
+      </Modal.Content>
+      <Modal.Actions>
+        <Button color="black" onClick={() => setEditPost(false)}>
+          Cancel
+        </Button>
+        <Button
+          content="Submit"
+          labelPosition="right"
+          icon="checkmark"
+          onClick={updatePost}
+          positive
+        />
+      </Modal.Actions>
+    </Modal>
+  );
 
   return (
     <div style={{ margin: "2.5rem 7rem 7rem 7rem" }}>
@@ -59,18 +188,20 @@ export function Post() {
           <Header.Subheader>{dateStr}</Header.Subheader>
         </Header.Content>
       </Header>
-      {/* <Header as="h3">Published : </Header> */}
-      {/* <Divider /> */}
-      {/* <Image
-        src={
-          data.getPost.author.avatarImg ??
-          "https://img.icons8.com/dotty/80/000000/question.png"
-        }
-        size="small"
-        floated="left"
-        style={{ margin: "2em 2em 2em -4em" }}
-      /> */}
       {paras}
+      {showEditPost}
+      <div>
+        <button
+          style={{
+            background: "linear-gradient(135deg, #ff1800, #ff009b)",
+            color: "white",
+          }}
+          className="ui button"
+          onClick={setdata}
+        >
+          <i className="pencil icon"></i>Edit Post
+        </button>
+      </div>
       {isAuthenticated && (
         <div>
           <div style={{ display: "flex" }}>
@@ -87,8 +218,16 @@ export function Post() {
                   style={{ minHeight: 100, width: "350px" }}
                 />
               </Form>
-              <div style={{marginTop: "10px"}}>
-                <button style={{ background: "linear-gradient(135deg, #ff1800, #ff009b)", color: "white"}} className="ui button">Post comment</button>
+              <div style={{ marginTop: "10px" }}>
+                <button
+                  style={{
+                    background: "linear-gradient(135deg, #ff1800, #ff009b)",
+                    color: "white",
+                  }}
+                  className="ui button"
+                >
+                  Post comment
+                </button>
               </div>
             </span>
           </div>

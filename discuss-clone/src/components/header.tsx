@@ -1,6 +1,7 @@
 import React from "react";
 import { Image } from "semantic-ui-react";
 import { useAuth0 } from "@auth0/auth0-react";
+import { Link } from "react-router-dom";
 
 export function AppHeader() {
   const { loginWithRedirect, logout, user, isAuthenticated } = useAuth0();
@@ -55,29 +56,31 @@ export function AppHeader() {
           className="ui left floated header"
           style={{ paddingLeft: "7rem", transform: "translate(-23px, 40px)" }}
         >
-          <div style={{ display: "flex" }}>
-            <span>
-              <Image
-                size="tiny"
-                src="/diggy.png"
-                style={{ marginRight: "1.5em" }}
-              />{" "}
-            </span>
-            <div>
-              <p
-                style={{
-                  background: "-webkit-linear-gradient(#ff1800, #ff009b)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  marginBottom: "0px",
-                  fontSize: "x-large",
-                }}
-              >
-                Dgraph
-              </p>
-              <p style={{ fontSize: "smaller" }}>DISCUSS</p>
+          <Link to="/">
+            <div style={{ display: "flex" }}>
+              <span>
+                <Image
+                  size="tiny"
+                  src="/diggy.png"
+                  style={{ marginRight: "1.5em" }}
+                />{" "}
+              </span>
+              <div>
+                <p
+                  style={{
+                    background: "-webkit-linear-gradient(#ff1800, #ff009b)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    marginBottom: "0px",
+                    fontSize: "x-large",
+                  }}
+                >
+                  Dgraph
+                </p>
+                <p style={{ fontSize: "smaller" }}>DISCUSS</p>
+              </div>
             </div>
-          </div>
+          </Link>
         </h3>
       </div>
     </>

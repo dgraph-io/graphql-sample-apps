@@ -6,6 +6,7 @@ fragment postData on Post {
   datePublished
   likes
   category {
+    id
     name
   }
   author {
@@ -31,5 +32,13 @@ query allCategories{
   queryCategory {
     id
     name
+  }
+}
+
+mutation addPost($post: AddPostInput!) {
+  addPost(input: [$post]) {
+    post {
+      id
+    }
   }
 }

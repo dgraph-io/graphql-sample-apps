@@ -8,7 +8,7 @@ export type PostDataFragment = (
   & Pick<Types.Post, 'id' | 'title' | 'text' | 'tags' | 'datePublished' | 'likes'>
   & { category: (
     { __typename?: 'Category' }
-    & Pick<Types.Category, 'name'>
+    & Pick<Types.Category, 'id' | 'name'>
   ), author: (
     { __typename?: 'User' }
     & Pick<Types.User, 'username' | 'displayName' | 'avatarImg'>
@@ -50,6 +50,22 @@ export type AllCategoriesQuery = (
   )>>> }
 );
 
+export type AddPostMutationVariables = Types.Exact<{
+  post: Types.AddPostInput;
+}>;
+
+
+export type AddPostMutation = (
+  { __typename?: 'Mutation' }
+  & { addPost?: Types.Maybe<(
+    { __typename?: 'AddPostPayload' }
+    & { post?: Types.Maybe<Array<Types.Maybe<(
+      { __typename?: 'Post' }
+      & Pick<Types.Post, 'id'>
+    )>>> }
+  )> }
+);
+
 export const PostDataFragmentDoc = gql`
     fragment postData on Post {
   id
@@ -59,6 +75,7 @@ export const PostDataFragmentDoc = gql`
   datePublished
   likes
   category {
+    id
     name
   }
   author {
@@ -166,3 +183,37 @@ export function useAllCategoriesLazyQuery(baseOptions?: ApolloReactHooks.LazyQue
 export type AllCategoriesQueryHookResult = ReturnType<typeof useAllCategoriesQuery>;
 export type AllCategoriesLazyQueryHookResult = ReturnType<typeof useAllCategoriesLazyQuery>;
 export type AllCategoriesQueryResult = ApolloReactCommon.QueryResult<AllCategoriesQuery, AllCategoriesQueryVariables>;
+export const AddPostDocument = gql`
+    mutation addPost($post: AddPostInput!) {
+  addPost(input: [$post]) {
+    post {
+      id
+    }
+  }
+}
+    `;
+export type AddPostMutationFn = ApolloReactCommon.MutationFunction<AddPostMutation, AddPostMutationVariables>;
+
+/**
+ * __useAddPostMutation__
+ *
+ * To run a mutation, you first call `useAddPostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddPostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addPostMutation, { data, loading, error }] = useAddPostMutation({
+ *   variables: {
+ *      post: // value for 'post'
+ *   },
+ * });
+ */
+export function useAddPostMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AddPostMutation, AddPostMutationVariables>) {
+        return ApolloReactHooks.useMutation<AddPostMutation, AddPostMutationVariables>(AddPostDocument, baseOptions);
+      }
+export type AddPostMutationHookResult = ReturnType<typeof useAddPostMutation>;
+export type AddPostMutationResult = ApolloReactCommon.MutationResult<AddPostMutation>;
+export type AddPostMutationOptions = ApolloReactCommon.BaseMutationOptions<AddPostMutation, AddPostMutationVariables>;

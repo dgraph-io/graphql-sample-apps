@@ -15,34 +15,22 @@ import {
 import { useAuth0 } from "@auth0/auth0-react";
 import { useAllPostsQuery } from "./types/operations";
 import { useAllCategoriesQuery } from "./types/operations";
+import { useAddPostMutation } from "./types/operations";
+import { Link } from "react-router-dom";
 
 export function PostFeed() {
   const { data, loading, error } = useAllPostsQuery();
   const { data: categoriesData, loading: catLoading } = useAllCategoriesQuery();
+  const [addPost] = useAddPostMutation();
   const [createPost, setCreatePost] = useState(false);
-  const tags: Array<string> = [];
+  const [title, setTitle] = useState("");
+  const [tags, setTags]: any = useState([]);
+  const [category, setCategory]: any = useState("");
+  const [text, setText]: any = useState("");
+
+  const postTags: Array<string> = [];
   const tagsOptions: Array<Object> = [];
-  // const stateOptions: any = [
-  //   { key: "angular", text: "Angular", value: "angular" },
-  //   { key: "css", text: "CSS", value: "css" },
-  //   { key: "design", text: "Graphic Design", value: "design" },
-  //   { key: "ember", text: "Ember", value: "ember" },
-  //   { key: "html", text: "HTML", value: "html" },
-  //   { key: "ia", text: "Information Architecture", value: "ia" },
-  //   { key: "javascript", text: "Javascript", value: "javascript" },
-  //   { key: "mech", text: "Mechanical Engineering", value: "mech" },
-  //   { key: "meteor", text: "Meteor", value: "meteor" },
-  //   { key: "node", text: "NodeJS", value: "node" },
-  //   { key: "plumbing", text: "Plumbing", value: "plumbing" },
-  //   { key: "python", text: "Python", value: "python" },
-  //   { key: "rails", text: "Rails", value: "rails" },
-  //   { key: "react", text: "React", value: "react" },
-  //   { key: "repair", text: "Kitchen Repair", value: "repair" },
-  //   { key: "ruby", text: "Ruby", value: "ruby" },
-  //   { key: "ui", text: "UI Design", value: "ui" },
-  //   { key: "ux", text: "User Experience", value: "ux" },
-  // ];
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated, user } = useAuth0();
 
   if (loading || catLoading) return <Loader />;
   if (error) return `Error! ${error.message}`;
@@ -50,6 +38,20 @@ export function PostFeed() {
   const categoriesOptions = categoriesData?.queryCategory?.map((category) => {
     return { key: category?.id, text: category?.name, value: category?.id };
   });
+
+  const submitPost = () => {
+    setCreatePost(false);
+    const post = {
+      text: text,
+      title: title,
+      tags: tags,
+      likes: 0,
+      category: { id: category },
+      author: { username: user.email },
+      datePublished: new Date().toISOString(),
+    };
+    addPost({ variables: { post: post } });
+  };
 
   const showCreatePost = (
     <Modal
@@ -68,6 +70,7 @@ export function PostFeed() {
                 style={{
                   backgroundColor: "#f3f3f3",
                 }}
+                onChange={(e) => setTitle(e.target.value)}
               />
             </Form.Field>
             <Form.Field>
@@ -81,6 +84,7 @@ export function PostFeed() {
                 style={{
                   backgroundColor: "#f3f3f3",
                 }}
+                onChange={(e, data) => setCategory(data.value)}
               />
             </Form.Field>
             <Form.Field>
@@ -95,6 +99,7 @@ export function PostFeed() {
                 style={{
                   backgroundColor: "#f3f3f3",
                 }}
+                onChange={(e, data) => setTags(data.value)}
               />
             </Form.Field>
             <Form.Field>
@@ -105,6 +110,7 @@ export function PostFeed() {
                 style={{
                   backgroundColor: "#f3f3f3",
                 }}
+                onChange={(e, data) => setText(data.value)}
               />
             </Form.Field>
           </Form>
@@ -118,7 +124,7 @@ export function PostFeed() {
           content="Submit"
           labelPosition="right"
           icon="checkmark"
-          onClick={() => setCreatePost(false)}
+          onClick={submitPost}
           positive
         />
       </Modal.Actions>
@@ -128,38 +134,24 @@ export function PostFeed() {
   const items = data?.queryPost?.map((post) => {
     const likes = post?.likes ?? 0;
     post?.tags.map((tag) => {
-      if (tags.indexOf(tag) > -1) {
-        tagsOptions.push({ key: tag, text: tag, value: tag })
+      if (postTags.indexOf(tag) > -1) {
+        tagsOptions.push({ key: tag, text: tag, value: tag });
       }
-    })
+    });
 
     return (
-      // <Feed.Event key={post?.id}>
-      //   <Feed.Label>{avatar}</Feed.Label>
-      //   <Feed.Content>
-      //     <Feed.Summary>
-      //       <Feed.User>{post?.author.displayName} </Feed.User>{" "}
-      //       <a href={"/post/" + post?.id} style={{ color: "black" }}>
-      //         {post?.title}
-      //       </a>
-      //       <Feed.Date>{dateStr}</Feed.Date>
-      //       <Feed.Extra text>
-      //         {post?.text.substring(0, 100)}...(posted in{" "}
-      //         <a>{post?.category.name}</a>)
-      //       </Feed.Extra>
-      //     </Feed.Summary>
-      //     <Feed.Meta>
-      //       <Feed.Like>
-      //         <Icon name="like" />
-      //         {likes} Like{likes === 1 ? "" : "s"}
-      //       </Feed.Like>
-      //     </Feed.Meta>
-      //   </Feed.Content>
-      // </Feed.Event>
-
       <Table.Row key={post?.id}>
         <Table.Cell>
-          <a href={"/post/" + post?.id} style={{ color: "black" }}>
+          <Link
+            to={{
+              pathname: "/post/" + post?.id,
+              state: {
+                categoriesOptions: categoriesOptions,
+                tagsOptions: tagsOptions
+              },
+            }}
+          >
+            {/* <a href={"/post/" + post?.id} style={{ color: "black" }}> */}
             <Header as="h4" image>
               <Image src={post?.author.avatarImg} rounded size="mini" />
               <Header.Content>
@@ -167,7 +159,8 @@ export function PostFeed() {
                 <Header.Subheader>{post?.author.displayName}</Header.Subheader>
               </Header.Content>
             </Header>
-          </a>
+            {/* </a> */}
+          </Link>
         </Table.Cell>
         <Table.Cell>
           <span className="ui red empty mini circular label"></span>{" "}
@@ -175,9 +168,11 @@ export function PostFeed() {
         </Table.Cell>
         <Table.Cell>
           {post?.tags.map((tag) => {
-            return <Label as="a" basic color="grey">
-              {post?.category.name}
-            </Label>
+            return (
+              <Label as="a" basic color="grey">
+                {tag}
+              </Label>
+            );
           })}
         </Table.Cell>
         <Table.Cell>
@@ -229,18 +224,18 @@ export function PostFeed() {
             backgroundColor: "#f3f3f3",
           }}
         />
-        {isAuthenticated && (
-          <button
-            className="ui button"
-            style={{
-              background: "linear-gradient(135deg, #ff1800, #ff009b)",
-              color: "white",
-            }}
-            onClick={() => setCreatePost(true)}
-          >
-            Create a New Post
-          </button>
-        )}
+        {/* {isAuthenticated && ( */}
+        <button
+          className="ui button"
+          style={{
+            background: "linear-gradient(135deg, #ff1800, #ff009b)",
+            color: "white",
+          }}
+          onClick={() => setCreatePost(true)}
+        >
+          Create a New Post
+        </button>
+        {/* )} */}
       </div>
       <Table basic="very" collapsing style={{ width: "100%" }}>
         <Table.Header>
@@ -256,5 +251,4 @@ export function PostFeed() {
       </Table>
     </>
   );
-  // </Container>
 }
