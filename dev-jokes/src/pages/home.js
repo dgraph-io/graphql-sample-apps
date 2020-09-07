@@ -19,6 +19,8 @@ import useImperativeQuery from "../utils/imperativeQuery";
 import { g2aTags, sortBy } from "../utils/utils";
 import { useQuery } from "@apollo/react-hooks";
 
+import Background from '../assets/images/background.jpeg';
+
 const Home = () => {
   const [mydata, setMydata] = useState(null);
   const [tags, setTags] = useState([]);
@@ -98,24 +100,24 @@ const Home = () => {
   return (
     <>
       <Navbar title="Home" color="primary" />
-      <Content>
+      <Content background={Background}>
         {mydata != null && (
           <>
-            <div style={{ display: "flex", alignItems: "center", flexWrap:"wrap" }}>
+            <div style={{ display: "flex", alignItems: "center", flexWrap:"wrap", background: "white", borderRadius: "10px" }}>
               <SearchBar
                 value={textString}
                 label="Search your joke here"
                 onChange={(newText) => setTextString(newText)}
                 onRequestSearch={handleClick}
-                style={{"min-width":"300px"}}
+                style={{minWidth:"300px"}}
               />
               <TagSelector
                 names={names}
                 tags={tags}
                 handleChange={(e) => setTags(e.target.value)}
               />
-              <div style={{ marginLeft: "auto", alignItems: "center" }}>
-                <Sort cb={SortBy} />
+              <div style={{ marginLeft: "auto", alignItems: "center"}}>
+                <Sort cb={SortBy}/>
               </div>
             </div>
             <br />

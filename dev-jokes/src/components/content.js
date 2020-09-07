@@ -32,10 +32,10 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Content = ({children}) => {
+const Content = ({children, background}) => {
   const classes = useStyles();
     return(
-      <main className={clsx(classes.content, classes.contentShift)}>
+      <main className={clsx(classes.content, classes.contentShift)} style={{backgroundImage: `url(${background})`, backgroundSize: "contain"}}>
         <div className={classes.drawerHeader} />
         {children}
       </main>

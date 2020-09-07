@@ -65,7 +65,7 @@ export const Sidebar = ({children = []}) => {
         }}
       >
         <div className={classes.logo}>
-          <img src={Logo} alt="logo" style={{"max-width":"-webkit-fill-available"}}/>
+          <img src={Logo} alt="logo" style={{maxWidth:"-webkit-fill-available"}}/>
         </div>
         <Divider />
         <List>
@@ -76,7 +76,7 @@ export const Sidebar = ({children = []}) => {
           }))}
         </List>
         <div className={classes.logo}>
-          <img src={Slash} alt="powered-by-slash" style={{"max-width":"-webkit-fill-available", "position":"absolute", "bottom":"0px"}}/>
+          <img src={Slash} alt="powered-by-slash" style={{maxWidth:"-webkit-fill-available", "position":"absolute", "bottom":"0px"}}/>
         </div>
       </Drawer>
   );
