@@ -110,7 +110,7 @@ function ModalSwitch(){
       <Switch location={background || location}>
       <Route path="/" exact={true} component={Home} />
         <PrivateRoute path="/profile" exact={true} component={Profile} />
-        <PrivateRoute path="/post/:postId" exact={true} component={CardModal} />
+        <Route path="/post/:postId" exact={true} component={CardModal} />
         <PrivateRoute path="/create" exact={true} component={Create} />
         <PrivateRoute path="/approve" exact={true} component={Approve} />
         <PrivateRoute path="/flagged" exact={true} component={Flagged} />

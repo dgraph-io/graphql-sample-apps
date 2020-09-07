@@ -194,7 +194,8 @@ export const Create = () => {
               onChange={e => setPostText(e.target.value)}
               margin="normal" variant="outlined" 
               fullWidth multiline rows={5}
-              inputProps={{ maxLength: 250}}/>
+              inputProps={{ maxLength: 250}} style={{"min-width":"300px"}}/>
+              <br />
             {
               type === 'text' ?
               <CanvasImage image={cimg} text={postText} ref={refCanvas}/> : <>

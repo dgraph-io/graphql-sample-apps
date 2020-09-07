@@ -13,7 +13,7 @@ const Profile = () => {
     <Navbar title="Profile" color="primary" />
     <Content>
         <div className="profile">
-          <img className="profile-img" src={user.picture} alt="Profile" />
+          <img className="profile-img" src={user.picture} alt="Profile" style={{"max-width":"100%"}}/>
           <p>Name: <strong>{user.name}</strong></p>
           <p>Email: <strong>{user.email}</strong></p>
         </div>

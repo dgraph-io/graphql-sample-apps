@@ -16,7 +16,7 @@ const createApolloClient = (token) => {
       return {
         headers: {
           ...headers,
-          "X-Auth0-Token": token,
+          "X-Auth-Token": token,
         },
       };
     });
