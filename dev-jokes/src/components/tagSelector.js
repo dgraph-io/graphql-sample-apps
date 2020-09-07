@@ -51,7 +51,7 @@ export default function TagSelector({names, tags, handleChange}){
     const theme = useTheme();
     return (
     <FormControl className={classes.formControl}>
-    <InputLabel id="demo-mutiple-chip-label">Tags</InputLabel>
+    <InputLabel id="demo-mutiple-chip-label" >Tags</InputLabel>
     <Select
         labelId="demo-mutiple-chip-label"
         id="demo-mutiple-chip"

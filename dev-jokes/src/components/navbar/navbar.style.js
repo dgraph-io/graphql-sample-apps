@@ -105,10 +105,10 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   headerTitle: {
-    color: "#424242"
+    color: "white"
   },
   appBar: {
-    background: "white",
+    background: "#19192c",
     color: "#424242",
     boxShadow: "none",
     borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
