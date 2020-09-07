@@ -249,7 +249,7 @@ export default function PostCard({
           state: { background: location },
         }}
       >
-        <img src={img} className="pic" alt={"preview"}/>
+        <img src={img} className="pic" alt={"preview"} width={"100%"} height={"auto"}/>
       </Link>
       <CardActions disableSpacing style={{padding: "0"}}>
         {isApproved ? (

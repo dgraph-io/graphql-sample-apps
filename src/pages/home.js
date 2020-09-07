@@ -101,12 +101,13 @@ const Home = () => {
       <Content>
         {mydata != null && (
           <>
-            <div style={{ display: "flex", alignItems: "center" }}>
+            <div style={{ display: "flex", alignItems: "center", flexWrap:"wrap" }}>
               <SearchBar
                 value={textString}
                 label="Search your joke here"
                 onChange={(newText) => setTextString(newText)}
                 onRequestSearch={handleClick}
+                style={{"min-width":"300px"}}
               />
               <TagSelector
                 names={names}
@@ -117,6 +118,7 @@ const Home = () => {
                 <Sort cb={SortBy} />
               </div>
             </div>
+            <br />
             <MasonartGrid data={mydata} isApproved={true}/>
           </>
         )}

@@ -33,6 +33,12 @@ a {
   width:  calc(100% - 240px);
 }
 
+@media only screen and (max-width:600px){
+  .card {
+    width: 250px;
+  }
+}
+
 .card {
   min-height: 200px;
   margin-bottom: 30px;

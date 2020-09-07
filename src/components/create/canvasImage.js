@@ -194,7 +194,7 @@ export default React.forwardRef(function CanvasImage({text}, ref) {
     return (
     <div>
         <canvas ref={ref} width={300} height={200} />
-        <div>
+        <div style={{"display":"flex"}}>
             <div>
                 <span style={{width:"20px", height:"20px" , border:"1px", background: color, display:"inline", float:"left"}} /> 
                 &nbsp; &nbsp; Text Color
