@@ -5,6 +5,8 @@ import {
   AddCategoryInput,
   AddPostInput,
   AddUserInput,
+  PermissionRef,
+  Role
 } from "../../src/types/graphql"
 import {
   InitCategoriesMutation,
@@ -16,10 +18,12 @@ import {
 } from "./types/operations"
 import { lorem } from 'faker';
 
+require("dotenv").config()
+
 const client = new ApolloClient({
   cache: new InMemoryCache(),
   link: new HttpLink({
-    uri: process.env.REACT_APP_GRAPHQL_ENDPOINT || "http://localhost:8080/graphql",
+    uri: process.env.REACT_APP_SLASH_GRAPHQL_ENDPOINT + '/graphql',
     fetch: fetch,
   }),
 })
@@ -33,25 +37,26 @@ const diggy: AddUserInput = {
 const michael: AddUserInput = {
   username: "michael@dgraph.io",
   displayName: "Michael",
-  avatarImg: "/michael.png",
+  // roles: [ { role: Role.Administrator } ]
 }
 
-const virat: AddUserInput = {
-  username: "virat@cricket.com",
-  displayName: "Virat",
-}
+// const apoorv: AddUserInput = {
+//   username: "apoorv@dgraph.io",
+//   displayName: "Michael",
+//   roles: [ { role: Role.Administrator } ]
+// }
 
-const anushka: AddUserInput = {
-  username: "anushka@bollywood.org",
-  displayName: "Anushka",
-}
+const stdAdmins: PermissionRef[] = [
+  { role: Role.Administrator, user: { username: "michael@dgraph.io" } },
+  // { role: Role.Administrator, user: { username: "apoorv@dgraph.io" } } 
+]
 
 const categories: Array<AddCategoryInput> = [
-  { name: "General", isPublic: true },
-  { name: "GraphQL", perms: { users: [ michael, diggy ] } },
-  { name: "Dgraph", perms: { users: [ michael, diggy ] }  },
-  { name: "React", perms: { users: [ michael, diggy ] }  },
-  { name: "Movies", isPublic: true },
+  { name: "General", isPublic: true, permissions: stdAdmins },
+  { name: "GraphQL", isPublic: true, permissions: stdAdmins  },
+  { name: "Slash GraphQL", isPublic: true, permissions: stdAdmins  },
+  { name: "React", isPublic: true, permissions: stdAdmins  },
+  { name: "Dgraph Internal", isPublic: false, permissions: stdAdmins  },
 ]
 
 const qsQuote = `
@@ -92,6 +97,7 @@ function makePosts(): Array<AddPostInput> {
       likes: 10,
       category: { name: "General" },
       author: michael,
+      tags: []
     },
     {
       title: "My first post about Dgraph GraphQL",
@@ -100,6 +106,7 @@ function makePosts(): Array<AddPostInput> {
       likes: 1,
       category: { name: "GraphQL" },
       author: diggy,
+      tags: []
     },
     {
       title: "Let me quote from the docs",
@@ -108,6 +115,7 @@ function makePosts(): Array<AddPostInput> {
       likes: 5,
       category: { name: "GraphQL" },
       author: michael,
+      tags: []
     },
     {
       title: "I know some things about Dgraph",
@@ -116,6 +124,7 @@ function makePosts(): Array<AddPostInput> {
       likes: 50,
       category: { name: "Dgraph" },
       author: diggy,
+      tags: []
     },
     {
       title: "How should I layout my components?",
@@ -123,23 +132,8 @@ function makePosts(): Array<AddPostInput> {
       datePublished: yesterday,
       category: { name: "React" },
       author: michael,
-    },
-    {
-      title: "Where should I deploy my frontend app?",
-      text: "I'm developing some new skills in development.  I'm writing a cricket scores app in Dgraph+React, but where should I deploy this?\n"+lorem.paragraphs(4),
-      datePublished: lastWeek,
-      likes: 1000000,
-      category: { name: "React" },
-      author: virat,
-    },
-    {
-      title: "I want to make an app for people's favorite movies",
-      text: lorem.paragraphs(7),
-      datePublished: lastWeek,
-      likes: 1000000,
-      category: { name: "Movies" },
-      author: anushka,
-    },
+      tags: []
+    }
   ]
 }
 
