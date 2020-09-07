@@ -13,15 +13,26 @@ import {
   TextArea,
 } from "semantic-ui-react";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useAllPostsQuery } from "./types/operations";
-import { useAllCategoriesQuery } from "./types/operations";
-import { useAddPostMutation } from "./types/operations";
+import { 
+  useAllPostsQuery, 
+  useAllCategoriesQuery, 
+  useAddPostMutation, 
+  AllPostsDocument, 
+  AllPostsQuery } from "./types/operations";
 import { Link } from "react-router-dom";
 
 export function PostFeed() {
   const { data, loading, error } = useAllPostsQuery();
   const { data: categoriesData, loading: catLoading } = useAllCategoriesQuery();
-  const [addPost] = useAddPostMutation();
+  const [addPost] = useAddPostMutation({      
+    update(cache, { data }) {
+    const existing = cache.readQuery<AllPostsQuery>({ query: AllPostsDocument })
+
+    cache.writeQuery({
+      query: AllPostsDocument,
+      data: { queryPost: [...(data?.addPost?.post ?? []), ...(existing?.queryPost ?? [])] },
+    })
+  }})
   const [createPost, setCreatePost] = useState(false);
   const [title, setTitle] = useState("");
   const [tags, setTags]: any = useState([]);
@@ -50,8 +61,10 @@ export function PostFeed() {
       author: { username: user.email },
       datePublished: new Date().toISOString(),
     };
-    addPost({ variables: { post: post } });
-  };
+    addPost(
+      { variables: { post: post } }
+    )
+  }
 
   const showCreatePost = (
     <Modal
