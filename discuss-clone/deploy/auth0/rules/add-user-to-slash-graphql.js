@@ -11,15 +11,15 @@ function addUserToSlashGraphQL(user, context, callback) {
 
     client
       .request(
-        `mutation($name: String!) {
-          addUser(input: [ { username: $name, displayName: $name } ]) {
+        `mutation($username: String!) {
+          addUser(input: [ { username: $username, displayName: $username } ]) {
             user { username }
           }
         }`,
-        { name: user.email }
+        { username: user.email }
       )
-      .then((data, err) => {
-        callback(err, user, context)
+      .then((data, error) => {
+        callback(error, user, context)
       })
       .catch((error) => {
         callback(error, user, context)

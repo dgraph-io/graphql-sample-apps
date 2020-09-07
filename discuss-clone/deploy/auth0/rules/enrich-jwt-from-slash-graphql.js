@@ -1,5 +1,3 @@
-
-
 function enrichJWTFromSlashGraphQL(user, context, callback) {
   // Roles should only be set to verified users.
   if (!user.email || !user.email_verified) {
@@ -25,14 +23,15 @@ function enrichJWTFromSlashGraphQL(user, context, callback) {
           roles {
             role
             forCategory {
-              id
-            }
+							id
+						}
           }
         }
       }`,
       { username: user.email }
     )
     .then((data, err) => {
+      // console.log(data)
       const hasAdminRole = !!(
         data &&
         data.getUser &&
