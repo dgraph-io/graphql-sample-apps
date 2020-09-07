@@ -1,5 +1,5 @@
-import React, { useState, FormEvent } from "react"
-import { useParams, useLocation } from "react-router-dom"
+import React, { useState, FormEvent } from "react";
+import { useParams, useLocation } from "react-router-dom";
 import {
   Container,
   Header,
@@ -12,41 +12,52 @@ import {
   Dropdown,
   Button,
   TextAreaProps,
-} from "semantic-ui-react"
-import { useGetPostQuery, useAddCommentMutation } from "./types/operations"
-import { DateTime } from "luxon"
-import { useAuth0 } from "@auth0/auth0-react"
+  Comment,
+} from "semantic-ui-react";
+import {
+  useGetPostQuery,
+  useAddCommentMutation,
+  useUpdatePostMutation,
+  useGetUserQuery,
+} from "./types/operations";
+import { DateTime } from "luxon";
+import { useAuth0 } from "@auth0/auth0-react";
 
 interface PostParams {
-  id: string
+  id: string;
 }
 
 export function Post() {
-  const [title, setTitle] = useState("")
-  const [tags, setTags]: any = useState([])
-  const [category, setCategory]: any = useState("")
-  const [text, setText]: any = useState("")
-  const [editPost, setEditPost] = useState(false)
-  const [commentText, setCommentText] = useState("")
+  const [title, setTitle] = useState("");
+  const [tags, setTags]: any = useState([]);
+  const [category, setCategory]: any = useState("");
+  const [text, setText]: any = useState("");
+  const [editPost, setEditPost] = useState(false);
+  const [commentText, setCommentText] = useState("");
+  const avatar = "/" + Math.floor(Math.random() * (9 - 1) + 1) + ".svg";
 
-  const { id } = useParams<PostParams>()
-  const location = useLocation()
+  const { id } = useParams<PostParams>();
+  const location = useLocation();
 
-  const { categoriesOptions, tagsOptions }: any = location.state
-  const { user, isAuthenticated } = useAuth0()
+  const { categoriesOptions, tagsOptions }: any = location.state;
+  const { user, isAuthenticated } = useAuth0();
 
-  const { data, loading, error } = useGetPostQuery({ variables: { id: id } })
+  const { data: currentUser, loading: userLoading } = useGetUserQuery({
+    variables: { username: isAuthenticated ? user.email : "" },
+  });
+  const { data, loading, error } = useGetPostQuery({ variables: { id: id } });
 
-  const [addCommentMutation] = useAddCommentMutation()
+  const [addCommentMutation] = useAddCommentMutation();
+  const [updatePostMutation] = useUpdatePostMutation();
 
-  if (loading) return <Loader />
+  if (loading || userLoading) return <Loader />;
   if (error) {
     return (
       <Container text style={{ marginTop: "7em" }}>
         <Header as="h1">Ouch! That page didn't load</Header>
         <p>Here's why : {error.message}</p>
       </Container>
-    )
+    );
   }
   if (!data?.getPost) {
     return (
@@ -55,20 +66,18 @@ export function Post() {
         <p>You've navigated to a post that doesn't exist.</p>
         <p>That most likely means that the id {id} isn't the id of post.</p>
       </Container>
-    )
+    );
   }
 
   const setdata = () => {
-    setEditPost(true)
-    // setTitle(data.getPost?.title);
+    setEditPost(true);
+    setTitle(data.getPost?.title + "");
     data.getPost?.tags.map((tag) => {
-      setTags((tag: any) => [...tag, tags])
-    })
-
-    setText(data?.getPost?.text)
-
-    setCategory(data?.getPost?.category?.id)
-  }
+      setTags((tag: any) => [...tag, tags]);
+    });
+    setText(data?.getPost?.text);
+    setCategory(data?.getPost?.category?.id);
+  };
 
   const addComment = () => {
     addCommentMutation({
@@ -76,34 +85,35 @@ export function Post() {
         comment: {
           text: commentText,
           commentsOn: { id: id },
-          author: { username: user.email },
+          author: { username: currentUser?.getUser?.username },
         },
       },
-      update(cache, { data }) { console.log(data) }
-  })}
+      update(cache, { data }) {
+        console.log(data);
+      },
+    });
+  };
 
-  let dateStr = "at some unknown time"
+  let dateStr = "at some unknown time";
   if (data.getPost.datePublished) {
     dateStr =
-      DateTime.fromISO(data.getPost.datePublished).toRelative() ?? dateStr
+      DateTime.fromISO(data.getPost.datePublished).toRelative() ?? dateStr;
   }
 
-  const paras = data.getPost.text.split("\n").map((str) => <p>{str}</p>)
-  console.log("cat", category)
+  const paras = data.getPost.text.split("\n").map((str) => <p>{str}</p>);
 
   const updatePost = () => {
-    setEditPost(false)
+    setEditPost(false);
     const post = {
       text: text,
       title: title,
       tags: tags,
-      likes: 0,
+      // likes: 0,
       category: { id: category },
-      author: { username: user.email },
-      datePublished: new Date().toISOString(),
-    }
-    // addPost({ variables: { post: post } });
-  }
+    };
+
+    updatePostMutation({ variables: { post: post, id: id } });
+  };
 
   const showEditPost = (
     <Modal
@@ -185,7 +195,70 @@ export function Post() {
         />
       </Modal.Actions>
     </Modal>
-  )
+  );
+
+  const comments = data.getPost.comments.map((comment) => {
+    const commentStart = (
+      <>
+        <Comment.Avatar
+          src={
+            comment.author.avatarImg ? comment.author.avatarImg + "" : avatar
+          }
+          rounded
+          size="mini"
+        />
+        <Comment.Content>
+          <Comment.Author as="a">{comment.author.displayName}</Comment.Author>
+          {/* <Comment.Metadata>
+            <div>{comment.}</div>
+          </Comment.Metadata> */}
+          <Comment.Text>{comment.text}</Comment.Text>
+          {/* <Comment.Actions>
+            <Comment.Action>Reply</Comment.Action>
+          </Comment.Actions> */}
+        </Comment.Content>
+      </>
+    );
+
+    const subcomments = comment.commentsOn.comments.map((subComment) => {
+      return (
+        <Comment.Group>
+          <Comment>
+            <Comment.Avatar
+              src={
+                subComment.author.avatarImg
+                  ? subComment.author.avatarImg + ""
+                  : avatar
+              }
+              rounded
+              size="mini"
+            />
+            <Comment.Content>
+              <Comment.Author as="a">
+                {subComment.author.displayName}
+              </Comment.Author>
+              {/* <Comment.Metadata>
+                  <div>Just now</div>
+                </Comment.Metadata> */}
+              <Comment.Text>{subComment.text}</Comment.Text>
+              {/* <Comment.Actions>
+                <Comment.Action>Reply</Comment.Action>
+              </Comment.Actions> */}
+            </Comment.Content>
+          </Comment>
+        </Comment.Group>
+      );
+    });
+
+    return (
+      <div style={{marginTop: "10px"}}>
+        <Comment>
+          {commentStart}
+          {subcomments}
+        </Comment>
+      </div>
+    );
+  });
 
   return (
     <div style={{ margin: "2.5rem 7rem 7rem 7rem" }}>
@@ -193,9 +266,13 @@ export function Post() {
         <Header as="h1">{data.getPost.title} </Header>
         <span className="ui red empty mini circular label"></span>
         {" " + data.getPost?.category.name}
-        <Label as="a" basic color="grey" style={{ marginLeft: "5px" }}>
-          {data.getPost?.category.name}
-        </Label>
+        {data.getPost?.tags.map((tag) => {
+          return (
+            <Label as="a" basic color="grey">
+              {tag}
+            </Label>
+          );
+        })}
       </div>
       <Header as="h4" image>
         <Image src={data.getPost?.author.avatarImg} rounded size="mini" />
@@ -206,7 +283,7 @@ export function Post() {
       </Header>
       {paras}
       {showEditPost}
-      <div>
+      <div style={{ marginTop: "30px" }}>
         <button
           style={{
             background: "linear-gradient(135deg, #ff1800, #ff009b)",
@@ -218,11 +295,12 @@ export function Post() {
           <i className="pencil icon"></i>Edit Post
         </button>
       </div>
+      {comments}
       {isAuthenticated && (
         <div>
-          <div style={{ display: "flex" }}>
+          <div style={{ display: "flex", marginTop: "50px" }}>
             <Image
-              src={user.picture}
+              src={currentUser?.getUser?.avatarImg}
               avatar
               size="mini"
               style={{ height: "35px" }}
@@ -232,9 +310,12 @@ export function Post() {
                 <TextArea
                   placeholder={`Type here to reply to ${data.getPost.author.displayName}...`}
                   style={{ minHeight: 100, width: "350px" }}
-                  onChange={(event: FormEvent<HTMLTextAreaElement>, data: TextAreaProps)=> {
-                    setCommentText(data.value?.toString() ?? "")
-                 }}
+                  onChange={(
+                    event: FormEvent<HTMLTextAreaElement>,
+                    data: TextAreaProps
+                  ) => {
+                    setCommentText(data.value?.toString() ?? "");
+                  }}
                 />
               </Form>
               <div style={{ marginTop: "10px" }}>
@@ -254,5 +335,5 @@ export function Post() {
         </div>
       )}
     </div>
-  )
+  );
 }

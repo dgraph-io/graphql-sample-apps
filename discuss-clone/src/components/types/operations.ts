@@ -12,7 +12,24 @@ export type PostDataFragment = (
   ), author: (
     { __typename?: 'User' }
     & Pick<Types.User, 'username' | 'displayName' | 'avatarImg'>
-  ) }
+  ), comments: Array<(
+    { __typename?: 'Comment' }
+    & Pick<Types.Comment, 'id' | 'text'>
+    & { commentsOn: (
+      { __typename?: 'Post' }
+      & { comments: Array<(
+        { __typename?: 'Comment' }
+        & Pick<Types.Comment, 'id' | 'text'>
+        & { author: (
+          { __typename?: 'User' }
+          & Pick<Types.User, 'username' | 'displayName' | 'avatarImg'>
+        ) }
+      )> }
+    ), author: (
+      { __typename?: 'User' }
+      & Pick<Types.User, 'username' | 'displayName' | 'avatarImg'>
+    ) }
+  )> }
 );
 
 export type AllPostsQueryVariables = Types.Exact<{ [key: string]: never; }>;
@@ -36,6 +53,19 @@ export type GetPostQuery = (
   & { getPost?: Types.Maybe<(
     { __typename?: 'Post' }
     & PostDataFragment
+  )> }
+);
+
+export type GetUserQueryVariables = Types.Exact<{
+  username: Types.Scalars['String'];
+}>;
+
+
+export type GetUserQuery = (
+  { __typename?: 'Query' }
+  & { getUser?: Types.Maybe<(
+    { __typename?: 'User' }
+    & Pick<Types.User, 'username' | 'displayName' | 'avatarImg'>
   )> }
 );
 
@@ -86,6 +116,40 @@ export type AddCommentMutation = (
   )> }
 );
 
+export type UpdateUserMutationVariables = Types.Exact<{
+  username: Types.Scalars['String'];
+  user?: Types.Maybe<Types.UserPatch>;
+}>;
+
+
+export type UpdateUserMutation = (
+  { __typename?: 'Mutation' }
+  & { updateUser?: Types.Maybe<(
+    { __typename?: 'UpdateUserPayload' }
+    & { user?: Types.Maybe<Array<Types.Maybe<(
+      { __typename?: 'User' }
+      & Pick<Types.User, 'displayName' | 'avatarImg'>
+    )>>> }
+  )> }
+);
+
+export type UpdatePostMutationVariables = Types.Exact<{
+  id: Types.Scalars['ID'];
+  post?: Types.Maybe<Types.PostPatch>;
+}>;
+
+
+export type UpdatePostMutation = (
+  { __typename?: 'Mutation' }
+  & { updatePost?: Types.Maybe<(
+    { __typename?: 'UpdatePostPayload' }
+    & { post?: Types.Maybe<Array<Types.Maybe<(
+      { __typename?: 'Post' }
+      & PostDataFragment
+    )>>> }
+  )> }
+);
+
 export const PostDataFragmentDoc = gql`
     fragment postData on Post {
   id
@@ -102,6 +166,26 @@ export const PostDataFragmentDoc = gql`
     username
     displayName
     avatarImg
+  }
+  comments {
+    id
+    text
+    commentsOn {
+      comments {
+        id
+        text
+        author {
+          username
+          displayName
+          avatarImg
+        }
+      }
+    }
+    author {
+      username
+      displayName
+      avatarImg
+    }
   }
 }
     `;
@@ -170,6 +254,41 @@ export function useGetPostLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHook
 export type GetPostQueryHookResult = ReturnType<typeof useGetPostQuery>;
 export type GetPostLazyQueryHookResult = ReturnType<typeof useGetPostLazyQuery>;
 export type GetPostQueryResult = ApolloReactCommon.QueryResult<GetPostQuery, GetPostQueryVariables>;
+export const GetUserDocument = gql`
+    query getUser($username: String!) {
+  getUser(username: $username) {
+    username
+    displayName
+    avatarImg
+  }
+}
+    `;
+
+/**
+ * __useGetUserQuery__
+ *
+ * To run a query within a React component, call `useGetUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserQuery({
+ *   variables: {
+ *      username: // value for 'username'
+ *   },
+ * });
+ */
+export function useGetUserQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, baseOptions);
+      }
+export function useGetUserLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, baseOptions);
+        }
+export type GetUserQueryHookResult = ReturnType<typeof useGetUserQuery>;
+export type GetUserLazyQueryHookResult = ReturnType<typeof useGetUserLazyQuery>;
+export type GetUserQueryResult = ApolloReactCommon.QueryResult<GetUserQuery, GetUserQueryVariables>;
 export const AllCategoriesDocument = gql`
     query allCategories {
   queryCategory {
@@ -276,3 +395,74 @@ export function useAddCommentMutation(baseOptions?: ApolloReactHooks.MutationHoo
 export type AddCommentMutationHookResult = ReturnType<typeof useAddCommentMutation>;
 export type AddCommentMutationResult = ApolloReactCommon.MutationResult<AddCommentMutation>;
 export type AddCommentMutationOptions = ApolloReactCommon.BaseMutationOptions<AddCommentMutation, AddCommentMutationVariables>;
+export const UpdateUserDocument = gql`
+    mutation updateUser($username: String!, $user: UserPatch) {
+  updateUser(input: {filter: {username: {eq: $username}}, set: $user}) {
+    user {
+      displayName
+      avatarImg
+    }
+  }
+}
+    `;
+export type UpdateUserMutationFn = ApolloReactCommon.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
+
+/**
+ * __useUpdateUserMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserMutation, { data, loading, error }] = useUpdateUserMutation({
+ *   variables: {
+ *      username: // value for 'username'
+ *      user: // value for 'user'
+ *   },
+ * });
+ */
+export function useUpdateUserMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
+        return ApolloReactHooks.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, baseOptions);
+      }
+export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
+export type UpdateUserMutationResult = ApolloReactCommon.MutationResult<UpdateUserMutation>;
+export type UpdateUserMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
+export const UpdatePostDocument = gql`
+    mutation updatePost($id: ID!, $post: PostPatch) {
+  updatePost(input: {filter: {id: [$id]}, set: $post}) {
+    post {
+      ...postData
+    }
+  }
+}
+    ${PostDataFragmentDoc}`;
+export type UpdatePostMutationFn = ApolloReactCommon.MutationFunction<UpdatePostMutation, UpdatePostMutationVariables>;
+
+/**
+ * __useUpdatePostMutation__
+ *
+ * To run a mutation, you first call `useUpdatePostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdatePostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updatePostMutation, { data, loading, error }] = useUpdatePostMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      post: // value for 'post'
+ *   },
+ * });
+ */
+export function useUpdatePostMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdatePostMutation, UpdatePostMutationVariables>) {
+        return ApolloReactHooks.useMutation<UpdatePostMutation, UpdatePostMutationVariables>(UpdatePostDocument, baseOptions);
+      }
+export type UpdatePostMutationHookResult = ReturnType<typeof useUpdatePostMutation>;
+export type UpdatePostMutationResult = ApolloReactCommon.MutationResult<UpdatePostMutation>;
+export type UpdatePostMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdatePostMutation, UpdatePostMutationVariables>;

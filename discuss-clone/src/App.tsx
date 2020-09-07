@@ -18,11 +18,9 @@ export function App() {
       >
         <div style={{ display: "inline-flex" }}>
           <span>
-            Powered by {" "}
-             <a href="https://slash.dgraph.io" target="__blank">
-            <strong>
-                 Slash GraphQL
-            </strong>
+            Powered by{" "}
+            <a href="https://slash.dgraph.io" target="__blank">
+              <strong>Slash GraphQL</strong>
             </a>
           </span>
           <Image size="mini" src="/lighting.svg" style={{ height: "25px" }} />
@@ -31,7 +29,6 @@ export function App() {
       <div className="App">
         <BrowserRouter>
           <AppHeader />
-          {/* <div className="ui divider"></div> */}
           <Switch>
             <Route exact path="/post/:id" component={Post} />
             <Route exact path="/" component={Home} />
