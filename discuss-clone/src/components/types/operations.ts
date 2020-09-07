@@ -66,6 +66,26 @@ export type AddPostMutation = (
   )> }
 );
 
+export type AddCommentMutationVariables = Types.Exact<{
+  comment: Types.AddCommentInput;
+}>;
+
+
+export type AddCommentMutation = (
+  { __typename?: 'Mutation' }
+  & { addComment?: Types.Maybe<(
+    { __typename?: 'AddCommentPayload' }
+    & { comment?: Types.Maybe<Array<Types.Maybe<(
+      { __typename?: 'Comment' }
+      & Pick<Types.Comment, 'id' | 'text'>
+      & { author: (
+        { __typename?: 'User' }
+        & Pick<Types.User, 'username' | 'displayName'>
+      ) }
+    )>>> }
+  )> }
+);
+
 export const PostDataFragmentDoc = gql`
     fragment postData on Post {
   id
@@ -217,3 +237,42 @@ export function useAddPostMutation(baseOptions?: ApolloReactHooks.MutationHookOp
 export type AddPostMutationHookResult = ReturnType<typeof useAddPostMutation>;
 export type AddPostMutationResult = ApolloReactCommon.MutationResult<AddPostMutation>;
 export type AddPostMutationOptions = ApolloReactCommon.BaseMutationOptions<AddPostMutation, AddPostMutationVariables>;
+export const AddCommentDocument = gql`
+    mutation addComment($comment: AddCommentInput!) {
+  addComment(input: [$comment]) {
+    comment {
+      id
+      text
+      author {
+        username
+        displayName
+      }
+    }
+  }
+}
+    `;
+export type AddCommentMutationFn = ApolloReactCommon.MutationFunction<AddCommentMutation, AddCommentMutationVariables>;
+
+/**
+ * __useAddCommentMutation__
+ *
+ * To run a mutation, you first call `useAddCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addCommentMutation, { data, loading, error }] = useAddCommentMutation({
+ *   variables: {
+ *      comment: // value for 'comment'
+ *   },
+ * });
+ */
+export function useAddCommentMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AddCommentMutation, AddCommentMutationVariables>) {
+        return ApolloReactHooks.useMutation<AddCommentMutation, AddCommentMutationVariables>(AddCommentDocument, baseOptions);
+      }
+export type AddCommentMutationHookResult = ReturnType<typeof useAddCommentMutation>;
+export type AddCommentMutationResult = ApolloReactCommon.MutationResult<AddCommentMutation>;
+export type AddCommentMutationOptions = ApolloReactCommon.BaseMutationOptions<AddCommentMutation, AddCommentMutationVariables>;

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import React, { useState, FormEvent } from "react"
+import { useParams, useLocation } from "react-router-dom"
 import {
   Container,
   Header,
@@ -11,38 +11,42 @@ import {
   Modal,
   Dropdown,
   Button,
-} from "semantic-ui-react";
-import { useGetPostQuery } from "./types/operations";
-import { DateTime } from "luxon";
-import { useAuth0 } from "@auth0/auth0-react";
+  TextAreaProps,
+} from "semantic-ui-react"
+import { useGetPostQuery, useAddCommentMutation } from "./types/operations"
+import { DateTime } from "luxon"
+import { useAuth0 } from "@auth0/auth0-react"
 
 interface PostParams {
-  id: string;
+  id: string
 }
 
 export function Post() {
-  const [title, setTitle] = useState("");
-  const [tags, setTags]: any = useState([]);
-  const [category, setCategory]: any = useState("");
-  const [text, setText]: any = useState("");
-  const [editPost, setEditPost] = useState(false);
+  const [title, setTitle] = useState("")
+  const [tags, setTags]: any = useState([])
+  const [category, setCategory]: any = useState("")
+  const [text, setText]: any = useState("")
+  const [editPost, setEditPost] = useState(false)
+  const [commentText, setCommentText] = useState("")
 
-  const { id } = useParams<PostParams>();
-  const location = useLocation();
+  const { id } = useParams<PostParams>()
+  const location = useLocation()
 
-  const { categoriesOptions, tagsOptions }: any = location.state;
-  const { user, isAuthenticated } = useAuth0();
+  const { categoriesOptions, tagsOptions }: any = location.state
+  const { user, isAuthenticated } = useAuth0()
 
-  const { data, loading, error } = useGetPostQuery({ variables: { id: id } });
+  const { data, loading, error } = useGetPostQuery({ variables: { id: id } })
 
-  if (loading) return <Loader />;
+  const [addCommentMutation] = useAddCommentMutation()
+
+  if (loading) return <Loader />
   if (error) {
     return (
       <Container text style={{ marginTop: "7em" }}>
         <Header as="h1">Ouch! That page didn't load</Header>
         <p>Here's why : {error.message}</p>
       </Container>
-    );
+    )
   }
   if (!data?.getPost) {
     return (
@@ -51,32 +55,44 @@ export function Post() {
         <p>You've navigated to a post that doesn't exist.</p>
         <p>That most likely means that the id {id} isn't the id of post.</p>
       </Container>
-    );
+    )
   }
 
   const setdata = () => {
-    setEditPost(true);
+    setEditPost(true)
     // setTitle(data.getPost?.title);
     data.getPost?.tags.map((tag) => {
-      setTags((tag: any) => [...tag, tags]);
-    });
+      setTags((tag: any) => [...tag, tags])
+    })
 
-    setText(data?.getPost?.text);
-    
-    setCategory(data?.getPost?.category?.id);
-  };
+    setText(data?.getPost?.text)
 
-  let dateStr = "at some unknown time";
-  if (data.getPost.datePublished) {
-    dateStr =
-      DateTime.fromISO(data.getPost.datePublished).toRelative() ?? dateStr;
+    setCategory(data?.getPost?.category?.id)
   }
 
-  const paras = data.getPost.text.split("\n").map((str) => <p>{str}</p>);
+  const addComment = () => {
+    addCommentMutation({
+      variables: {
+        comment: {
+          text: commentText,
+          commentsOn: { id: id },
+          author: { username: user.email },
+        },
+      },
+      update(cache, { data }) { console.log(data) }
+  })}
+
+  let dateStr = "at some unknown time"
+  if (data.getPost.datePublished) {
+    dateStr =
+      DateTime.fromISO(data.getPost.datePublished).toRelative() ?? dateStr
+  }
+
+  const paras = data.getPost.text.split("\n").map((str) => <p>{str}</p>)
   console.log("cat", category)
 
   const updatePost = () => {
-    setEditPost(false);
+    setEditPost(false)
     const post = {
       text: text,
       title: title,
@@ -85,9 +101,9 @@ export function Post() {
       category: { id: category },
       author: { username: user.email },
       datePublished: new Date().toISOString(),
-    };
+    }
     // addPost({ variables: { post: post } });
-  };
+  }
 
   const showEditPost = (
     <Modal
@@ -169,7 +185,7 @@ export function Post() {
         />
       </Modal.Actions>
     </Modal>
-  );
+  )
 
   return (
     <div style={{ margin: "2.5rem 7rem 7rem 7rem" }}>
@@ -216,6 +232,9 @@ export function Post() {
                 <TextArea
                   placeholder={`Type here to reply to ${data.getPost.author.displayName}...`}
                   style={{ minHeight: 100, width: "350px" }}
+                  onChange={(event: FormEvent<HTMLTextAreaElement>, data: TextAreaProps)=> {
+                    setCommentText(data.value?.toString() ?? "")
+                 }}
                 />
               </Form>
               <div style={{ marginTop: "10px" }}>
@@ -225,6 +244,7 @@ export function Post() {
                     color: "white",
                   }}
                   className="ui button"
+                  onClick={addComment}
                 >
                   Post comment
                 </button>
@@ -234,5 +254,5 @@ export function Post() {
         </div>
       )}
     </div>
-  );
+  )
 }

@@ -42,3 +42,16 @@ mutation addPost($post: AddPostInput!) {
     }
   }
 }
+
+mutation addComment($comment: AddCommentInput!) {
+  addComment(input: [$comment]) {
+    comment {
+      id
+      text
+      author {
+        username
+        displayName
+      }
+    }
+  }
+}
