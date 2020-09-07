@@ -1,5 +1,5 @@
-query itsYourPost($username: String!) {
-  queryPost {
+query itsYourComment($username: String!) {
+  queryComment {
     author(filter: { username: { eq: $username } }) {
       username
     }

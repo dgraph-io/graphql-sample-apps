@@ -3,7 +3,7 @@ type User @auth(
   add: { rule: "<<is-this-user>>" },
   update: { rule: "<<is-this-user>>" },
   delete: { rule: "{$role: {eq: \"Admin\"}}" }
-){
+) {
   username: String! @id
   displayName: String
   avatarImg: String
@@ -36,11 +36,14 @@ enum Role {
 }
 
 type Post @auth(
-  query: { rule: "<<has-any-post-permission>>" },
-  add: { rule:  "<<has-write-permission>>" },
-  add: { rule:  "<<its-your-post>>" },
+  query: { or: [
+    { rule: "<<has-any-post-permission>>" },
+    { rule: "<<post-in-public-category>>" }
+  ] },
+  add: { rule: "<<has-write-permission>>" },
+  update: { rule: "<<its-your-post>>" },
   delete: { rule:  "<<has-the-posts-category-admin>>" },
-){
+) {
   id: ID!
   title: String!
   text: String!
@@ -49,6 +52,22 @@ type Post @auth(
   author: User!
   tags: [String!]!
   category: Category! @hasInverse(field: posts)
+  comments: [Comment!]!
+}
+
+type Comment @auth(
+  query: { or: [
+    { rule: "<<has-any-comment-permission>>" },
+    { rule: "<<comment-on-post-in-public-category>>" },
+  ] },
+  add: { rule: "<<author-and-has-write-permission>>" }
+  update: { rule: "<<its-your-comment>>" },
+  delete: { rule: "{$role: {eq: \"Admin\"}}" }
+) {
+  id: ID!
+  text: String!
+  commentsOn: Post!
+  author: User!
 }
 
 type Category @auth(
@@ -63,7 +82,7 @@ type Category @auth(
     { rule: "<<has-category-admin>>" }
   ] }
   delete: { rule: "{$role: {eq: \"Admin\"}}" }
-){
+) {
   id: ID!
   name: String!
   posts: [Post]

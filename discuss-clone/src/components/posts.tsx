@@ -60,6 +60,7 @@ export function PostFeed() {
       category: { id: category },
       author: { username: user.email },
       datePublished: new Date().toISOString(),
+      comments: []
     };
     addPost(
       { variables: { post: post } }

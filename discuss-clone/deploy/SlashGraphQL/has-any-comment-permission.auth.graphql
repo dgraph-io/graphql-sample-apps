@@ -1,0 +1,13 @@
+query hasAnyCommentPermission($username: String!) {
+  queryComment {
+    commentsOn {
+      category {
+        permissions {
+          user(filter: { username: { eq: $username } }) {
+            username
+          }
+        }
+      }
+    }
+  }
+}
