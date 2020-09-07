@@ -20,8 +20,6 @@ const AuthorizedApolloProvider: React.FC = ({ children }) => {
     uri: process.env.REACT_APP_SLASH_GRAPHQL_ENDPOINT + "/graphql",
   })
 
-console.log("HERE")
-
   const authLink = setContext(async (_, { headers }) => {
     if (!isAuthenticated) {
       return { headers }
@@ -45,7 +43,6 @@ console.log("HERE")
   return <ApolloProvider client={apolloClient}>{children}</ApolloProvider>
 }
 
-console.log("HERE")
 ReactDOM.render(
   <Auth0Provider
     domain={process.env.REACT_APP_AUTH0_DOMAIN ?? "ERR"}
