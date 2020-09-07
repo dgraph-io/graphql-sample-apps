@@ -1,10 +1,12 @@
-const { GraphQLClient } = require("graphql-request@1.8.2")
+
 
 function enrichJWTFromSlashGraphQL(user, context, callback) {
   // Roles should only be set to verified users.
   if (!user.email || !user.email_verified) {
     return callback(null, user, context)
   }
+
+  const { GraphQLClient } = require("graphql-request@1.8.2")
 
   // Fill this value with your Slash GraphQL backend.
   const slashGraphQL = "<<your-Slash-GraphQL-URL>>"
@@ -22,11 +24,13 @@ function enrichJWTFromSlashGraphQL(user, context, callback) {
         getUser(username: $username) {
           roles {
             role
-            forCategory
+            forCategory {
+              id
+            }
           }
         }
       }`,
-      { name: user.email }
+      { username: user.email }
     )
     .then((data, err) => {
       const hasAdminRole = !!(
