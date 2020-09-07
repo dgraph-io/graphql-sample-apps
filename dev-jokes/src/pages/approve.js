@@ -12,6 +12,7 @@ import {g2aTags} from "../utils/utils";
 
 const Approve = () => {
   const [allTags, setAllTags] = useState([]);
+
   const { loading, error, data } = useQuery(GET_UNAPPROVED_POST);
   const {data: tagsData, loading: tloading, error: terror} = useQuery(GET_TAGS)
 

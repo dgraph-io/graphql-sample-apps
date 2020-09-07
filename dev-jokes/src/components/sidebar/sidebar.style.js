@@ -1,14 +1,22 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-const drawerWidth = 240;
+const drawerWidth = 180;
+const drawerWidthSm = 60;
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
     width: drawerWidth,
-    // flexShrink: 0,
+    flexShrink:0,
+    [theme.breakpoints.down('xs')]: {
+      width: drawerWidthSm,
+    },
   },
   drawerPaper: {
     width: drawerWidth,
+    flexShrink:0,
+    [theme.breakpoints.down('xs')]: {
+      width: drawerWidthSm,
+    },
   },
   drawerHeader: {
     display: "flex",

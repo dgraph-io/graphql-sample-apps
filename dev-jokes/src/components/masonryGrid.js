@@ -4,6 +4,13 @@ import Masonry from "react-masonry-css";
 
 import PostCard from "./card/postCard";
 
+const breakpointColumnsObj = {
+  default: 4,
+  1200: 3,
+  900: 2,
+  675: 1
+};
+
 const MasonaryGrid = ({data, isApproved, allTags, updateCache}) => {
   const location = useLocation();
   const getShortName = (username) => {
@@ -11,7 +18,7 @@ const MasonaryGrid = ({data, isApproved, allTags, updateCache}) => {
   }
   return(
     <Masonry
-      breakpointCols={4}
+      breakpointCols={breakpointColumnsObj}
       className="my-masonry-grid"
       columnClassName="my-masonry-grid_column"
     >
