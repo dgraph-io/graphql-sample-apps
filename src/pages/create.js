@@ -21,7 +21,6 @@ import axios from 'axios';
 import {v4 as uuid} from 'uuid'; 
 import LoadingOverlay from 'react-loading-overlay';
 import CanvasImage from "../components/create/canvasImage";
-import * as cimg from "../assets/images/background.jpg"
 import config from "../config"
 
 import {g2aTags, a2gTags, dataURItoBlob} from "../utils/utils"
@@ -198,7 +197,7 @@ export const Create = () => {
               <br />
             {
               type === 'text' ?
-              <CanvasImage image={cimg} text={postText} ref={refCanvas}/> : <>
+              <CanvasImage text={postText} ref={refCanvas}/> : <>
               {imagePreviewURL === null ? <></> :
                 <img src={imagePreviewURL} height={200} width={300} alt={"preview"}/> }
               <br/>
