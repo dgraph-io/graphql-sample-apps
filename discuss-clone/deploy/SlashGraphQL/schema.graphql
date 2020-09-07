@@ -11,19 +11,22 @@ type User @auth(
   roles: [Permission] @hasInverse(field: user)
 }
 
-# FIXME:
-# query: 
-#   * only if it's you
-#   * or you the site admin
-#   * or you are the admin for the same category
-# add:
-#   * you the site admin
-#   * or you are the admin for the same category
-# update:  NO
-# delete:
-#   * you the site admin
-#   * or you are the admin for the same category
-type Permission {
+type Permission @auth(
+  query: { or: [
+    { rule: "<<permission-is-about-you>>" },
+    { rule: "<<you-admin-the-permission-category>>" },
+    { rule: "{$role: {eq: \"Admin\"}}" }
+  ]},
+  add: { or: [
+    { rule: "<<you-admin-the-permission-category>>" },
+    { rule: "{$role: {eq: \"Admin\"}}" }
+  ]},
+  update: { rule: "{$role: {eq: \"Admin\"}}" },
+  delete: { or: [
+    { rule: "<<you-admin-the-permission-category>>" },
+    { rule: "{$role: {eq: \"Admin\"}}" }
+  ]},
+) {
   user: User!
   role: Role! @search
   forCategory: Category

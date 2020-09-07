@@ -1,0 +1,11 @@
+query youAdminThePermissionCategory($username: String!) {
+  queryPermission {
+    forCategory {
+      permissions(filter: { role: { eq: ADMINISTRATOR } }) {
+        user(filter: { username: { eq: $username } }) {
+          username
+        }
+      }
+    }
+  }
+}
