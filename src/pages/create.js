@@ -194,7 +194,7 @@ export const Create = () => {
               onChange={e => setPostText(e.target.value)}
               margin="normal" variant="outlined" 
               fullWidth multiline rows={5}
-              inputProps={{ maxLength: 250}} style={{"min-width":"300px"}}/>
+              inputProps={{ maxLength: 250}} style={{minWidth:"300px"}}/>
               <br />
             {
               type === 'text' ?
