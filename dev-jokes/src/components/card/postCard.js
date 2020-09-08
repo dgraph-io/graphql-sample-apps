@@ -242,14 +242,15 @@ export default function PostCard({
   }
 
   return (
-    <div className={"card"}>
+    <div className={"card"} style={{borderRadius: "10px"}}>
       <Link
         to={{
           pathname: `/post/${id}`,
           state: { background: location },
         }}
       >
-        <img src={img} className="pic" alt={"preview"} width={"100%"} height={"auto"}/>
+        <img src={img} className="pic" alt={"preview"} width={"100%"} height={"auto"} 
+        style={{borderRadius: "10px"}}/>
       </Link>
       <CardActions disableSpacing style={{padding: "0"}}>
         {isApproved ? (
