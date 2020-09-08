@@ -108,7 +108,7 @@ function makePosts(): Array<AddPostInput> {
       category: { name: "GraphQL" },
       author: diggy,
       comments: [],
-      tags: "SLASH, GRAPHQL",
+      tags: "SLASH GRAPHQL",
     },
     {
       title: "Let me quote from the docs",
@@ -118,7 +118,7 @@ function makePosts(): Array<AddPostInput> {
       category: { name: "GraphQL" },
       author: michael,
       comments: [],
-      tags: "SLASH, REACT",
+      tags: "SLASH REACT",
     },
     {
       title: "I know some things about Dgraph",
@@ -130,7 +130,7 @@ function makePosts(): Array<AddPostInput> {
       category: { name: "Dgraph" },
       author: diggy,
       comments: [],
-      tags: "GRAPHQL, REACT",
+      tags: "GRAPHQL REACT",
     },
     {
       title: "How should I layout my components?",

@@ -21,7 +21,7 @@ export function PostFeed() {
   const [
     getFilteredPosts,
     { loading: filterLoading, data: filteredData, error: filterError },
-  ] = useFilterPostsLazyQuery();
+  ] = useFilterPostsLazyQuery({onCompleted: () => setSearchStatus(true)});
 
   const {
     allCategories,
@@ -31,6 +31,9 @@ export function PostFeed() {
   } = useCategories(user?.email ?? "");
 
   const [searchText, setSearchText] = useState("");
+  const [category, setCategory]: any = useState("");
+  const [tags, setTags]: any = useState("");
+  const [searchStatus, setSearchStatus] = useState(false);
 
   if (loading || catLoading || filterLoading) return <Loader />;
   if (error) return `Error! ${error.message}`;
@@ -42,15 +45,35 @@ export function PostFeed() {
   });
 
   const searchPosts = () => {
-    getFilteredPosts({ variables: { filter: {} } });
+    let filter;
+    if (searchText === "" && tags !== "") {
+      filter = {
+          tags: { allofterms: tags },
+        }
+    } else if (searchText !== "" && tags === ""){
+      filter= {
+          title: { anyofterms: searchText },
+          or: { text: { anyoftext: searchText } },
+        }
+    } else if(searchText !== "" && tags !== "") {
+      filter = {
+        title: { anyofterms: searchText },
+        tags: { allofterms: tags },
+        or: { text: { anyoftext: searchText } },
+      };
+    } else {
+      filter= {}
+    }
+    getFilteredPosts({
+      variables: {
+        filter: filter,
+      },
+    });
   };
 
-  const textSearch = (e: any) => {
-    setSearchText(e.target.value);
-    searchPosts();
-  };
+  const dataset = searchStatus? filteredData?.queryPost : data?.queryPost
 
-  const items = data?.queryPost?.map((post) => {
+  const items = dataset?.map((post) => {
     const likes = post?.likes ?? 0;
     const tagsArray = post?.tags?.trim().split(/\s+/) || [];
 
@@ -108,7 +131,8 @@ export function PostFeed() {
           icon="search"
           placeholder="Type any keywords..."
           style={{ marginRight: "10px", backgroundColor: "#f3f3f3" }}
-          onChange={(e) => textSearch(e)}
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
         />
         <Dropdown
           placeholder="Categories"
@@ -120,7 +144,9 @@ export function PostFeed() {
             width: "20%",
             backgroundColor: "#f3f3f3",
           }}
+          defaultValue={category}
           options={categoriesOptions}
+          onChange={(e, data: any) => setCategory(data.value)}
         />
         <Input
           placeholder="Enter space separated tags..."
@@ -129,6 +155,8 @@ export function PostFeed() {
             width: "41%",
             backgroundColor: "#f3f3f3",
           }}
+          value={tags}
+          onChange={(e) => setTags(e.target.value)}
         />
         <button
           className="ui button"
@@ -137,7 +165,7 @@ export function PostFeed() {
             color: "white",
             marginRight: "5px",
           }}
-          // onClick={() => setCreatePost(true)}
+          onClick={searchPosts}
         >
           Search
         </button>
