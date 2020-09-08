@@ -221,68 +221,36 @@ export function Post() {
     </Modal>
   )
 
-  const comments = data.getPost.comments.map((comment) => {
-    const commentStart = (
-      <>
-        <Comment.Avatar
-          src={
-            comment.author.avatarImg ? comment.author.avatarImg + "" : avatar
-          }
-          rounded
-          size="mini"
-        />
-        <Comment.Content>
-          <Comment.Author as="a">{comment.author.displayName}</Comment.Author>
-          {/* <Comment.Metadata>
-            <div>{comment.}</div>
-          </Comment.Metadata> */}
-          <Comment.Text>{comment.text}</Comment.Text>
-          {/* <Comment.Actions>
-            <Comment.Action>Reply</Comment.Action>
-          </Comment.Actions> */}
-        </Comment.Content>
-      </>
-    )
-
-    const subcomments = comment.commentsOn.comments.map((subComment) => {
-      return (
-        <Comment.Group>
-          <Comment>
-            <Comment.Avatar
-              src={
-                subComment.author.avatarImg
-                  ? subComment.author.avatarImg + ""
-                  : avatar
-              }
-              rounded
-              size="mini"
-            />
-            <Comment.Content>
-              <Comment.Author as="a">
-                {subComment.author.displayName}
-              </Comment.Author>
-              {/* <Comment.Metadata>
-                  <div>Just now</div>
-                </Comment.Metadata> */}
-              <Comment.Text>{subComment.text}</Comment.Text>
-              {/* <Comment.Actions>
-                <Comment.Action>Reply</Comment.Action>
-              </Comment.Actions> */}
-            </Comment.Content>
-          </Comment>
-        </Comment.Group>
-      )
-    })
-
-    return (
-      <div style={{ marginTop: "10px" }}>
-        <Comment>
-          {commentStart}
-          {subcomments}
-        </Comment>
-      </div>
-    )
-  })
+  const comments = (
+    <div style={{ marginTop: "10px" }}>
+      {data.getPost.comments.map((comment) => {
+        return (
+          <Comment.Group>
+            <Comment>
+              <Comment.Avatar
+                src={
+                  comment.author.avatarImg
+                    ? comment.author.avatarImg + ""
+                    : avatar
+                }
+                rounded
+                size="mini"
+              />
+              <Comment.Content>
+                <Comment.Author as="a">
+                  {comment.author.displayName}
+                </Comment.Author>
+                {/* <Comment.Metadata>
+                      <div>Just now</div>
+                    </Comment.Metadata> */}
+                <Comment.Text>{comment.text}</Comment.Text>
+              </Comment.Content>
+            </Comment>
+          </Comment.Group>
+        )
+      })}
+    </div>
+  )
 
   return (
     <div style={{ margin: "2.5rem 7rem 7rem 7rem" }}>
