@@ -143,18 +143,14 @@ export function AppHeader() {
 
   const userItem = isAuthenticated ? (
     <span>
-      <Icon
-        className="setting"
-        aria-hidden="true"
-        style={{ cursor: "pointer" }}
-        onClick={() => {
-          currentSettings()
-          setUpdateSettings(true)
-        }}
-      />
       <Image
         src={avatar(data?.getUser?.avatarImg)}
         avatar
+        style={{ cursor: "pointer" }}
+        onClick={() => {
+          currentSettings();
+          setUpdateSettings(true);
+        }}
       />
       <button
         className="ui button"
@@ -199,7 +195,6 @@ export function AppHeader() {
           className="ui right floated header"
           style={{ paddingRight: "7rem", transform: "translate(-10px, 50px)" }}
         >
-          {/* <button className="ui pink button">Sign Up</button> */}
           {userItem}
         </h3>
         <h3

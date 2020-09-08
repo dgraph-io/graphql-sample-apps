@@ -10,31 +10,47 @@ export type Scalars = {
   DateTime: any;
 };
 
-export type CategoryRef = {
-  id?: Maybe<Scalars['ID']>;
-  name?: Maybe<Scalars['String']>;
-  posts?: Maybe<Array<Maybe<PostRef>>>;
+export type AddPermissionPayload = {
+  __typename?: 'AddPermissionPayload';
+  permission?: Maybe<Array<Maybe<Permission>>>;
+  numUids?: Maybe<Scalars['Int']>;
+};
+
+
+export type AddPermissionPayloadPermissionArgs = {
+  filter?: Maybe<PermissionFilter>;
+  first?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+export type CategoryFilter = {
+  id?: Maybe<Array<Scalars['ID']>>;
   isPublic?: Maybe<Scalars['Boolean']>;
-  permissions?: Maybe<Array<Maybe<PermissionRef>>>;
+  and?: Maybe<CategoryFilter>;
+  or?: Maybe<CategoryFilter>;
+  not?: Maybe<CategoryFilter>;
 };
 
-export type PermissionFilter = {
-  role?: Maybe<Role_Hash>;
-  and?: Maybe<PermissionFilter>;
-  or?: Maybe<PermissionFilter>;
-  not?: Maybe<PermissionFilter>;
+export type PostOrder = {
+  asc?: Maybe<PostOrderable>;
+  desc?: Maybe<PostOrderable>;
+  then?: Maybe<PostOrder>;
 };
 
-export type UserFilter = {
-  username?: Maybe<StringHashFilter>;
-  and?: Maybe<UserFilter>;
-  or?: Maybe<UserFilter>;
-  not?: Maybe<UserFilter>;
-};
-
-export enum Mode {
-  Batch = 'BATCH',
-  Single = 'SINGLE'
+export enum DgraphIndex {
+  Int = 'int',
+  Float = 'float',
+  Bool = 'bool',
+  Hash = 'hash',
+  Exact = 'exact',
+  Term = 'term',
+  Fulltext = 'fulltext',
+  Trigram = 'trigram',
+  Regexp = 'regexp',
+  Year = 'year',
+  Month = 'month',
+  Day = 'day',
+  Hour = 'hour'
 }
 
 export type CustomHttp = {
@@ -74,25 +90,32 @@ export type AddPostInput = {
   comments: Array<CommentRef>;
 };
 
-export enum CommentOrderable {
-  Text = 'text'
+export type CategoryRef = {
+  id?: Maybe<Scalars['ID']>;
+  name?: Maybe<Scalars['String']>;
+  posts?: Maybe<Array<Maybe<PostRef>>>;
+  isPublic?: Maybe<Scalars['Boolean']>;
+  permissions?: Maybe<Array<Maybe<PermissionRef>>>;
+};
+
+export type PermissionFilter = {
+  role?: Maybe<Role_Hash>;
+  and?: Maybe<PermissionFilter>;
+  or?: Maybe<PermissionFilter>;
+  not?: Maybe<PermissionFilter>;
+};
+
+export type UserFilter = {
+  username?: Maybe<StringHashFilter>;
+  and?: Maybe<UserFilter>;
+  or?: Maybe<UserFilter>;
+  not?: Maybe<UserFilter>;
+};
+
+export enum Mode {
+  Batch = 'BATCH',
+  Single = 'SINGLE'
 }
-
-export type PermissionPatch = {
-  user?: Maybe<UserRef>;
-  role?: Maybe<Role>;
-  forCategory?: Maybe<CategoryRef>;
-};
-
-export type PostFilter = {
-  id?: Maybe<Array<Scalars['ID']>>;
-  title?: Maybe<StringTermFilter>;
-  text?: Maybe<StringFullTextFilter>;
-  tags?: Maybe<StringTermFilter>;
-  and?: Maybe<PostFilter>;
-  or?: Maybe<PostFilter>;
-  not?: Maybe<PostFilter>;
-};
 
 export type UpdateCategoryPayload = {
   __typename?: 'UpdateCategoryPayload';
@@ -119,6 +142,51 @@ export type UpdatePermissionPayloadPermissionArgs = {
   filter?: Maybe<PermissionFilter>;
   first?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
+};
+
+export enum CommentOrderable {
+  Text = 'text'
+}
+
+export type PermissionPatch = {
+  user?: Maybe<UserRef>;
+  role?: Maybe<Role>;
+  forCategory?: Maybe<CategoryRef>;
+};
+
+export type PostFilter = {
+  id?: Maybe<Array<Scalars['ID']>>;
+  title?: Maybe<StringTermFilter>;
+  text?: Maybe<StringFullTextFilter>;
+  tags?: Maybe<StringTermFilter>;
+  and?: Maybe<PostFilter>;
+  or?: Maybe<PostFilter>;
+  not?: Maybe<PostFilter>;
+};
+
+export type Comment = {
+  __typename?: 'Comment';
+  id: Scalars['ID'];
+  text: Scalars['String'];
+  commentsOn: Post;
+  author: User;
+};
+
+
+export type CommentCommentsOnArgs = {
+  filter?: Maybe<PostFilter>;
+};
+
+
+export type CommentAuthorArgs = {
+  filter?: Maybe<UserFilter>;
+};
+
+export type AuthRule = {
+  and?: Maybe<Array<Maybe<AuthRule>>>;
+  or?: Maybe<Array<Maybe<AuthRule>>>;
+  not?: Maybe<AuthRule>;
+  rule?: Maybe<Scalars['String']>;
 };
 
 export type AddUserPayload = {
@@ -150,29 +218,40 @@ export type DeleteCommentPayloadCommentArgs = {
   offset?: Maybe<Scalars['Int']>;
 };
 
-export type Comment = {
-  __typename?: 'Comment';
+export type Category = {
+  __typename?: 'Category';
   id: Scalars['ID'];
-  text: Scalars['String'];
-  commentsOn: Post;
-  author: User;
+  name: Scalars['String'];
+  posts?: Maybe<Array<Maybe<Post>>>;
+  isPublic?: Maybe<Scalars['Boolean']>;
+  permissions?: Maybe<Array<Maybe<Permission>>>;
 };
 
 
-export type CommentCommentsOnArgs = {
+export type CategoryPostsArgs = {
   filter?: Maybe<PostFilter>;
+  order?: Maybe<PostOrder>;
+  first?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
 };
 
 
-export type CommentAuthorArgs = {
-  filter?: Maybe<UserFilter>;
+export type CategoryPermissionsArgs = {
+  filter?: Maybe<PermissionFilter>;
+  first?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
 };
 
-export type AuthRule = {
-  and?: Maybe<Array<Maybe<AuthRule>>>;
-  or?: Maybe<Array<Maybe<AuthRule>>>;
-  not?: Maybe<AuthRule>;
-  rule?: Maybe<Scalars['String']>;
+export enum HttpMethod {
+  Get = 'GET',
+  Post = 'POST',
+  Put = 'PUT',
+  Patch = 'PATCH',
+  Delete = 'DELETE'
+}
+
+export type StringRegExpFilter = {
+  regexp?: Maybe<Scalars['String']>;
 };
 
 export type AddPostPayload = {
@@ -275,42 +354,6 @@ export type QueryQueryCategoryArgs = {
   offset?: Maybe<Scalars['Int']>;
 };
 
-export type Category = {
-  __typename?: 'Category';
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  posts?: Maybe<Array<Maybe<Post>>>;
-  isPublic?: Maybe<Scalars['Boolean']>;
-  permissions?: Maybe<Array<Maybe<Permission>>>;
-};
-
-
-export type CategoryPostsArgs = {
-  filter?: Maybe<PostFilter>;
-  order?: Maybe<PostOrder>;
-  first?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type CategoryPermissionsArgs = {
-  filter?: Maybe<PermissionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-export enum HttpMethod {
-  Get = 'GET',
-  Post = 'POST',
-  Put = 'PUT',
-  Patch = 'PATCH',
-  Delete = 'DELETE'
-}
-
-export type StringRegExpFilter = {
-  regexp?: Maybe<Scalars['String']>;
-};
-
 export enum Role {
   Reader = 'READER',
   Writer = 'WRITER',
@@ -335,6 +378,24 @@ export type UpdateUserInput = {
   filter: UserFilter;
   set?: Maybe<UserPatch>;
   remove?: Maybe<UserPatch>;
+};
+
+export type DateTimeFilter = {
+  eq?: Maybe<Scalars['DateTime']>;
+  le?: Maybe<Scalars['DateTime']>;
+  lt?: Maybe<Scalars['DateTime']>;
+  ge?: Maybe<Scalars['DateTime']>;
+  gt?: Maybe<Scalars['DateTime']>;
+};
+
+export type StringTermFilter = {
+  allofterms?: Maybe<Scalars['String']>;
+  anyofterms?: Maybe<Scalars['String']>;
+};
+
+export type StringFullTextFilter = {
+  alloftext?: Maybe<Scalars['String']>;
+  anyoftext?: Maybe<Scalars['String']>;
 };
 
 export type AddUserInput = {
@@ -362,22 +423,10 @@ export type PostPatch = {
   comments?: Maybe<Array<CommentRef>>;
 };
 
-export type DateTimeFilter = {
-  eq?: Maybe<Scalars['DateTime']>;
-  le?: Maybe<Scalars['DateTime']>;
-  lt?: Maybe<Scalars['DateTime']>;
-  ge?: Maybe<Scalars['DateTime']>;
-  gt?: Maybe<Scalars['DateTime']>;
-};
-
-export type StringTermFilter = {
-  allofterms?: Maybe<Scalars['String']>;
-  anyofterms?: Maybe<Scalars['String']>;
-};
-
-export type StringFullTextFilter = {
-  alloftext?: Maybe<Scalars['String']>;
-  anyoftext?: Maybe<Scalars['String']>;
+export type PermissionRef = {
+  user?: Maybe<UserRef>;
+  role?: Maybe<Role>;
+  forCategory?: Maybe<CategoryRef>;
 };
 
 export type UpdateCommentInput = {
@@ -392,10 +441,15 @@ export type UserOrder = {
   then?: Maybe<UserOrder>;
 };
 
-export type PermissionRef = {
-  user?: Maybe<UserRef>;
-  role?: Maybe<Role>;
-  forCategory?: Maybe<CategoryRef>;
+export enum CategoryOrderable {
+  Name = 'name'
+}
+
+export type CommentRef = {
+  id?: Maybe<Scalars['ID']>;
+  text?: Maybe<Scalars['String']>;
+  commentsOn?: Maybe<PostRef>;
+  author?: Maybe<UserRef>;
 };
 
 export type IntFilter = {
@@ -406,15 +460,39 @@ export type IntFilter = {
   gt?: Maybe<Scalars['Int']>;
 };
 
-export enum CategoryOrderable {
-  Name = 'name'
-}
+export type User = {
+  __typename?: 'User';
+  username: Scalars['String'];
+  displayName?: Maybe<Scalars['String']>;
+  avatarImg?: Maybe<Scalars['String']>;
+  posts?: Maybe<Array<Maybe<Post>>>;
+  roles?: Maybe<Array<Maybe<Permission>>>;
+};
 
-export type CommentRef = {
-  id?: Maybe<Scalars['ID']>;
-  text?: Maybe<Scalars['String']>;
-  commentsOn?: Maybe<PostRef>;
-  author?: Maybe<UserRef>;
+
+export type UserPostsArgs = {
+  filter?: Maybe<PostFilter>;
+  order?: Maybe<PostOrder>;
+  first?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type UserRolesArgs = {
+  filter?: Maybe<PermissionFilter>;
+  first?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+export type StringHashFilter = {
+  eq?: Maybe<Scalars['String']>;
+};
+
+export type AddCategoryInput = {
+  name: Scalars['String'];
+  posts?: Maybe<Array<Maybe<PostRef>>>;
+  isPublic?: Maybe<Scalars['Boolean']>;
+  permissions?: Maybe<Array<Maybe<PermissionRef>>>;
 };
 
 export type AddCommentInput = {
@@ -524,60 +602,6 @@ export type MutationDeleteCategoryArgs = {
   filter: CategoryFilter;
 };
 
-export type User = {
-  __typename?: 'User';
-  username: Scalars['String'];
-  displayName?: Maybe<Scalars['String']>;
-  avatarImg?: Maybe<Scalars['String']>;
-  posts?: Maybe<Array<Maybe<Post>>>;
-  roles?: Maybe<Array<Maybe<Permission>>>;
-};
-
-
-export type UserPostsArgs = {
-  filter?: Maybe<PostFilter>;
-  order?: Maybe<PostOrder>;
-  first?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-
-export type UserRolesArgs = {
-  filter?: Maybe<PermissionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-export type StringHashFilter = {
-  eq?: Maybe<Scalars['String']>;
-};
-
-export type AddCategoryInput = {
-  name: Scalars['String'];
-  posts?: Maybe<Array<Maybe<PostRef>>>;
-  isPublic?: Maybe<Scalars['Boolean']>;
-  permissions?: Maybe<Array<Maybe<PermissionRef>>>;
-};
-
-export type Role_Hash = {
-  eq: Role;
-};
-
-export type DeletePostPayload = {
-  __typename?: 'DeletePostPayload';
-  post?: Maybe<Array<Maybe<Post>>>;
-  msg?: Maybe<Scalars['String']>;
-  numUids?: Maybe<Scalars['Int']>;
-};
-
-
-export type DeletePostPayloadPostArgs = {
-  filter?: Maybe<PostFilter>;
-  order?: Maybe<PostOrder>;
-  first?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
 export enum PostOrderable {
   Title = 'title',
   Text = 'text',
@@ -598,21 +622,23 @@ export type CommentOrder = {
   then?: Maybe<CommentOrder>;
 };
 
-export type Permission = {
-  __typename?: 'Permission';
-  user: User;
-  role: Role;
-  forCategory?: Maybe<Category>;
+export type Role_Hash = {
+  eq: Role;
+};
+
+export type DeletePostPayload = {
+  __typename?: 'DeletePostPayload';
+  post?: Maybe<Array<Maybe<Post>>>;
+  msg?: Maybe<Scalars['String']>;
+  numUids?: Maybe<Scalars['Int']>;
 };
 
 
-export type PermissionUserArgs = {
-  filter?: Maybe<UserFilter>;
-};
-
-
-export type PermissionForCategoryArgs = {
-  filter?: Maybe<CategoryFilter>;
+export type DeletePostPayloadPostArgs = {
+  filter?: Maybe<PostFilter>;
+  order?: Maybe<PostOrder>;
+  first?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
 };
 
 export type FloatFilter = {
@@ -645,28 +671,21 @@ export type UserRef = {
   roles?: Maybe<Array<Maybe<PermissionRef>>>;
 };
 
-export type PostRef = {
-  id?: Maybe<Scalars['ID']>;
-  title?: Maybe<Scalars['String']>;
-  text?: Maybe<Scalars['String']>;
-  datePublished?: Maybe<Scalars['DateTime']>;
-  likes?: Maybe<Scalars['Int']>;
-  author?: Maybe<UserRef>;
-  tags?: Maybe<Scalars['String']>;
-  category?: Maybe<CategoryRef>;
-  comments?: Maybe<Array<CommentRef>>;
+export type Permission = {
+  __typename?: 'Permission';
+  user: User;
+  role: Role;
+  forCategory?: Maybe<Category>;
 };
 
-export type UpdatePermissionInput = {
-  filter: PermissionFilter;
-  set?: Maybe<PermissionPatch>;
-  remove?: Maybe<PermissionPatch>;
+
+export type PermissionUserArgs = {
+  filter?: Maybe<UserFilter>;
 };
 
-export type UpdatePostInput = {
-  filter: PostFilter;
-  set?: Maybe<PostPatch>;
-  remove?: Maybe<PostPatch>;
+
+export type PermissionForCategoryArgs = {
+  filter?: Maybe<CategoryFilter>;
 };
 
 export type StringExactFilter = {
@@ -706,6 +725,30 @@ export type DeleteUserPayloadUserArgs = {
   offset?: Maybe<Scalars['Int']>;
 };
 
+export type PostRef = {
+  id?: Maybe<Scalars['ID']>;
+  title?: Maybe<Scalars['String']>;
+  text?: Maybe<Scalars['String']>;
+  datePublished?: Maybe<Scalars['DateTime']>;
+  likes?: Maybe<Scalars['Int']>;
+  author?: Maybe<UserRef>;
+  tags?: Maybe<Scalars['String']>;
+  category?: Maybe<CategoryRef>;
+  comments?: Maybe<Array<CommentRef>>;
+};
+
+export type UpdatePermissionInput = {
+  filter: PermissionFilter;
+  set?: Maybe<PermissionPatch>;
+  remove?: Maybe<PermissionPatch>;
+};
+
+export type UpdatePostInput = {
+  filter: PostFilter;
+  set?: Maybe<PostPatch>;
+  remove?: Maybe<PostPatch>;
+};
+
 
 export type DeleteCategoryPayload = {
   __typename?: 'DeleteCategoryPayload';
@@ -720,6 +763,26 @@ export type DeleteCategoryPayloadCategoryArgs = {
   order?: Maybe<CategoryOrder>;
   first?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
+};
+
+export type AddCategoryPayload = {
+  __typename?: 'AddCategoryPayload';
+  category?: Maybe<Array<Maybe<Category>>>;
+  numUids?: Maybe<Scalars['Int']>;
+};
+
+
+export type AddCategoryPayloadCategoryArgs = {
+  filter?: Maybe<CategoryFilter>;
+  order?: Maybe<CategoryOrder>;
+  first?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
+export type AddPermissionInput = {
+  user: UserRef;
+  role: Role;
+  forCategory?: Maybe<CategoryRef>;
 };
 
 export type Post = {
@@ -753,32 +816,6 @@ export type PostCommentsArgs = {
   offset?: Maybe<Scalars['Int']>;
 };
 
-export type AddCategoryPayload = {
-  __typename?: 'AddCategoryPayload';
-  category?: Maybe<Array<Maybe<Category>>>;
-  numUids?: Maybe<Scalars['Int']>;
-};
-
-
-export type AddCategoryPayloadCategoryArgs = {
-  filter?: Maybe<CategoryFilter>;
-  order?: Maybe<CategoryOrder>;
-  first?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-export type AddPermissionInput = {
-  user: UserRef;
-  role: Role;
-  forCategory?: Maybe<CategoryRef>;
-};
-
-export type CategoryOrder = {
-  asc?: Maybe<CategoryOrderable>;
-  desc?: Maybe<CategoryOrderable>;
-  then?: Maybe<CategoryOrder>;
-};
-
 export type CommentFilter = {
   id?: Maybe<Array<Scalars['ID']>>;
   not?: Maybe<CommentFilter>;
@@ -797,45 +834,8 @@ export type UserPatch = {
   roles?: Maybe<Array<Maybe<PermissionRef>>>;
 };
 
-export enum DgraphIndex {
-  Int = 'int',
-  Float = 'float',
-  Bool = 'bool',
-  Hash = 'hash',
-  Exact = 'exact',
-  Term = 'term',
-  Fulltext = 'fulltext',
-  Trigram = 'trigram',
-  Regexp = 'regexp',
-  Year = 'year',
-  Month = 'month',
-  Day = 'day',
-  Hour = 'hour'
-}
-
-export type AddPermissionPayload = {
-  __typename?: 'AddPermissionPayload';
-  permission?: Maybe<Array<Maybe<Permission>>>;
-  numUids?: Maybe<Scalars['Int']>;
-};
-
-
-export type AddPermissionPayloadPermissionArgs = {
-  filter?: Maybe<PermissionFilter>;
-  first?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-};
-
-export type CategoryFilter = {
-  id?: Maybe<Array<Scalars['ID']>>;
-  isPublic?: Maybe<Scalars['Boolean']>;
-  and?: Maybe<CategoryFilter>;
-  or?: Maybe<CategoryFilter>;
-  not?: Maybe<CategoryFilter>;
-};
-
-export type PostOrder = {
-  asc?: Maybe<PostOrderable>;
-  desc?: Maybe<PostOrderable>;
-  then?: Maybe<PostOrder>;
+export type CategoryOrder = {
+  asc?: Maybe<CategoryOrderable>;
+  desc?: Maybe<CategoryOrderable>;
+  then?: Maybe<CategoryOrder>;
 };

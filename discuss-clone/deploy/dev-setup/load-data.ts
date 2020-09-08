@@ -17,6 +17,7 @@ import {
   InitPostsDocument,
 } from "./types/operations"
 import { lorem } from 'faker';
+import { title } from "process"
 
 require("dotenv").config()
 
@@ -97,7 +98,7 @@ function makePosts(): Array<AddPostInput> {
       likes: 10,
       category: { name: "General" },
       author: michael,
-      comments: []
+      comments: [],
     },
     {
       title: "My first post about Dgraph GraphQL",
@@ -106,7 +107,8 @@ function makePosts(): Array<AddPostInput> {
       likes: 1,
       category: { name: "GraphQL" },
       author: diggy,
-      comments: []
+      comments: [],
+      tags: "SLASH, GRAPHQL",
     },
     {
       title: "Let me quote from the docs",
@@ -115,16 +117,20 @@ function makePosts(): Array<AddPostInput> {
       likes: 5,
       category: { name: "GraphQL" },
       author: michael,
-      comments: []
+      comments: [],
+      tags: "SLASH, REACT",
     },
     {
       title: "I know some things about Dgraph",
-      text: "It's a GraphQL native DB written from the disk up in Go.\nIn fact, I know so much, I can tell you in latin.\n"+lorem.paragraphs(6),
+      text:
+        "It's a GraphQL native DB written from the disk up in Go.\nIn fact, I know so much, I can tell you in latin.\n" +
+        lorem.paragraphs(6),
       datePublished: anHourAgo,
       likes: 50,
       category: { name: "Dgraph" },
       author: diggy,
-      comments: []
+      comments: [],
+      tags: "GRAPHQL, REACT",
     },
     {
       title: "How should I layout my components?",
@@ -132,9 +138,9 @@ function makePosts(): Array<AddPostInput> {
       datePublished: yesterday,
       category: { name: "React" },
       author: michael,
-      comments: []
-    }
-  ]
+      comments: [],
+    },
+  ];
 }
 
 

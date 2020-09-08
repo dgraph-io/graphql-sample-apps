@@ -30,7 +30,6 @@ export function PostFeed() {
 
   const {
     allCategories,
-    publicCategories,
     allWriteableCategories,
     loading: catLoading,
     error: catError,
@@ -60,8 +59,7 @@ export function PostFeed() {
   const [category, setCategory]: any = useState("")
   const [text, setText]: any = useState("")
 
-  const postTags: Array<string> = []
-  const tagsOptions: Array<Object> = []
+  const tagsOptions: Array<{key: string, text: string, value: string}> = []
 
   if (loading || catLoading) return <Loader />
   if (error) return `Error! ${error.message}`
@@ -76,6 +74,14 @@ export function PostFeed() {
   })
 
   const canAddPosts = isAuthenticated && allWriteableCategories.length > 0
+
+  const createTags = (tagsSet: any) => {
+    let tags: string = "";
+      tagsSet.forEach((tag: string) => {
+        tags += tag + ",";
+      });
+    setTags(tags.substring(0, tags.length - 1));
+  }
 
   const submitPost = () => {
     setCreatePost(false)
@@ -138,7 +144,7 @@ export function PostFeed() {
                 style={{
                   backgroundColor: "#f3f3f3",
                 }}
-                onChange={(e, data) => setTags(data.value)}
+                onChange={(e, data) => createTags(data.value)}
               />
             </Form.Field>
             <Form.Field>
@@ -172,10 +178,11 @@ export function PostFeed() {
 
   const items = data?.queryPost?.map((post) => {
     const likes = post?.likes ?? 0
-    post?.tags.map((tag) => {
-      if (postTags.indexOf(tag) > -1) {
-        tagsOptions.push({ key: tag, text: tag, value: tag })
-      }
+    const tagsArray = post?.tags?.split(",") || []
+   tagsArray.forEach((tag) => {
+     if (tagsOptions.findIndex((x) => x["key"] === tag) === -1) {
+       tagsOptions.push({ key: tag, text: tag, value: tag });
+     }
     })
 
     return (
@@ -206,9 +213,9 @@ export function PostFeed() {
           {" " + post?.category.name}
         </Table.Cell>
         <Table.Cell>
-          {post?.tags.map((tag) => {
+          {tagsArray.map((tag) => {
             return (
-              <Label as="a" basic color="grey">
+              <Label as="a" basic color="grey" key={tag}>
                 {tag}
               </Label>
             )
@@ -221,7 +228,7 @@ export function PostFeed() {
           </p>
           <p>
             {" "}
-            <i className="comment outline icon"></i> 3 Replies
+            <i className="comment outline icon"></i> {post?.comments.length} Replies
           </p>
         </Table.Cell>
       </Table.Row>

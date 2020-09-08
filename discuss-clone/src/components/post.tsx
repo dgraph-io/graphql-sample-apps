@@ -260,10 +260,10 @@ export function Post() {
       <div>
         <Header as="h1">{data.getPost.title} </Header>
         <span className="ui red empty mini circular label"></span>
-        {" " + data.getPost?.category.name}
-        {data.getPost?.tags?.split(/\s+/).map((tag) => {
+        {" " + data.getPost?.category.name + "  "}
+        {data.getPost?.tags?.split(",").map((tag) => {
           return (
-            <Label as="a" basic color="grey">
+            <Label as="a" basic color="grey" key={tag}>
               {tag}
             </Label>
           )
