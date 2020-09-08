@@ -154,7 +154,7 @@ export function AppHeader() {
       />
       <Image
         src={
-          data?.getUser?.avatarImg ? data.getUser.avatarImg : `/${avatar}.svg`
+          data?.getUser?.avatarImg ?? `/${avatar}.svg`
         }
         avatar
       />
