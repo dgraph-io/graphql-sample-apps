@@ -9,6 +9,7 @@ export const GET_CHART_DATA = gql`
         type
         count
         entries {
+          netPromoterScore
           rating
           singleChoice {
             title

@@ -1,14 +1,45 @@
 @import url('https://fonts.googleapis.com/css?family=Ubuntu&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
+html,
 body {
-  font-family: 'Ubuntu';
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: 'Ubuntu' !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+.box {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+
+.box .row.header {
+  flex: 0 1 auto;
+}
+
+.box .row.content {
+  flex: 1 1 auto;
+}
+
+.box .row.footer {
+  flex: 0 1 40px;
+}
+
+main {
+  max-width: 64rem;
+  padding: 2rem;
+  margin: auto;
+  height: 100%;
+}
+
 code {
-  font-family: 'Ubuntu Mono';
+  font-family: 'Ubuntu Mono' !important;
 }
 
 #root {

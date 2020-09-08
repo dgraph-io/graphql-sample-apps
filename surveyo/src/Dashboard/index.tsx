@@ -61,25 +61,37 @@ function DashboardHelper() {
       title: 'Responses',
       dataIndex: 'responses',
       key: 'responses',
-      render: (text: any, record: any) => record.responses?.length || 0,
+      render: (_text: any, record: any) => record.responses?.length || 0,
     },
     {
       title: 'Actions',
       key: 'action',
-      render: (text: any, record: any) => (
+      render: (_text: any, record: any) => (
         <Space size="middle">
           <Tooltip title="Open form">
-            <a href={`/form/${record.id}`} target="_blank" rel="noopener noreferrer">
+            <a
+              href={`/form/${record.id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <ExportOutlined />
             </a>
           </Tooltip>
           <Tooltip title="Charts">
-            <a href={`charts/${record.id}`}>
+            <a
+              href={`charts/${record.id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <LineChartOutlined />
             </a>
           </Tooltip>
           <Tooltip title="GraphiQL">
-            <a href={`/graphiql/${record.id}`}>
+            <a
+              href={`/graphiql/${record.id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <CodeOutlined />
             </a>
           </Tooltip>
