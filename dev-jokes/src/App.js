@@ -116,7 +116,7 @@ function ModalSwitch(){
         <PrivateRoute path="/flagged" exact={true} component={Flagged} />
         <Route component={NotFound} />
       </Switch>
-       {background && <PrivateRoute path="/post/:postId" exact={true} component={CardModal}/>}
+       {background && <Route path="/post/:postId" exact={true} component={CardModal}/>}
     </div>
   );
 }
