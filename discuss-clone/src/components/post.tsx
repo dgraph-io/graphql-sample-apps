@@ -24,6 +24,7 @@ import {
 import { DateTime } from "luxon"
 import { useAuth0 } from "@auth0/auth0-react"
 import { useCategories } from "./categories"
+import { avatar } from "./avatar"
 
 interface PostParams {
   id: string
@@ -59,7 +60,6 @@ export function Post() {
   const [text, setText]: any = useState("")
   const [editPost, setEditPost] = useState(false)
   const [commentText, setCommentText] = useState("")
-  const avatar = "/" + Math.floor(Math.random() * (9 - 1) + 1) + ".svg"
 
   const location = useLocation()
   const { categoriesOptions, tagsOptions }: any = location.state
@@ -235,11 +235,7 @@ export function Post() {
           <Comment.Group>
             <Comment>
               <Comment.Avatar
-                src={
-                  comment.author.avatarImg
-                    ? comment.author.avatarImg + ""
-                    : avatar
-                }
+                src={avatar(comment.author.avatarImg)}
                 rounded
                 size="mini"
               />
@@ -274,7 +270,7 @@ export function Post() {
         })}
       </div>
       <Header as="h4" image>
-        <Image src={data.getPost?.author.avatarImg} rounded size="mini" />
+        <Image src={avatar(data.getPost?.author.avatarImg)} rounded size="mini" />
         <Header.Content>
           {data.getPost?.author.displayName}
           <Header.Subheader>{dateStr}</Header.Subheader>
@@ -301,7 +297,7 @@ export function Post() {
         <div>
           <div style={{ display: "flex", marginTop: "50px" }}>
             <Image
-              src={currentUser?.getUser?.avatarImg}
+              src={avatar(currentUser?.getUser?.avatarImg)}
               avatar
               size="mini"
               style={{ height: "35px" }}

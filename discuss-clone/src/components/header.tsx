@@ -11,6 +11,7 @@ import {
 import { useAuth0 } from "@auth0/auth0-react";
 import { Link } from "react-router-dom";
 import { useGetUserQuery, useUpdateUserMutation } from "./types/operations";
+import { avatar } from "./avatar"
 
 export function AppHeader() {
   const [updateSettings, setUpdateSettings] = useState(false);
@@ -18,7 +19,6 @@ export function AppHeader() {
   const [avatarImg, setAvatarImg] = useState("");
   const [currentUser, setCurrentUser] = useState("");
   const { loginWithRedirect, logout, user, isAuthenticated } = useAuth0();
-  const avatar = Math.floor(Math.random() * (9 - 1) + 1);
   const { data, loading, error } = useGetUserQuery({
     variables: { username: isAuthenticated ? user.email : "" }
   });
@@ -153,9 +153,7 @@ export function AppHeader() {
         }}
       />
       <Image
-        src={
-          data?.getUser?.avatarImg ?? `/${avatar}.svg`
-        }
+        src={avatar(data?.getUser?.avatarImg)}
         avatar
       />
       <button

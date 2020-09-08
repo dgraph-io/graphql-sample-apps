@@ -21,6 +21,7 @@ import {
 } from "./types/operations"
 import { useCategories } from "./categories"
 import { Link } from "react-router-dom"
+import { avatar } from "./avatar"
 
 export function PostFeed() {
   const { isAuthenticated, user } = useAuth0()
@@ -191,7 +192,7 @@ export function PostFeed() {
           >
             {/* <a href={"/post/" + post?.id} style={{ color: "black" }}> */}
             <Header as="h4" image>
-              <Image src={post?.author.avatarImg} rounded size="mini" />
+              <Image src={avatar(post?.author.avatarImg)} rounded size="mini" />
               <Header.Content>
                 {post?.title}
                 <Header.Subheader>{post?.author.displayName}</Header.Subheader>
