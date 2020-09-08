@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from "react"
 import {
   Button,
   Modal,
@@ -11,47 +11,73 @@ import {
   Input,
   Form,
   TextArea,
-} from "semantic-ui-react";
-import { useAuth0 } from "@auth0/auth0-react";
-import { 
-  useAllPostsQuery, 
-  useAllCategoriesQuery, 
-  useAddPostMutation, 
-  AllPostsDocument, 
-  AllPostsQuery } from "./types/operations";
-import { Link } from "react-router-dom";
+} from "semantic-ui-react"
+import { useAuth0 } from "@auth0/auth0-react"
+import {
+  useAllPostsQuery,
+  useAddPostMutation,
+  AllPostsDocument,
+  AllPostsQuery,
+} from "./types/operations"
+import { useCategories } from "./categories"
+import { Link } from "react-router-dom"
 
 export function PostFeed() {
-  const { data, loading, error } = useAllPostsQuery();
-  const { data: categoriesData, loading: catLoading } = useAllCategoriesQuery();
-  const [addPost] = useAddPostMutation({      
+  const { isAuthenticated, user } = useAuth0()
+
+  const { data, loading, error } = useAllPostsQuery()
+
+  const {
+    allCategories,
+    publicCategories,
+    allWriteableCategories,
+    loading: catLoading,
+    error: catError,
+  } = useCategories(user?.email ?? "")
+
+  const [addPost] = useAddPostMutation({
     update(cache, { data }) {
-    const existing = cache.readQuery<AllPostsQuery>({ query: AllPostsDocument })
+      const existing = cache.readQuery<AllPostsQuery>({
+        query: AllPostsDocument,
+      })
 
-    cache.writeQuery({
-      query: AllPostsDocument,
-      data: { queryPost: [...(data?.addPost?.post ?? []), ...(existing?.queryPost ?? [])] },
-    })
-  }})
-  const [createPost, setCreatePost] = useState(false);
-  const [title, setTitle] = useState("");
-  const [tags, setTags]: any = useState([]);
-  const [category, setCategory]: any = useState("");
-  const [text, setText]: any = useState("");
+      cache.writeQuery({
+        query: AllPostsDocument,
+        data: {
+          queryPost: [
+            ...(data?.addPost?.post ?? []),
+            ...(existing?.queryPost ?? []),
+          ],
+        },
+      })
+    },
+  })
 
-  const postTags: Array<string> = [];
-  const tagsOptions: Array<Object> = [];
-  const { isAuthenticated, user } = useAuth0();
+  const [createPost, setCreatePost] = useState(false)
+  const [title, setTitle] = useState("")
+  const [tags, setTags]: any = useState([])
+  const [category, setCategory]: any = useState("")
+  const [text, setText]: any = useState("")
 
-  if (loading || catLoading) return <Loader />;
-  if (error) return `Error! ${error.message}`;
+  const postTags: Array<string> = []
+  const tagsOptions: Array<Object> = []
 
-  const categoriesOptions = categoriesData?.queryCategory?.map((category) => {
-    return { key: category?.id, text: category?.name, value: category?.id };
-  });
+  if (loading || catLoading) return <Loader />
+  if (error) return `Error! ${error.message}`
+  if (catError) return `Error! ${catError.message}`
+
+  const categoriesOptions = allCategories.map((category) => {
+    return { key: category?.id, text: category?.name, value: category?.id }
+  })
+
+  const writableCategoriesOptions = allWriteableCategories.map((category) => {
+    return { key: category?.id, text: category?.name, value: category?.id }
+  })
+
+  const canAddPosts = allWriteableCategories.length > 0
 
   const submitPost = () => {
-    setCreatePost(false);
+    setCreatePost(false)
     const post = {
       text: text,
       title: title,
@@ -60,11 +86,9 @@ export function PostFeed() {
       category: { id: category },
       author: { username: user.email },
       datePublished: new Date().toISOString(),
-      comments: []
-    };
-    addPost(
-      { variables: { post: post } }
-    )
+      comments: [],
+    }
+    addPost({ variables: { post: post } })
   }
 
   const showCreatePost = (
@@ -94,7 +118,7 @@ export function PostFeed() {
                 fluid
                 search
                 selection
-                options={categoriesOptions}
+                options={writableCategoriesOptions}
                 style={{
                   backgroundColor: "#f3f3f3",
                 }}
@@ -143,15 +167,15 @@ export function PostFeed() {
         />
       </Modal.Actions>
     </Modal>
-  );
+  )
 
   const items = data?.queryPost?.map((post) => {
-    const likes = post?.likes ?? 0;
+    const likes = post?.likes ?? 0
     post?.tags.map((tag) => {
       if (postTags.indexOf(tag) > -1) {
-        tagsOptions.push({ key: tag, text: tag, value: tag });
+        tagsOptions.push({ key: tag, text: tag, value: tag })
       }
-    });
+    })
 
     return (
       <Table.Row key={post?.id}>
@@ -161,7 +185,7 @@ export function PostFeed() {
               pathname: "/post/" + post?.id,
               state: {
                 categoriesOptions: categoriesOptions,
-                tagsOptions: tagsOptions
+                tagsOptions: tagsOptions,
               },
             }}
           >
@@ -186,7 +210,7 @@ export function PostFeed() {
               <Label as="a" basic color="grey">
                 {tag}
               </Label>
-            );
+            )
           })}
         </Table.Cell>
         <Table.Cell>
@@ -200,8 +224,8 @@ export function PostFeed() {
           </p>
         </Table.Cell>
       </Table.Row>
-    );
-  });
+    )
+  })
 
   return (
     <>
@@ -238,18 +262,18 @@ export function PostFeed() {
             backgroundColor: "#f3f3f3",
           }}
         />
-        {/* {isAuthenticated && ( */}
-        <button
-          className="ui button"
-          style={{
-            background: "linear-gradient(135deg, #ff1800, #ff009b)",
-            color: "white",
-          }}
-          onClick={() => setCreatePost(true)}
-        >
-          Create a New Post
-        </button>
-        {/* )} */}
+        {isAuthenticated && canAddPosts && (
+          <button
+            className="ui button"
+            style={{
+              background: "linear-gradient(135deg, #ff1800, #ff009b)",
+              color: "white",
+            }}
+            onClick={() => setCreatePost(true)}
+          >
+            Create a New Post
+          </button>
+        )}
       </div>
       <Table basic="very" collapsing style={{ width: "100%" }}>
         <Table.Header>
@@ -264,5 +288,5 @@ export function PostFeed() {
         <Table.Body>{items}</Table.Body>
       </Table>
     </>
-  );
+  )
 }

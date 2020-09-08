@@ -56,8 +56,23 @@ query getUser($username: String!) {
   }
 }
 
-query allCategories{
-  queryCategory {
+query categories($username: String!) {
+  all: queryCategory {
+    id
+    name
+  }
+
+  writable: queryCategory @cascade {
+    id
+    name
+    permissions(filter: { role: { eq: WRITER } }) {
+      user(filter: { username: { eq: $username } }) {
+        username
+      }
+    }
+  }
+  
+  public: queryCategory(filter: { isPublic: true }) {
     id
     name
   }

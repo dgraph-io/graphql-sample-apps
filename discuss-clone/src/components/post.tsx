@@ -1,5 +1,5 @@
-import React, { useState, FormEvent } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import React, { useState, FormEvent } from "react"
+import { useParams, useLocation } from "react-router-dom"
 import {
   Container,
   Header,
@@ -13,51 +13,66 @@ import {
   Button,
   TextAreaProps,
   Comment,
-} from "semantic-ui-react";
+} from "semantic-ui-react"
 import {
   useGetPostQuery,
   useAddCommentMutation,
   useUpdatePostMutation,
   useGetUserQuery,
-} from "./types/operations";
-import { DateTime } from "luxon";
-import { useAuth0 } from "@auth0/auth0-react";
+} from "./types/operations"
+import { DateTime } from "luxon"
+import { useAuth0 } from "@auth0/auth0-react"
+import { useCategories } from "./categories"
 
 interface PostParams {
-  id: string;
+  id: string
 }
 
 export function Post() {
-  const [title, setTitle] = useState("");
-  const [tags, setTags]: any = useState([]);
-  const [category, setCategory]: any = useState("");
-  const [text, setText]: any = useState("");
-  const [editPost, setEditPost] = useState(false);
-  const [commentText, setCommentText] = useState("");
-  const avatar = "/" + Math.floor(Math.random() * (9 - 1) + 1) + ".svg";
+  const { id } = useParams<PostParams>()
 
-  const { id } = useParams<PostParams>();
-  const location = useLocation();
-
-  const { categoriesOptions, tagsOptions }: any = location.state;
-  const { user, isAuthenticated } = useAuth0();
+  const { user, isAuthenticated } = useAuth0()
 
   const { data: currentUser, loading: userLoading } = useGetUserQuery({
     variables: { username: isAuthenticated ? user.email : "" },
-  });
-  const { data, loading, error } = useGetPostQuery({ variables: { id: id } });
+  })
+  const { data, loading, error } = useGetPostQuery({ variables: { id: id } })
+  const {
+    allWriteableCategories,
+    loading: catLoading,
+    error: catError,
+  } = useCategories(user?.email ?? "")
 
-  const [addCommentMutation] = useAddCommentMutation();
-  const [updatePostMutation] = useUpdatePostMutation();
+  const [addCommentMutation] = useAddCommentMutation()
+  const [updatePostMutation] = useUpdatePostMutation()
 
-  if (loading || userLoading) return <Loader />;
+  const [title, setTitle] = useState("")
+  const [tags, setTags]: any = useState([])
+  const [category, setCategory]: any = useState("")
+  const [text, setText]: any = useState("")
+  const [editPost, setEditPost] = useState(false)
+  const [commentText, setCommentText] = useState("")
+  const avatar = "/" + Math.floor(Math.random() * (9 - 1) + 1) + ".svg"
+
+  const location = useLocation()
+  const { categoriesOptions, tagsOptions }: any = location.state
+
+  if (loading || userLoading || catLoading) return <Loader />
   if (error) {
     return (
       <Container text style={{ marginTop: "7em" }}>
         <Header as="h1">Ouch! That page didn't load</Header>
         <p>Here's why : {error.message}</p>
       </Container>
-    );
+    )
+  }
+  if (catError) {
+    return (
+      <Container text style={{ marginTop: "7em" }}>
+        <Header as="h1">Ouch! That page didn't load</Header>
+        <p>Here's why : {catError.message}</p>
+      </Container>
+    )
   }
   if (!data?.getPost) {
     return (
@@ -66,18 +81,27 @@ export function Post() {
         <p>You've navigated to a post that doesn't exist.</p>
         <p>That most likely means that the id {id} isn't the id of post.</p>
       </Container>
-    );
+    )
   }
 
+  const canEditThisPost = data.getPost.author.username === user?.email
+  const canPostComments = !!allWriteableCategories.find(
+    (c) => c?.id === data.getPost?.category.id
+  )
+
+  const writableCategoriesOptions = allWriteableCategories.map((category) => {
+    return { key: category?.id, text: category?.name, value: category?.id }
+  })
+
   const setdata = () => {
-    setEditPost(true);
-    setTitle(data.getPost?.title + "");
+    setEditPost(true)
+    setTitle(data.getPost?.title + "")
     data.getPost?.tags.map((tag) => {
-      setTags((tag: any) => [...tag, tags]);
-    });
-    setText(data?.getPost?.text);
-    setCategory(data?.getPost?.category?.id);
-  };
+      setTags((tag: any) => [...tag, tags])
+    })
+    setText(data?.getPost?.text)
+    setCategory(data?.getPost?.category?.id)
+  }
 
   const addComment = () => {
     addCommentMutation({
@@ -89,31 +113,31 @@ export function Post() {
         },
       },
       update(cache, { data }) {
-        console.log(data);
+        console.log(data)
       },
-    });
-  };
-
-  let dateStr = "at some unknown time";
-  if (data.getPost.datePublished) {
-    dateStr =
-      DateTime.fromISO(data.getPost.datePublished).toRelative() ?? dateStr;
+    })
   }
 
-  const paras = data.getPost.text.split("\n").map((str) => <p>{str}</p>);
+  let dateStr = "at some unknown time"
+  if (data.getPost.datePublished) {
+    dateStr =
+      DateTime.fromISO(data.getPost.datePublished).toRelative() ?? dateStr
+  }
+
+  const paras = data.getPost.text.split("\n").map((str) => <p>{str}</p>)
 
   const updatePost = () => {
-    setEditPost(false);
+    setEditPost(false)
     const post = {
       text: text,
       title: title,
       tags: tags,
       // likes: 0,
       category: { id: category },
-    };
+    }
 
-    updatePostMutation({ variables: { post: post, id: id } });
-  };
+    updatePostMutation({ variables: { post: post, id: id } })
+  }
 
   const showEditPost = (
     <Modal
@@ -144,7 +168,7 @@ export function Post() {
                 search
                 selection
                 defaultValue={category}
-                options={categoriesOptions}
+                options={writableCategoriesOptions}
                 style={{
                   backgroundColor: "#f3f3f3",
                 }}
@@ -195,7 +219,7 @@ export function Post() {
         />
       </Modal.Actions>
     </Modal>
-  );
+  )
 
   const comments = data.getPost.comments.map((comment) => {
     const commentStart = (
@@ -218,7 +242,7 @@ export function Post() {
           </Comment.Actions> */}
         </Comment.Content>
       </>
-    );
+    )
 
     const subcomments = comment.commentsOn.comments.map((subComment) => {
       return (
@@ -247,18 +271,18 @@ export function Post() {
             </Comment.Content>
           </Comment>
         </Comment.Group>
-      );
-    });
+      )
+    })
 
     return (
-      <div style={{marginTop: "10px"}}>
+      <div style={{ marginTop: "10px" }}>
         <Comment>
           {commentStart}
           {subcomments}
         </Comment>
       </div>
-    );
-  });
+    )
+  })
 
   return (
     <div style={{ margin: "2.5rem 7rem 7rem 7rem" }}>
@@ -271,7 +295,7 @@ export function Post() {
             <Label as="a" basic color="grey">
               {tag}
             </Label>
-          );
+          )
         })}
       </div>
       <Header as="h4" image>
@@ -283,20 +307,22 @@ export function Post() {
       </Header>
       {paras}
       {showEditPost}
-      <div style={{ marginTop: "30px" }}>
-        <button
-          style={{
-            background: "linear-gradient(135deg, #ff1800, #ff009b)",
-            color: "white",
-          }}
-          className="ui button"
-          onClick={setdata}
-        >
-          <i className="pencil icon"></i>Edit Post
-        </button>
-      </div>
+      {canEditThisPost && (
+        <div style={{ marginTop: "30px" }}>
+          <button
+            style={{
+              background: "linear-gradient(135deg, #ff1800, #ff009b)",
+              color: "white",
+            }}
+            className="ui button"
+            onClick={setdata}
+          >
+            <i className="pencil icon"></i>Edit Post
+          </button>
+        </div>
+      )}
       {comments}
-      {isAuthenticated && (
+      {canPostComments && (
         <div>
           <div style={{ display: "flex", marginTop: "50px" }}>
             <Image
@@ -314,7 +340,7 @@ export function Post() {
                     event: FormEvent<HTMLTextAreaElement>,
                     data: TextAreaProps
                   ) => {
-                    setCommentText(data.value?.toString() ?? "");
+                    setCommentText(data.value?.toString() ?? "")
                   }}
                 />
               </Form>
@@ -335,5 +361,5 @@ export function Post() {
         </div>
       )}
     </div>
-  );
+  )
 }
