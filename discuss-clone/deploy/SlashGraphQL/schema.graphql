@@ -48,12 +48,12 @@ type Post @auth(
   delete: { rule:  "<<has-the-posts-category-admin>>" },
 ) {
   id: ID!
-  title: String!
-  text: String!
+  title: String! @search(by: [term])
+  text: String! @search(by: [fulltext])
   datePublished: DateTime
   likes: Int
   author: User!
-  tags: [String!]!
+  tags: [String!]! @search(by: [hash])
   category: Category! @hasInverse(field: posts)
   comments: [Comment!]!
 }
