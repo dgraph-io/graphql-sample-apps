@@ -1,5 +1,5 @@
 import React, { useState, FormEvent } from "react"
-import { useParams, useLocation } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import {
   Container,
   Header,
@@ -55,14 +55,11 @@ export function Post() {
   })
 
   const [title, setTitle] = useState("")
-  const [tags, setTags]: any = useState([])
+  const [tags, setTags]: any = useState("")
   const [category, setCategory]: any = useState("")
   const [text, setText]: any = useState("")
   const [editPost, setEditPost] = useState(false)
   const [commentText, setCommentText] = useState("")
-
-  const location = useLocation()
-  const { categoriesOptions, tagsOptions }: any = location.state
 
   if (loading || userLoading || catLoading) return <Loader />
   if (error) {
@@ -103,9 +100,7 @@ export function Post() {
   const setdata = () => {
     setEditPost(true)
     setTitle(data.getPost?.title + "")
-    data.getPost?.tags?.split(/\s+/).map((tag) => {
-      setTags((tag: any) => [...tag, tags])
-    })
+    setTags(data.getPost?.tags)
     setText(data?.getPost?.text)
     setCategory(data?.getPost?.category?.id)
   }
@@ -184,18 +179,13 @@ export function Post() {
             </Form.Field>
             <Form.Field>
               <label>Tags (optional)</label>
-              <Dropdown
-                placeholder="Select appropriate tags..."
-                fluid
-                multiple
-                search
-                selection
-                defaultValue={tags}
-                options={tagsOptions}
+              <input
+                placeholder="Enter space separated tags..."
                 style={{
                   backgroundColor: "#f3f3f3",
                 }}
-                onChange={(e, data) => setTags(data.value)}
+                value={tags}
+                onChange={(e) => setTags(e.target.value)}
               />
             </Form.Field>
             <Form.Field>
@@ -226,7 +216,7 @@ export function Post() {
         />
       </Modal.Actions>
     </Modal>
-  )
+  );
 
   const comments = (
     <div style={{ marginTop: "10px" }}>
@@ -261,12 +251,14 @@ export function Post() {
         <Header as="h1">{data.getPost.title} </Header>
         <span className="ui red empty mini circular label"></span>
         {" " + data.getPost?.category.name + "  "}
-        {data.getPost?.tags?.split(",").map((tag) => {
-          return (
-            <Label as="a" basic color="grey" key={tag}>
-              {tag}
-            </Label>
-          )
+        {data.getPost?.tags?.trim().split(/\s+/).map((tag) => {
+          if (tag !== "") {
+            return (
+              <Label as="a" basic color="grey" key={tag}>
+                {tag}
+              </Label>
+            );
+          }
         })}
       </div>
       <Header as="h4" image>

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
 import {
   Header,
   Label,
@@ -7,61 +7,52 @@ import {
   Table,
   Dropdown,
   Input,
-} from "semantic-ui-react"
-import { useAuth0 } from "@auth0/auth0-react"
-import {
-  useAllPostsQuery,
-  useFilterPostsLazyQuery
-} from "./types/operations"
-import { useCategories } from "./categories"
-import { Link } from "react-router-dom"
-import { avatar } from "./avatar"
+} from "semantic-ui-react";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useAllPostsQuery, useFilterPostsLazyQuery } from "./types/operations";
+import { useCategories } from "./categories";
+import { Link } from "react-router-dom";
+import { avatar } from "./avatar";
 
 export function PostFeed() {
-  const { user } = useAuth0()
+  const { user } = useAuth0();
 
-  const { data, loading, error } = useAllPostsQuery()
-  const [getFilteredPosts, { loading: filterLoading, data: filteredData, error: filterError }] = useFilterPostsLazyQuery()
+  const { data, loading, error } = useAllPostsQuery();
+  const [
+    getFilteredPosts,
+    { loading: filterLoading, data: filteredData, error: filterError },
+  ] = useFilterPostsLazyQuery();
 
   const {
     allCategories,
     allWriteableCategories,
     loading: catLoading,
     error: catError,
-  } = useCategories(user?.email ?? "")
-  
-  const [searchText, setSearchText] = useState("")
+  } = useCategories(user?.email ?? "");
 
-  const tagsOptions: Array<{key: string, text: string, value: string}> = []
+  const [searchText, setSearchText] = useState("");
 
-  if (loading || catLoading || filterLoading) return <Loader />
-  if (error) return `Error! ${error.message}`
-  if (catError) return `Error! ${catError.message}`
-  if (filterError) return `Error! ${filterError.message}`
+  if (loading || catLoading || filterLoading) return <Loader />;
+  if (error) return `Error! ${error.message}`;
+  if (catError) return `Error! ${catError.message}`;
+  if (filterError) return `Error! ${filterError.message}`;
 
   const categoriesOptions = allCategories.map((category) => {
-    return { key: category?.id, text: category?.name, value: category?.id }
-  })
+    return { key: category?.id, text: category?.name, value: category?.id };
+  });
 
   const searchPosts = () => {
-
-    getFilteredPosts({variables:{filter:{}}})
-  }
+    getFilteredPosts({ variables: { filter: {} } });
+  };
 
   const textSearch = (e: any) => {
-    setSearchText(e.target.value)
-    console.log("Ss")
-    searchPosts()
-  }
+    setSearchText(e.target.value);
+    searchPosts();
+  };
 
   const items = data?.queryPost?.map((post) => {
-    const likes = post?.likes ?? 0
-    const tagsArray = post?.tags?.split(",") || []
-   tagsArray.forEach((tag) => {
-     if (tagsOptions.findIndex((x) => x["key"] === tag) === -1) {
-       tagsOptions.push({ key: tag, text: tag, value: tag });
-     }
-    })
+    const likes = post?.likes ?? 0;
+    const tagsArray = post?.tags?.trim().split(/\s+/) || [];
 
     return (
       <Table.Row key={post?.id}>
@@ -69,13 +60,8 @@ export function PostFeed() {
           <Link
             to={{
               pathname: "/post/" + post?.id,
-              state: {
-                categoriesOptions: categoriesOptions,
-                tagsOptions: tagsOptions,
-              },
             }}
           >
-            {/* <a href={"/post/" + post?.id} style={{ color: "black" }}> */}
             <Header as="h4" image>
               <Image src={avatar(post?.author.avatarImg)} rounded size="mini" />
               <Header.Content>
@@ -83,7 +69,6 @@ export function PostFeed() {
                 <Header.Subheader>{post?.author.displayName}</Header.Subheader>
               </Header.Content>
             </Header>
-            {/* </a> */}
           </Link>
         </Table.Cell>
         <Table.Cell>
@@ -92,11 +77,13 @@ export function PostFeed() {
         </Table.Cell>
         <Table.Cell>
           {tagsArray.map((tag) => {
-            return (
-              <Label as="a" basic color="grey" key={tag}>
-                {tag}
-              </Label>
-            )
+            if (tag != "") {
+              return (
+                <Label as="a" basic color="grey" key={tag}>
+                  {tag}
+                </Label>
+              );
+            }
           })}
         </Table.Cell>
         <Table.Cell>
@@ -106,12 +93,13 @@ export function PostFeed() {
           </p>
           <p>
             {" "}
-            <i className="comment outline icon"></i> {post?.comments.length} Replies
+            <i className="comment outline icon"></i> {post?.comments.length}{" "}
+            Replies
           </p>
         </Table.Cell>
       </Table.Row>
-    )
-  })
+    );
+  });
 
   return (
     <>
@@ -127,26 +115,32 @@ export function PostFeed() {
           fluid
           search
           selection
-          options={categoriesOptions}
           style={{
             marginRight: "10px",
             width: "20%",
             backgroundColor: "#f3f3f3",
           }}
+          options={categoriesOptions}
         />
-        <Dropdown
-          placeholder="Tags"
-          fluid
-          multiple
-          search
-          selection
-          options={tagsOptions}
+        <Input
+          placeholder="Enter space separated tags..."
           style={{
             marginRight: "10px",
             width: "41%",
             backgroundColor: "#f3f3f3",
           }}
         />
+        <button
+          className="ui button"
+          style={{
+            background: "linear-gradient(135deg, #ff1800, #ff009b)",
+            color: "white",
+            marginRight: "5px",
+          }}
+          // onClick={() => setCreatePost(true)}
+        >
+          Search
+        </button>
       </div>
       <Table basic="very" collapsing style={{ width: "100%" }}>
         <Table.Header>
@@ -161,5 +155,5 @@ export function PostFeed() {
         <Table.Body>{items}</Table.Body>
       </Table>
     </>
-  )
+  );
 }

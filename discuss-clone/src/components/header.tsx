@@ -16,7 +16,6 @@ import {
   useAddPostMutation,
   AllPostsDocument,
   AllPostsQuery,
-  useAllPostsQuery,
 } from "./types/operations";
 import { avatar } from "./avatar";
 import { useCategories } from "./categories";
@@ -27,12 +26,6 @@ export function AppHeader() {
   const [title, setTitle] = useState("");
   const [category, setCategory]: any = useState("");
   const [text, setText]: any = useState("");
-  const {
-    data: postsData,
-    error: postErr,
-    loading: postLoading,
-  } = useAllPostsQuery();
-  const tagsOptions: Array<{ key: string; text: string; value: string }> = [];
 
   const [name, setName] = useState("");
   const [avatarImg, setAvatarImg] = useState("");
@@ -43,11 +36,11 @@ export function AppHeader() {
   });
   const [updateUserMutation] = useUpdateUserMutation();
   const {
-   allWriteableCategories,
+    allWriteableCategories,
     loading: catLoading,
     error: catError,
   } = useCategories(user?.email ?? "");
-  const [tags, setTags]: any = useState([]);
+  const [tags, setTags]: any = useState("");
 
   const [addPost] = useAddPostMutation({
     update(cache, { data }) {
@@ -78,19 +71,9 @@ export function AppHeader() {
     });
   }
 
-  if (loading || catLoading || postLoading) return <Loader />;
+  if (loading || catLoading ) return <Loader />;
   if (error) return <div>`Error! ${error.message}`</div>;
-  if (postErr) return <div>`Error! ${postErr.message}`</div>;
   if (catError) return <div>`Error! ${catError.message}`</div>;
-
-  postsData?.queryPost?.map((post) => {
-    const tagsArray = post?.tags?.split(",") || [];
-    tagsArray.forEach((tag) => {
-      if (tagsOptions.findIndex((x) => x["key"] === tag) === -1) {
-        tagsOptions.push({ key: tag, text: tag, value: tag });
-      }
-    });
-  });
 
   const currentSettings = () => {
     setName(data?.getUser?.displayName ? data.getUser.displayName : "");
@@ -114,14 +97,6 @@ export function AppHeader() {
   const writableCategoriesOptions = allWriteableCategories.map((category) => {
     return { key: category?.id, text: category?.name, value: category?.id };
   });
-
-  const createTags = (tagsSet: any) => {
-    let tags: string = "";
-    tagsSet.forEach((tag: string) => {
-      tags += tag + ",";
-    });
-    setTags(tags.substring(0, tags.length - 1));
-  };
 
   const submitPost = () => {
     setCreatePost(false);
@@ -174,18 +149,13 @@ export function AppHeader() {
             </Form.Field>
             <Form.Field>
               <label>Tags (optional)</label>
-              <Dropdown
-                placeholder="Select appropriate tags..."
-                fluid
-                multiple
-                search
-                selection
-                options={tagsOptions}
-                style={{
-                  backgroundColor: "#f3f3f3",
-                }}
-                onChange={(e, data) => createTags(data.value)}
-              />
+                <input
+                  placeholder="Enter space separated tags..."
+                  style={{
+                    backgroundColor: "#f3f3f3",
+                  }}
+                  onChange={(e) => setTags(e.target.value)}
+                />
             </Form.Field>
             <Form.Field>
               <label>Your Message</label>
