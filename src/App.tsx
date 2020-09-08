@@ -9,8 +9,9 @@ import {ApolloProvider} from '@apollo/client';
 import {Switch, Route, Link, NavLink, Router} from 'react-router-dom';
 import {useAuth0, withAuthenticationRequired} from '@auth0/auth0-react';
 import createApolloClient from './ApolloConfig';
-import logo from './logo.svg';
-import {Layout, Typography} from 'antd';
+import logoLight from './images/logoLight.svg';
+import logoDark from './images/logoDark.svg';
+import {Typography} from 'antd';
 import FormCreator from './FormCreator';
 import history from './history';
 
@@ -42,56 +43,69 @@ function PrivateRoute({component, ...args}: any) {
   );
 }
 
-function SyMenu(isAuthenticated: Boolean) {
-  const {loginWithRedirect, logout} = useAuth0();
+function SyMenu() {
+  const {isAuthenticated, isLoading, loginWithRedirect, logout} = useAuth0();
 
-  return (
-    <>
-      <div style={{float: 'left'}}>
-        <NavLink to="/">
-          <img src={logo} style={{height: '24px'}} alt="" />
-        </NavLink>
-      </div>
-      <div style={{float: 'right'}}>
-        {isAuthenticated ? (
+  const menuItems = () => {
+    if (isLoading) {
+      return null;
+    } else if (isAuthenticated) {
+      return (
+        <Button
+          onClick={() =>
+            logout({
+              returnTo: window.location.origin,
+            })
+          }
+          ghost
+          style={{color: 'white', borderColor: 'white'}}
+        >
+          Logout
+        </Button>
+      );
+    } else {
+      return (
+        <>
           <Button
             onClick={() =>
-              logout({
+              loginWithRedirect({
                 returnTo: window.location.origin,
               })
             }
             ghost
-            style={{color: '#000000', borderColor: '#000000', margin: '10px'}}
+            style={{color: 'white', borderColor: 'white'}}
           >
-            Logout
+            Login
           </Button>
-        ) : (
-          <>
-            <Button
-              onClick={() =>
-                loginWithRedirect({
-                  returnTo: window.location.origin,
-                })
-              }
-              ghost
-              style={{color: '#000000', borderColor: '#000000', margin: '10px'}}
-            >
-              Login
-            </Button>
-            <Button
-              type="primary"
-              onClick={() =>
-                loginWithRedirect({
-                  screen_hint: 'signup',
-                })
-              }
-            >
-              Sign up
-            </Button>
-          </>
-        )}
+          <Button
+            type="primary"
+            onClick={() => loginWithRedirect({screen_hint: 'signup'})}
+            style={{marginLeft: 10}}
+          >
+            Sign up
+          </Button>
+        </>
+      );
+    }
+  };
+
+  return (
+    <div
+      style={{
+        backgroundColor: 'black',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: 10,
+      }}
+    >
+      <div>
+        <NavLink to="/">
+          <img src={logoLight} style={{height: 32, padding: 5}} alt="" />
+        </NavLink>
       </div>
-    </>
+      <div>{menuItems()}</div>
+    </div>
   );
 }
 
@@ -103,13 +117,12 @@ function App() {
       client={createApolloClient(isAuthenticated ? getIdTokenClaims : null)}
     >
       <Router history={history}>
-        <Layout style={{height: '100%'}}>
-          <Layout.Header style={{background: 'white'}}>
-            {SyMenu(isAuthenticated as Boolean)}
-          </Layout.Header>
-          <Layout hasSider>
-            <Layout.Sider breakpoint="lg" collapsedWidth={1} theme="light" />
-            <Layout.Content>
+        <div className="box">
+          <div className="row header">
+            <SyMenu />
+          </div>
+          <div className="row content">
+            <main>
               {isLoading ? (
                 <Loading />
               ) : (
@@ -129,10 +142,9 @@ function App() {
                   />
                 </Switch>
               )}
-            </Layout.Content>
-            <Layout.Sider breakpoint="lg" collapsedWidth={1} theme="light" />
-          </Layout>
-        </Layout>
+            </main>
+          </div>
+        </div>
       </Router>
     </ApolloProvider>
   );
@@ -151,7 +163,7 @@ function Home() {
         alignItems: 'center',
       }}
     >
-      <img src={logo} alt="" />
+      <img src={logoDark} alt="" />
       <Typography.Title level={3}>Surveys, simplified.</Typography.Title>
       <Link to="/create">
         <Button type="primary" size="large">

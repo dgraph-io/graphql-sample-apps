@@ -3,7 +3,7 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { AddFormInput } from "../../../__generated__/globalTypes";
+import { AddFormInput } from "./../../../__generated__/globalTypes";
 
 // ====================================================
 // GraphQL mutation operation: AddForm

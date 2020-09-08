@@ -19,6 +19,7 @@ export default function Page() {
   }
 
   if (error) {
+    console.error(error);
     return <Result500 />;
   }
 
