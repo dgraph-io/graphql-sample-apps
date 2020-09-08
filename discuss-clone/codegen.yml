@@ -16,6 +16,7 @@ generates:
     plugins:
       - typescript-operations
       - typescript-react-apollo
+      - named-operations-object
     config:
       reactApolloVersion: 3
       withHOC: false

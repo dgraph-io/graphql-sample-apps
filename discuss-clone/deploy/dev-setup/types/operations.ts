@@ -105,3 +105,9 @@ export function useInitPostsMutation(baseOptions?: ApolloReactHooks.MutationHook
 export type InitPostsMutationHookResult = ReturnType<typeof useInitPostsMutation>;
 export type InitPostsMutationResult = ApolloReactCommon.MutationResult<InitPostsMutation>;
 export type InitPostsMutationOptions = ApolloReactCommon.BaseMutationOptions<InitPostsMutation, InitPostsMutationVariables>;
+export const namedOperations = {
+  Mutation: {
+    InitCategories: 'InitCategories',
+    InitPosts: 'InitPosts'
+  }
+}

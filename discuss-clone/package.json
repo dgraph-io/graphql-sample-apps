@@ -53,6 +53,7 @@
   "devDependencies": {
     "@graphql-codegen/add": "^1.15.4",
     "@graphql-codegen/cli": "^1.15.4",
+    "@graphql-codegen/named-operations-object": "^1.17.8",
     "@graphql-codegen/near-operation-file-preset": "^1.15.4",
     "@graphql-codegen/typescript": "^1.15.4",
     "@graphql-codegen/typescript-operations": "^1.15.4",
@@ -61,13 +62,13 @@
     "@types/luxon": "^1.24.1",
     "@types/node": "^12.0.0",
     "@types/react-router-dom": "^5.1.5",
-    "faker": "^4.1.0",
-    "dotenv": "^8.2.0",
-    "graphql-request": "^3.0.0",
     "auth0": "^2.27.1",
+    "cross-fetch": "^3.0.5",
+    "dotenv": "^8.2.0",
+    "faker": "^4.1.0",
+    "graphql-request": "^3.0.0",
     "jwks-rsa": "^1.9.0",
     "readline-sync": "^1.4.10",
-    "cross-fetch": "^3.0.5",
     "ts-node": "^8.10.2"
   }
 }

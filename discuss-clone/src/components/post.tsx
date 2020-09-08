@@ -19,6 +19,7 @@ import {
   useAddCommentMutation,
   useUpdatePostMutation,
   useGetUserQuery,
+  namedOperations,
 } from "./types/operations"
 import { DateTime } from "luxon"
 import { useAuth0 } from "@auth0/auth0-react"
@@ -36,15 +37,21 @@ export function Post() {
   const { data: currentUser, loading: userLoading } = useGetUserQuery({
     variables: { username: isAuthenticated ? user.email : "" },
   })
-  const { data, loading, error } = useGetPostQuery({ variables: { id: id } })
+  const { data, loading, error } = useGetPostQuery({
+    variables: { id: id },
+  })
   const {
     allWriteableCategories,
     loading: catLoading,
     error: catError,
   } = useCategories(user?.email ?? "")
 
-  const [addCommentMutation] = useAddCommentMutation()
-  const [updatePostMutation] = useUpdatePostMutation()
+  const [addCommentMutation] = useAddCommentMutation({
+    refetchQueries: [namedOperations.Query.getPost],
+  })
+  const [updatePostMutation] = useUpdatePostMutation({
+    refetchQueries: [namedOperations.Query.getPost],
+  })
 
   const [title, setTitle] = useState("")
   const [tags, setTags]: any = useState([])

@@ -495,3 +495,20 @@ export function useUpdatePostMutation(baseOptions?: ApolloReactHooks.MutationHoo
 export type UpdatePostMutationHookResult = ReturnType<typeof useUpdatePostMutation>;
 export type UpdatePostMutationResult = ApolloReactCommon.MutationResult<UpdatePostMutation>;
 export type UpdatePostMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdatePostMutation, UpdatePostMutationVariables>;
+export const namedOperations = {
+  Query: {
+    allPosts: 'allPosts',
+    getPost: 'getPost',
+    getUser: 'getUser',
+    categories: 'categories'
+  },
+  Mutation: {
+    addPost: 'addPost',
+    addComment: 'addComment',
+    updateUser: 'updateUser',
+    updatePost: 'updatePost'
+  },
+  Fragment: {
+    postData: 'postData'
+  }
+}
