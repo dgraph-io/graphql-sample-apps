@@ -92,7 +92,7 @@ export function Post() {
   }
 
   const canEditThisPost = data.getPost.author.username === user?.email
-  const canPostComments = !!allWriteableCategories.find(
+  const canPostComments = isAuthenticated && !!allWriteableCategories.find(
     (c) => c?.id === data.getPost?.category.id
   )
 

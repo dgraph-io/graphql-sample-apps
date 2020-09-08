@@ -75,7 +75,7 @@ export function PostFeed() {
     return { key: category?.id, text: category?.name, value: category?.id }
   })
 
-  const canAddPosts = allWriteableCategories.length > 0
+  const canAddPosts = isAuthenticated && allWriteableCategories.length > 0
 
   const submitPost = () => {
     setCreatePost(false)
@@ -263,7 +263,7 @@ export function PostFeed() {
             backgroundColor: "#f3f3f3",
           }}
         />
-        {isAuthenticated && canAddPosts && (
+        {canAddPosts && (
           <button
             className="ui button"
             style={{
