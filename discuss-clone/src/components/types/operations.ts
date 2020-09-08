@@ -43,6 +43,19 @@ export type AllPostsQuery = (
   )>>> }
 );
 
+export type FilterPostsQueryVariables = Types.Exact<{
+  filter?: Types.Maybe<Types.PostFilter>;
+}>;
+
+
+export type FilterPostsQuery = (
+  { __typename?: 'Query' }
+  & { queryPost?: Types.Maybe<Array<Types.Maybe<(
+    { __typename?: 'Post' }
+    & PostDataFragment
+  )>>> }
+);
+
 export type GetPostQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
@@ -236,6 +249,39 @@ export function useAllPostsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHoo
 export type AllPostsQueryHookResult = ReturnType<typeof useAllPostsQuery>;
 export type AllPostsLazyQueryHookResult = ReturnType<typeof useAllPostsLazyQuery>;
 export type AllPostsQueryResult = ApolloReactCommon.QueryResult<AllPostsQuery, AllPostsQueryVariables>;
+export const FilterPostsDocument = gql`
+    query filterPosts($filter: PostFilter) {
+  queryPost(filter: $filter) {
+    ...postData
+  }
+}
+    ${PostDataFragmentDoc}`;
+
+/**
+ * __useFilterPostsQuery__
+ *
+ * To run a query within a React component, call `useFilterPostsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFilterPostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFilterPostsQuery({
+ *   variables: {
+ *      filter: // value for 'filter'
+ *   },
+ * });
+ */
+export function useFilterPostsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<FilterPostsQuery, FilterPostsQueryVariables>) {
+        return ApolloReactHooks.useQuery<FilterPostsQuery, FilterPostsQueryVariables>(FilterPostsDocument, baseOptions);
+      }
+export function useFilterPostsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<FilterPostsQuery, FilterPostsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<FilterPostsQuery, FilterPostsQueryVariables>(FilterPostsDocument, baseOptions);
+        }
+export type FilterPostsQueryHookResult = ReturnType<typeof useFilterPostsQuery>;
+export type FilterPostsLazyQueryHookResult = ReturnType<typeof useFilterPostsLazyQuery>;
+export type FilterPostsQueryResult = ApolloReactCommon.QueryResult<FilterPostsQuery, FilterPostsQueryVariables>;
 export const GetPostDocument = gql`
     query getPost($id: ID!) {
   getPost(id: $id) {
@@ -498,6 +544,7 @@ export type UpdatePostMutationOptions = ApolloReactCommon.BaseMutationOptions<Up
 export const namedOperations = {
   Query: {
     allPosts: 'allPosts',
+    filterPosts: 'filterPosts',
     getPost: 'getPost',
     getUser: 'getUser',
     categories: 'categories'

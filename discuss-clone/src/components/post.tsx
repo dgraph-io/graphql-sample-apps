@@ -131,7 +131,7 @@ export function Post() {
       DateTime.fromISO(data.getPost.datePublished).toRelative() ?? dateStr
   }
 
-  const paras = data.getPost.text.split("\n").map((str) => <p>{str}</p>)
+  const paras = data.getPost.text.split("\n").map((str) => <p key={str}>{str}</p>)
 
   const updatePost = () => {
     setEditPost(false)

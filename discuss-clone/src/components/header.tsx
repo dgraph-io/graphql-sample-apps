@@ -1,92 +1,220 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Image,
-  Icon,
   Modal,
   Form,
   Button,
   Dropdown,
   Loader,
+  TextArea,
 } from "semantic-ui-react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Link } from "react-router-dom";
-import { useGetUserQuery, useUpdateUserMutation } from "./types/operations";
-import { avatar } from "./avatar"
+import {
+  useGetUserQuery,
+  useUpdateUserMutation,
+  useAddPostMutation,
+  AllPostsDocument,
+  AllPostsQuery,
+  useAllPostsQuery,
+} from "./types/operations";
+import { avatar } from "./avatar";
+import { useCategories } from "./categories";
 
 export function AppHeader() {
   const [updateSettings, setUpdateSettings] = useState(false);
+  const [createPost, setCreatePost] = useState(false);
+  const [title, setTitle] = useState("");
+  const [category, setCategory]: any = useState("");
+  const [text, setText]: any = useState("");
+  const {
+    data: postsData,
+    error: postErr,
+    loading: postLoading,
+  } = useAllPostsQuery();
+  const tagsOptions: Array<{ key: string; text: string; value: string }> = [];
+
   const [name, setName] = useState("");
   const [avatarImg, setAvatarImg] = useState("");
   const [currentUser, setCurrentUser] = useState("");
   const { loginWithRedirect, logout, user, isAuthenticated } = useAuth0();
   const { data, loading, error } = useGetUserQuery({
-    variables: { username: isAuthenticated ? user.email : "" }
+    variables: { username: isAuthenticated ? user.email : "" },
   });
   const [updateUserMutation] = useUpdateUserMutation();
+  const {
+   allWriteableCategories,
+    loading: catLoading,
+    error: catError,
+  } = useCategories(user?.email ?? "");
+  const [tags, setTags]: any = useState([]);
 
-  const avatarsOptions = [
-    {
-      key: "/1.svg",
-      text: "Avatar 1",
-      value: "/1.svg",
-      image: { avatar: true, src: "/1.svg" },
-    },
-    {
-      key: "/2.svg",
-      text: "Avatar 2",
-      value: "/2.svg",
-      image: { avatar: true, src: "/2.svg" },
-    },
-    {
-      key: "/3.svg",
-      text: "Avatar 3",
-      value: "/3.svg",
-      image: { avatar: true, src: "/3.svg" },
-    },
-    {
-      key: "/4.svg",
-      text: "Avatar 4",
-      value: "/4.svg",
-      image: { avatar: true, src: "/4.svg" },
-    },
-    {
-      key: "/5.svg",
-      text: "Avatar 5",
-      value: "/5.svg",
-      image: { avatar: true, src: "/5.svg" },
-    },
-    {
-      key: "/6.svg",
-      text: "Avatar 6",
-      value: "/6.svg",
-      image: { avatar: true, src: "/6.svg" },
-    },
-    {
-      key: "/7.svg",
-      text: "Avatar 7",
-      value: "/7.svg",
-      image: { avatar: true, src: "/7.svg" },
-    },
-    {
-      key: "/8.svg",
-      text: "Avatar 8",
-      value: "/8.svg",
-      image: { avatar: true, src: "/8.svg" },
-    },
-  ];
+  const [addPost] = useAddPostMutation({
+    update(cache, { data }) {
+      const existing = cache.readQuery<AllPostsQuery>({
+        query: AllPostsDocument,
+      });
 
-  if (loading) return <Loader />;
+      cache.writeQuery({
+        query: AllPostsDocument,
+        data: {
+          queryPost: [
+            ...(data?.addPost?.post ?? []),
+            ...(existing?.queryPost ?? []),
+          ],
+        },
+      });
+    },
+  });
+
+  const avatarsOptions = [];
+
+  for (let i = 1; i < 9; i++) {
+    avatarsOptions.push({
+      key: `/${i}.svg`,
+      text: `Avatar ${i}`,
+      value: `/${i}.svg`,
+      image: { avatar: true, src: `/${i}.svg` },
+    });
+  }
+
+  if (loading || catLoading || postLoading) return <Loader />;
   if (error) return <div>`Error! ${error.message}`</div>;
+  if (postErr) return <div>`Error! ${postErr.message}`</div>;
+  if (catError) return <div>`Error! ${catError.message}`</div>;
+
+  postsData?.queryPost?.map((post) => {
+    const tagsArray = post?.tags?.split(",") || [];
+    tagsArray.forEach((tag) => {
+      if (tagsOptions.findIndex((x) => x["key"] === tag) === -1) {
+        tagsOptions.push({ key: tag, text: tag, value: tag });
+      }
+    });
+  });
 
   const currentSettings = () => {
     setName(data?.getUser?.displayName ? data.getUser.displayName : "");
-    setAvatarImg(data?.getUser?.avatarImg ? data.getUser.avatarImg : "/" + avatar + ".svg");
-    setCurrentUser(user.email)
+    setAvatarImg(
+      data?.getUser?.avatarImg ? data.getUser.avatarImg : "/" + avatar + ".svg"
+    );
+    setCurrentUser(user.email);
   };
 
   const submitSettings = () => {
-    updateUserMutation({variables: {username: currentUser, user:{displayName: name, avatarImg: avatarImg}}})
+    updateUserMutation({
+      variables: {
+        username: currentUser,
+        user: { displayName: name, avatarImg: avatarImg },
+      },
+    });
   };
+
+  const canAddPosts = isAuthenticated && allWriteableCategories.length > 0;
+
+  const writableCategoriesOptions = allWriteableCategories.map((category) => {
+    return { key: category?.id, text: category?.name, value: category?.id };
+  });
+
+  const createTags = (tagsSet: any) => {
+    let tags: string = "";
+    tagsSet.forEach((tag: string) => {
+      tags += tag + ",";
+    });
+    setTags(tags.substring(0, tags.length - 1));
+  };
+
+  const submitPost = () => {
+    setCreatePost(false);
+    const post = {
+      text: text,
+      title: title,
+      tags: tags,
+      likes: 0,
+      category: { id: category },
+      author: { username: user.email },
+      datePublished: new Date().toISOString(),
+      comments: [],
+    };
+    addPost({ variables: { post: post } });
+  };
+
+  const showCreatePost = (
+    <Modal
+      onClose={() => setCreatePost(false)}
+      onOpen={() => setCreatePost(true)}
+      open={createPost}
+    >
+      <Modal.Header>Create Post</Modal.Header>
+      <Modal.Content>
+        <Modal.Description>
+          <Form>
+            <Form.Field>
+              <label>Title</label>
+              <input
+                placeholder="Type title..."
+                style={{
+                  backgroundColor: "#f3f3f3",
+                }}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </Form.Field>
+            <Form.Field>
+              <label>Category</label>
+              <Dropdown
+                placeholder="You must select a category to continue..."
+                fluid
+                search
+                selection
+                options={writableCategoriesOptions}
+                style={{
+                  backgroundColor: "#f3f3f3",
+                }}
+                onChange={(e, data) => setCategory(data.value)}
+              />
+            </Form.Field>
+            <Form.Field>
+              <label>Tags (optional)</label>
+              <Dropdown
+                placeholder="Select appropriate tags..."
+                fluid
+                multiple
+                search
+                selection
+                options={tagsOptions}
+                style={{
+                  backgroundColor: "#f3f3f3",
+                }}
+                onChange={(e, data) => createTags(data.value)}
+              />
+            </Form.Field>
+            <Form.Field>
+              <label>Your Message</label>
+              <TextArea
+                rows="3"
+                placholder="Enter your message..."
+                style={{
+                  backgroundColor: "#f3f3f3",
+                }}
+                onChange={(e, data) => setText(data.value)}
+              />
+            </Form.Field>
+          </Form>
+        </Modal.Description>
+      </Modal.Content>
+      <Modal.Actions>
+        <Button color="black" onClick={() => setCreatePost(false)}>
+          Cancel
+        </Button>
+        <Button
+          content="Submit"
+          labelPosition="right"
+          icon="checkmark"
+          onClick={submitPost}
+          positive
+        />
+      </Modal.Actions>
+    </Modal>
+  );
 
   const showSettings = (
     <Modal
@@ -120,7 +248,7 @@ export function AppHeader() {
                 style={{
                   backgroundColor: "#f3f3f3",
                 }}
-                onChange={(e, data) => setAvatarImg(data.value+"")}
+                onChange={(e, data) => setAvatarImg(data.value + "")}
               />
             </Form.Field>
           </Form>
@@ -143,25 +271,47 @@ export function AppHeader() {
 
   const userItem = isAuthenticated ? (
     <span>
-      <Image
-        src={avatar(data?.getUser?.avatarImg)}
-        avatar
-        style={{ cursor: "pointer" }}
-        onClick={() => {
-          currentSettings();
-          setUpdateSettings(true);
-        }}
-      />
-      <button
-        className="ui button"
-        style={{
-          background: "linear-gradient(135deg, #ff1800, #ff009b)",
-          color: "white",
-        }}
-        onClick={() => logout()}
+      {canAddPosts && (
+        <span>
+          <button
+            className="ui button"
+            style={{
+              background: "linear-gradient(135deg, #ff1800, #ff009b)",
+              color: "white",
+              marginRight: "5px",
+            }}
+            onClick={() => setCreatePost(true)}
+          >
+            Create Post
+          </button>
+        </span>
+      )}
+      <Dropdown
+        item
+        trigger={
+          <Image
+            src={avatar(data?.getUser?.avatarImg)}
+            avatar
+            style={{ cursor: "pointer" }}
+          />
+        }
       >
-        Logout
-      </button>
+        <Dropdown.Menu>
+          <Dropdown.Item>
+            <div
+              onClick={() => {
+                currentSettings();
+                setUpdateSettings(true);
+              }}
+            >
+              Settings
+            </div>
+          </Dropdown.Item>
+          <Dropdown.Item>
+            <div onClick={() => logout()}>Logout</div>
+          </Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
     </span>
   ) : (
     <span>
@@ -181,6 +331,7 @@ export function AppHeader() {
   return (
     <>
       {showSettings}
+      {showCreatePost}
       <div
         className="ui clearing segment"
         style={{

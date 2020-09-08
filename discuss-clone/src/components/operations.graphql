@@ -42,6 +42,12 @@ query allPosts {
   }
 }
 
+query filterPosts($filter: PostFilter) {
+queryPost(filter: $filter) {
+  ...postData
+}
+}
+
 query getPost($id: ID!) {
   getPost(id: $id) {
     ...postData
