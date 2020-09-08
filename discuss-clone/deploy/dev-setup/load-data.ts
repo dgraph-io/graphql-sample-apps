@@ -97,7 +97,7 @@ function makePosts(): Array<AddPostInput> {
       likes: 10,
       category: { name: "General" },
       author: michael,
-      tags: []
+      comments: []
     },
     {
       title: "My first post about Dgraph GraphQL",
@@ -106,7 +106,7 @@ function makePosts(): Array<AddPostInput> {
       likes: 1,
       category: { name: "GraphQL" },
       author: diggy,
-      tags: []
+      comments: []
     },
     {
       title: "Let me quote from the docs",
@@ -115,7 +115,7 @@ function makePosts(): Array<AddPostInput> {
       likes: 5,
       category: { name: "GraphQL" },
       author: michael,
-      tags: []
+      comments: []
     },
     {
       title: "I know some things about Dgraph",
@@ -124,7 +124,7 @@ function makePosts(): Array<AddPostInput> {
       likes: 50,
       category: { name: "Dgraph" },
       author: diggy,
-      tags: []
+      comments: []
     },
     {
       title: "How should I layout my components?",
@@ -132,7 +132,7 @@ function makePosts(): Array<AddPostInput> {
       datePublished: yesterday,
       category: { name: "React" },
       author: michael,
-      tags: []
+      comments: []
     }
   ]
 }

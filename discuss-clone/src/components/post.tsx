@@ -103,7 +103,7 @@ export function Post() {
   const setdata = () => {
     setEditPost(true)
     setTitle(data.getPost?.title + "")
-    data.getPost?.tags.map((tag) => {
+    data.getPost?.tags?.split(/\s+/).map((tag) => {
       setTags((tag: any) => [...tag, tags])
     })
     setText(data?.getPost?.text)
@@ -261,7 +261,7 @@ export function Post() {
         <Header as="h1">{data.getPost.title} </Header>
         <span className="ui red empty mini circular label"></span>
         {" " + data.getPost?.category.name}
-        {data.getPost?.tags.map((tag) => {
+        {data.getPost?.tags?.split(/\s+/).map((tag) => {
           return (
             <Label as="a" basic color="grey">
               {tag}

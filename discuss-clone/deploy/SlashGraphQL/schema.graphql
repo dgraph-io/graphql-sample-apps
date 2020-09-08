@@ -53,7 +53,7 @@ type Post @auth(
   datePublished: DateTime
   likes: Int
   author: User!
-  tags: [String!]! @search(by: [hash])
+  tags: String @search(by: [term])
   category: Category! @hasInverse(field: posts)
   comments: [Comment!]!
 }
