@@ -57,7 +57,7 @@ async function createSchema() {
     "\n\n# Dgraph.Authorization " +
     JSON.stringify(authConfig.Dgraph_Authorization)
 
-  console.log(schema)
+  // console.log(schema)
 
   return schema
 }
@@ -68,6 +68,8 @@ async function installSchema() {
   var slashToken = readlineSync.question("Slash GraphQL API Key : ", {
     hideEchoBack: true,
   })
+
+  console.log("Deploying to : " + process.env.REACT_APP_SLASH_GRAPHQL_ENDPOINT)
 
   const client = new GraphQLClient(
     process.env.REACT_APP_SLASH_GRAPHQL_ENDPOINT + "/admin",
