@@ -1,4 +1,4 @@
-# DevJokes
+# DevJoke
 
 A simple fun applications to post and view all your developer jokes. Code respository is [here](https://github.com/dgraph/DevJokes).
 
