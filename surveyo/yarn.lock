@@ -2075,6 +2075,11 @@
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-1.0.1.tgz#0a851d3bd96498fa25c33ab7278ed3bd65f06c3e"
   integrity sha512-l42BggppR6zLmpfU6fq9HEa2oGPEI8yrSPL3GITjfRInppYFahObbIQOQK3UGxEnyQpltZLaPe75046NOZQikw==
 
+"@types/stopword@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@types/stopword/-/stopword-0.3.0.tgz#d246496ce04fa222b55a926e1166482d8c37606b"
+  integrity sha512-BPQgYJBb+Y7UC3pvU8J0OgF3VMG0kdLHWr10WmYlDUo+EW1ljX6OfTGziiFM3pG5+8a1zdyWtRPXiVldd9DrPA==
+
 "@types/testing-library__dom@*":
   version "7.5.0"
   resolved "https://registry.yarnpkg.com/@types/testing-library__dom/-/testing-library__dom-7.5.0.tgz#e0a00dd766983b1d6e9d10d33e708005ce6ad13e"
@@ -11209,6 +11214,11 @@ stealthy-require@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/stealthy-require/-/stealthy-require-1.1.1.tgz#35b09875b4ff49f26a777e509b3090a3226bf24b"
   integrity sha1-NbCYdbT/SfJqd35QmzCQoyJr8ks=
+
+stopword@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/stopword/-/stopword-1.0.1.tgz#b91f873c9d3e870af47189c84423eb0280e9dfbc"
+  integrity sha512-mcBsIyr5/cJ0QMlXd8P5vtFyvHPTP8m9mOs8OCu84uAOc9QVRpBUz9KhHu0T5rZDycu5NvHSu3/m1Qz7m2ZCiw==
 
 stream-browserify@^2.0.1:
   version "2.0.2"

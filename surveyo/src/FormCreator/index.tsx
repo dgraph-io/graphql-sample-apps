@@ -20,9 +20,8 @@ import update from 'immutability-helper';
 import {useMutation} from '@apollo/client';
 import {DownOutlined} from '@ant-design/icons';
 
-
-import { useForm } from 'antd/lib/form/Form';
-import { useAuth0 } from '@auth0/auth0-react';
+import {useForm} from 'antd/lib/form/Form';
+import {useAuth0} from '@auth0/auth0-react';
 import moment from 'moment';
 import {
   DeleteOutlined,
@@ -31,6 +30,7 @@ import {
 } from '@ant-design/icons';
 
 import {ADD_FORM} from './query';
+import NetPromoterScore from '../Form/NetPromoterScore';
 
 const formItemLayout = {
   labelCol: {
@@ -83,9 +83,9 @@ function QuestionCard({question, updateQuestion, deleteQuestion}: any) {
             updateQuestion({...question, required: e.target.checked})
           }
         >
-          Want this to be a required field
+          Required
         </Checkbox>
-        {createQuestionField({question, updateQuestion})}
+        <div>{createQuestionField({question, updateQuestion})}</div>
       </Card>
     </div>
   );
@@ -217,10 +217,12 @@ function createQuestionField({question, updateQuestion}: any) {
           <Rate count={count} allowHalf />
         </>
       );
-    default:
+    case 'Text':
       return (
         <Input.TextArea placeholder="Short answer here" allowClear disabled />
       );
+    case 'NetPromoterScore':
+      return <NetPromoterScore disabled />;
   }
 }
 
@@ -251,6 +253,7 @@ function FormCreator() {
       <Menu.Item key="SingleChoice">Multiple Choice</Menu.Item>
       <Menu.Item key="Date">Date</Menu.Item>
       <Menu.Item key="Rating">Rating</Menu.Item>
+      <Menu.Item key="NetPromoterScore">Net Promoter Score</Menu.Item>
     </Menu>
   );
 

@@ -9,6 +9,7 @@
 
 export enum FieldType {
   Date = "Date",
+  NetPromoterScore = "NetPromoterScore",
   Rating = "Rating",
   SingleChoice = "SingleChoice",
   Text = "Text",
@@ -30,6 +31,7 @@ export interface EntryRef {
   id?: string | null;
   field?: FieldRef | null;
   date?: any | null;
+  netPromoterScore?: number | null;
   rating?: number | null;
   singleChoice?: FieldOptionRef | null;
   text?: string | null;

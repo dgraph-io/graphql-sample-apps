@@ -9,6 +9,7 @@ import {PageHeader, Row, Col, Card, Result} from 'antd';
 import {Form, Typography} from 'antd';
 import {useMutation} from '@apollo/client';
 import update from 'immutability-helper';
+import NetPromoterScore from './NetPromoterScore';
 
 export function SyForm(props: SyFormProps) {
   const [state, setState] = useState<SyFormState>({
@@ -54,6 +55,14 @@ export function SyForm(props: SyFormProps) {
         })
       );
     },
+    NetPromoterScore: (event: any) => {
+      const value = event.target.value;
+      setState(state =>
+        update(state, {
+          entries: {[idx]: {$merge: {netPromoterScore: value}}},
+        })
+      );
+    },
     Radio: (event: any) => {
       const value = event.target.value;
       setState(state =>
@@ -77,6 +86,10 @@ export function SyForm(props: SyFormProps) {
       case 'Date':
         return (
           <DatePicker mode="date" onChange={handleChange(idx).DatePicker} />
+        );
+      case 'NetPromoterScore':
+        return (
+          <NetPromoterScore onChange={handleChange(idx).NetPromoterScore} />
         );
       case 'Rating':
         return (
