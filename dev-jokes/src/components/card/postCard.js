@@ -371,7 +371,7 @@ export default function PostCard({
 
 function TagList({ tags }) {
   return (
-    <div>
+    <div style={{display:"flex", flexWrap:"wrap"}}>
       {tags.map((tag) => (
         <Box component="div" display="inline" p={1} m={1} bgcolor="yellow">
           {tag}
