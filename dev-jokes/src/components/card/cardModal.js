@@ -39,6 +39,7 @@ const CardModal = (props) => {
           <Fade in={open}>
             <div 
               style={{
+                  outline: "none",
                   position: 'absolute', 
                   left: '50%', 
                   top: '50%',

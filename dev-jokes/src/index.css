@@ -47,6 +47,10 @@ a {
     0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
+.card:focus{
+  outline: none;
+}
+
 .pic {
   min-height: 200px;
   object-fit: contain;
