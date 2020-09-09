@@ -23,15 +23,6 @@ export const dataURItoBlob = (dataURI) => {
   return new Blob([new Uint8Array(array)], {type: 'image/jpeg'});
 }
 
-export const isPresentInListOfDict = (list, key, value) => {
-  list.forEach((item) => {
-    if (item[key] === value) {
-      return true;
-    }
-  });
-  return false;
-}
-
 // Sort by: new, old, liked
 export const sortBy = (data, by) => {
   let newData;

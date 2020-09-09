@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import PostCard from "./postCard";
 import Modal from '@material-ui/core/Modal';
 import {GET_POST_BY_ID } from "../../gql/queryData.js";
@@ -15,6 +15,7 @@ const CardModal = (props) => {
       {
         variables: {postId: postId}
       });
+    const location = useLocation();
     
     useEffect( () => {
       if(!loading && !error) {
@@ -24,7 +25,13 @@ const CardModal = (props) => {
 
     const handleClose = () => {
       setOpen(false);
-      history.goBack();
+      // When a single post is shared (say through twitter),
+      // we must redirect to home, when modal is closed
+      console.log(location)
+      if (location.state === undefined)
+        history.push("/")
+      else
+        history.goBack();
     };
 
     return (

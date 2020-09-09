@@ -15,10 +15,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export function Sort({cb}) {
+export function Selector({label, cb, options}) {
   const classes = useStyles();
   const [state, setState] = React.useState({
-    sort: '',
     name: 'hai',
   });
 
@@ -34,21 +33,20 @@ export function Sort({cb}) {
 
   return (
     <FormControl className={classes.formControl}>
-      <InputLabel htmlFor="outlined-age-native-simple">Sort By</InputLabel>
+      <InputLabel htmlFor="outlined-age-native-simple">{label}</InputLabel>
       <Select
         native
-        value={state.age}
         onChange={handleChange}
-        label="Sort By"
+        label={label}
         inputProps={{
-          name: 'sort by',
+          name: label,
           id: 'outlined-age-native-simple',
         }}
       >
         <option aria-label="None" value="" />
-        <option value="new">Newest</option>
-        <option value="old">Oldest</option>
-        <option value="liked">Most Liked</option>
+        {options.map((option) => (
+          <option value={option["value"]}> {option["name"]}</option>
+        ))}
       </Select>
     </FormControl>
   );

@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Content = ({children, background}) => {
+const Content = ({children}) => {
   const classes = useStyles();
     return(
       <main className={clsx(classes.content, classes.contentShift)}>
