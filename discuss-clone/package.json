@@ -21,13 +21,14 @@
     "react-scripts": "3.4.1",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.88.2",
-    "tailwindcss": "^1.7.6",
+    "tailwindcss": "^1.8.5",
     "typescript": "~3.7.2",
     "yarn": "^1.22.5"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "npm run build:css && react-scripts start",
+    "build": "npm run build:css && react-scripts build",
+    "build:css": "postcss src/styles/tailwind.css -o src/styles/main.css",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "generate-types": "graphql-codegen --config codegen.yml",
@@ -63,11 +64,13 @@
     "@types/node": "^12.0.0",
     "@types/react-router-dom": "^5.1.5",
     "auth0": "^2.27.1",
+    "autoprefixer": "^9.8.6",
     "cross-fetch": "^3.0.5",
     "dotenv": "^8.2.0",
     "faker": "^4.1.0",
     "graphql-request": "^3.0.0",
     "jwks-rsa": "^1.9.0",
+    "postcss-cli": "^7.1.2",
     "readline-sync": "^1.4.10",
     "ts-node": "^8.10.2"
   }

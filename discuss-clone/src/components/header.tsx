@@ -84,6 +84,7 @@ export function AppHeader() {
   };
 
   const submitSettings = () => {
+    setUpdateSettings(false)
     updateUserMutation({
       variables: {
         username: currentUser,
@@ -127,9 +128,6 @@ export function AppHeader() {
               <label>Title</label>
               <input
                 placeholder="Type title..."
-                style={{
-                  backgroundColor: "#f3f3f3",
-                }}
                 onChange={(e) => setTitle(e.target.value)}
               />
             </Form.Field>
@@ -141,9 +139,6 @@ export function AppHeader() {
                 search
                 selection
                 options={writableCategoriesOptions}
-                style={{
-                  backgroundColor: "#f3f3f3",
-                }}
                 onChange={(e, data) => setCategory(data.value)}
               />
             </Form.Field>
@@ -151,9 +146,6 @@ export function AppHeader() {
               <label>Tags (optional)</label>
                 <input
                   placeholder="Enter space separated tags..."
-                  style={{
-                    backgroundColor: "#f3f3f3",
-                  }}
                   onChange={(e) => setTags(e.target.value)}
                 />
             </Form.Field>
@@ -162,9 +154,6 @@ export function AppHeader() {
               <TextArea
                 rows="3"
                 placholder="Enter your message..."
-                style={{
-                  backgroundColor: "#f3f3f3",
-                }}
                 onChange={(e, data) => setText(data.value)}
               />
             </Form.Field>
@@ -200,9 +189,6 @@ export function AppHeader() {
               <label>Display Name</label>
               <input
                 placeholder="Update display name..."
-                style={{
-                  backgroundColor: "#f3f3f3",
-                }}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
@@ -215,9 +201,6 @@ export function AppHeader() {
                 selection
                 options={avatarsOptions}
                 defaultValue={avatarImg}
-                style={{
-                  backgroundColor: "#f3f3f3",
-                }}
                 onChange={(e, data) => setAvatarImg(data.value + "")}
               />
             </Form.Field>
@@ -243,17 +226,12 @@ export function AppHeader() {
     <span>
       {canAddPosts && (
         <span>
-          <button
-            className="ui button"
-            style={{
-              background: "linear-gradient(135deg, #ff1800, #ff009b)",
-              color: "white",
-              marginRight: "5px",
-            }}
+          <Button
+            className="dgraph-btn mr-1"
             onClick={() => setCreatePost(true)}
           >
             Create Post
-          </button>
+          </Button>
         </span>
       )}
       <Dropdown
@@ -262,7 +240,7 @@ export function AppHeader() {
           <Image
             src={avatar(data?.getUser?.avatarImg)}
             avatar
-            style={{ cursor: "pointer" }}
+            className="cursor-pointer"
           />
         }
       >
@@ -285,16 +263,12 @@ export function AppHeader() {
     </span>
   ) : (
     <span>
-      <button
-        className="ui button"
-        style={{
-          background: "linear-gradient(135deg, #ff1800, #ff009b)",
-          color: "white",
-        }}
+      <Button
+        className="dgraph-btn"
         onClick={() => loginWithRedirect()}
       >
         Log In
-      </button>
+      </Button>
     </span>
   );
 
@@ -302,48 +276,25 @@ export function AppHeader() {
     <>
       {showSettings}
       {showCreatePost}
-      <div
-        className="ui clearing segment"
-        style={{
-          border: "0px",
-          borderRadius: "0px",
-          boxShadow: "inset 0 0 0 10px #eaeaea",
-          padding: "1.5em 1.5em",
-          paddingTop: "0px",
-        }}
-      >
+      <div className="ui clearing segment header-seg">
         <h3
-          className="ui right floated header"
-          style={{ paddingRight: "7rem", transform: "translate(-10px, 50px)" }}
+          className="ui right floated header header-seg-right"
         >
           {userItem}
         </h3>
         <h3
-          className="ui left floated header"
-          style={{ paddingLeft: "7rem", transform: "translate(-23px, 40px)" }}
+          className="ui left floated header header-seg-left"
         >
           <Link to="/">
-            <div style={{ display: "flex" }}>
+            <div className="flex">
               <span>
-                <Image
-                  size="tiny"
-                  src="/diggy.png"
-                  style={{ marginRight: "1.5em" }}
-                />{" "}
+                <Image size="tiny" src="/diggy.png" className="mr-5" />{" "}
               </span>
               <div>
-                <p
-                  style={{
-                    background: "-webkit-linear-gradient(#ff1800, #ff009b)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    marginBottom: "0px",
-                    fontSize: "x-large",
-                  }}
-                >
+                <p className="header-text">
                   Dgraph
                 </p>
-                <p style={{ fontSize: "smaller" }}>DISCUSS</p>
+                <p className="t-size">DISCUSS</p>
               </div>
             </div>
           </Link>

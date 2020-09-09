@@ -64,7 +64,7 @@ export function Post() {
   if (loading || userLoading || catLoading) return <Loader />
   if (error) {
     return (
-      <Container text style={{ marginTop: "7em" }}>
+      <Container text className="mt-24">
         <Header as="h1">Ouch! That page didn't load</Header>
         <p>Here's why : {error.message}</p>
       </Container>
@@ -72,20 +72,20 @@ export function Post() {
   }
   if (catError) {
     return (
-      <Container text style={{ marginTop: "7em" }}>
+      <Container text className="mt-24">
         <Header as="h1">Ouch! That page didn't load</Header>
         <p>Here's why : {catError.message}</p>
       </Container>
-    )
+    );
   }
   if (!data?.getPost) {
     return (
-      <Container text style={{ marginTop: "7em" }}>
+      <Container text className="mt-24">
         <Header as="h1">This is not a post</Header>
         <p>You've navigated to a post that doesn't exist.</p>
         <p>That most likely means that the id {id} isn't the id of post.</p>
       </Container>
-    )
+    );
   }
 
   const canEditThisPost = data.getPost.author.username === user?.email
@@ -155,9 +155,6 @@ export function Post() {
               <label>Title</label>
               <input
                 placeholder="Type title..."
-                style={{
-                  backgroundColor: "#f3f3f3",
-                }}
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
               />
@@ -171,9 +168,6 @@ export function Post() {
                 selection
                 defaultValue={category}
                 options={writableCategoriesOptions}
-                style={{
-                  backgroundColor: "#f3f3f3",
-                }}
                 onChange={(e, data) => setCategory(data.value)}
               />
             </Form.Field>
@@ -181,9 +175,6 @@ export function Post() {
               <label>Tags (optional)</label>
               <input
                 placeholder="Enter space separated tags..."
-                style={{
-                  backgroundColor: "#f3f3f3",
-                }}
                 value={tags}
                 onChange={(e) => setTags(e.target.value)}
               />
@@ -193,9 +184,6 @@ export function Post() {
               <TextArea
                 rows="3"
                 placholder="Enter your message..."
-                style={{
-                  backgroundColor: "#f3f3f3",
-                }}
                 value={text}
                 onChange={(e, data) => setText(data.value)}
               />
@@ -219,7 +207,7 @@ export function Post() {
   );
 
   const comments = (
-    <div style={{ marginTop: "10px" }}>
+    <div className="mt-3">
       {data.getPost.comments.map((comment) => {
         return (
           <Comment.Group>
@@ -246,23 +234,30 @@ export function Post() {
   )
 
   return (
-    <div style={{ margin: "2.5rem 7rem 7rem 7rem" }}>
+    <div className="layout-margin">
       <div>
         <Header as="h1">{data.getPost.title} </Header>
         <span className="ui red empty mini circular label"></span>
         {" " + data.getPost?.category.name + "  "}
-        {data.getPost?.tags?.trim().split(/\s+/).map((tag) => {
-          if (tag !== "") {
-            return (
-              <Label as="a" basic color="grey" key={tag}>
-                {tag}
-              </Label>
-            );
-          }
-        })}
+        {data.getPost?.tags
+          ?.trim()
+          .split(/\s+/)
+          .map((tag) => {
+            if (tag !== "") {
+              return (
+                <Label as="a" basic color="grey" key={tag}>
+                  {tag}
+                </Label>
+              );
+            }
+          })}
       </div>
       <Header as="h4" image>
-        <Image src={avatar(data.getPost?.author.avatarImg)} rounded size="mini" />
+        <Image
+          src={avatar(data.getPost?.author.avatarImg)}
+          rounded
+          size="mini"
+        />
         <Header.Content>
           {data.getPost?.author.displayName}
           <Header.Subheader>{dateStr}</Header.Subheader>
@@ -271,58 +266,43 @@ export function Post() {
       {paras}
       {showEditPost}
       {canEditThisPost && (
-        <div style={{ marginTop: "30px" }}>
-          <button
-            style={{
-              background: "linear-gradient(135deg, #ff1800, #ff009b)",
-              color: "white",
-            }}
-            className="ui button"
-            onClick={setdata}
-          >
+        <div className="mt-4">
+          <Button className="dgraph-btn" onClick={setdata}>
             <i className="pencil icon"></i>Edit Post
-          </button>
+          </Button>
         </div>
       )}
       {comments}
       {canPostComments && (
         <div>
-          <div style={{ display: "flex", marginTop: "50px" }}>
+          <div className="flex mt-12">
             <Image
               src={avatar(currentUser?.getUser?.avatarImg)}
               avatar
               size="mini"
-              style={{ height: "35px" }}
+              className="avatar-align"
             />
-            <span style={{ marginLeft: "10px" }}>
-              <Form>
+            <span className="ml-3">
+              <Form className="comment-box">
                 <TextArea
                   placeholder={`Type here to reply to ${data.getPost.author.displayName}...`}
-                  style={{ minHeight: 100, width: "350px" }}
                   onChange={(
                     event: FormEvent<HTMLTextAreaElement>,
                     data: TextAreaProps
                   ) => {
-                    setCommentText(data.value?.toString() ?? "")
+                    setCommentText(data.value?.toString() ?? "");
                   }}
                 />
               </Form>
-              <div style={{ marginTop: "10px" }}>
-                <button
-                  style={{
-                    background: "linear-gradient(135deg, #ff1800, #ff009b)",
-                    color: "white",
-                  }}
-                  className="ui button"
-                  onClick={addComment}
-                >
+              <div className="mt-3">
+                <Button className="dgraph-btn" onClick={addComment}>
                   Post comment
-                </button>
+                </Button>
               </div>
             </span>
           </div>
         </div>
       )}
     </div>
-  )
+  );
 }

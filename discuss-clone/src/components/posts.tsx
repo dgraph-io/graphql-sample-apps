@@ -7,6 +7,7 @@ import {
   Table,
   Dropdown,
   Input,
+  Button,
 } from "semantic-ui-react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useAllPostsQuery, useFilterPostsLazyQuery } from "./types/operations";
@@ -25,7 +26,6 @@ export function PostFeed() {
 
   const {
     allCategories,
-    allWriteableCategories,
     loading: catLoading,
     error: catError,
   } = useCategories(user?.email ?? "");
@@ -100,13 +100,14 @@ export function PostFeed() {
         </Table.Cell>
         <Table.Cell>
           {tagsArray.map((tag) => {
-            if (tag != "") {
+            if (tag !== "") {
               return (
                 <Label as="a" basic color="grey" key={tag}>
                   {tag}
                 </Label>
               );
             }
+            return;
           })}
         </Table.Cell>
         <Table.Cell>
@@ -126,11 +127,11 @@ export function PostFeed() {
 
   return (
     <>
-      <div style={{ display: "flex", marginBottom: "2rem" }}>
+      <div className="flex mb-10">
         <Input
           icon="search"
           placeholder="Type any keywords..."
-          style={{ marginRight: "10px", backgroundColor: "#f3f3f3" }}
+          className="mr-3"
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
         />
@@ -139,38 +140,25 @@ export function PostFeed() {
           fluid
           search
           selection
-          style={{
-            marginRight: "10px",
-            width: "20%",
-            backgroundColor: "#f3f3f3",
-          }}
+          className="mr-3 category-field"
           defaultValue={category}
           options={categoriesOptions}
           onChange={(e, data: any) => setCategory(data.value)}
         />
         <Input
           placeholder="Enter space separated tags..."
-          style={{
-            marginRight: "10px",
-            width: "41%",
-            backgroundColor: "#f3f3f3",
-          }}
+          className="mr-3 tags-field"
           value={tags}
           onChange={(e) => setTags(e.target.value)}
         />
-        <button
-          className="ui button"
-          style={{
-            background: "linear-gradient(135deg, #ff1800, #ff009b)",
-            color: "white",
-            marginRight: "5px",
-          }}
+        <Button
+          className="dgraph-btn mr-1"
           onClick={searchPosts}
         >
           Search
-        </button>
+        </Button>
       </div>
-      <Table basic="very" collapsing style={{ width: "100%" }}>
+      <Table basic="very">
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>Posts</Table.HeaderCell>

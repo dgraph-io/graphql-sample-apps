@@ -14,3 +14,44 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.ui.button.dgraph-btn {
+  background: linear-gradient(135deg, #ff1800, #ff009b);
+  color: white;
+}
+
+.ui.segment.header-seg {
+  border: 0px;
+  border-radius: 0px;
+  box-shadow: inset 0 0 0 10px #eaeaea;
+  padding: 1.5em 1.5em;
+  padding-top: 0px;
+}
+
+.ui.floated.header.header-seg-right {
+  padding-right: 7rem;
+  transform: translate(-10px, 50px);
+}
+
+.ui.floated.header.header-seg-left {
+  padding-left: 7rem;
+  transform: translate(-23px, 40px);
+}
+
+.ui.mini.image.avatar-align {
+  align-self: flex-start;
+}
+
+.ui.form.comment-box textarea {
+  min-height: 100px;
+  width: 350px;
+}
+
+.ui.fluid.dropdown.category-field {
+  width: 20%;
+  min-width: fit-content;
+}
+
+.ui.mini.image.lightning-logo {
+  height: 25px;
+}
