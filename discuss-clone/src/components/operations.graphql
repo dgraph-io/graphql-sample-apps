@@ -51,10 +51,44 @@ query queryPermission {
   }
 }
 
-query filterPosts($filter: PostFilter) {
-queryPost(filter: $filter) {
-  ...postData
-}
+query filterPosts($filter: PostFilter, $categoryID: [ID!]) {
+  queryPost(filter: $filter) @cascade {
+    id
+    title
+    text
+    tags
+    datePublished
+    likes
+    category(filter: { id: $categoryID }) {
+      id
+      name
+    }
+    author {
+      username
+      displayName
+      avatarImg
+    }
+    comments {
+      id
+      text
+      commentsOn {
+        comments {
+          id
+          text
+          author {
+            username
+            displayName
+            avatarImg
+          }
+        }
+      }
+      author {
+        username
+        displayName
+        avatarImg
+      }
+    }
+  }
 }
 
 query getPost($id: ID!) {

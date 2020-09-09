@@ -34,6 +34,7 @@ export function PostFeed() {
   const [category, setCategory]: any = useState("");
   const [tags, setTags]: any = useState("");
   const [searchStatus, setSearchStatus] = useState(false);
+  const categoriesSet: any = [];
 
   if (loading || catLoading || filterLoading) return <Loader />;
   if (error) return `Error! ${error.message}`;
@@ -41,6 +42,7 @@ export function PostFeed() {
   if (filterError) return `Error! ${filterError.message}`;
 
   const categoriesOptions = allCategories.map((category) => {
+    categoriesSet.push(category?.id)
     return { key: category?.id, text: category?.name, value: category?.id };
   });
 
@@ -67,6 +69,7 @@ export function PostFeed() {
     getFilteredPosts({
       variables: {
         filter: filter,
+        categoryID: category? [category]:categoriesSet
       },
     });
   };

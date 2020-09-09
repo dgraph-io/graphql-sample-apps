@@ -60,6 +60,7 @@ export type QueryPermissionQuery = (
 
 export type FilterPostsQueryVariables = Types.Exact<{
   filter?: Types.Maybe<Types.PostFilter>;
+  categoryID?: Types.Maybe<Array<Types.Scalars['ID']>>;
 }>;
 
 
@@ -67,7 +68,31 @@ export type FilterPostsQuery = (
   { __typename?: 'Query' }
   & { queryPost?: Types.Maybe<Array<Types.Maybe<(
     { __typename?: 'Post' }
-    & PostDataFragment
+    & Pick<Types.Post, 'id' | 'title' | 'text' | 'tags' | 'datePublished' | 'likes'>
+    & { category: (
+      { __typename?: 'Category' }
+      & Pick<Types.Category, 'id' | 'name'>
+    ), author: (
+      { __typename?: 'User' }
+      & Pick<Types.User, 'username' | 'displayName' | 'avatarImg'>
+    ), comments: Array<(
+      { __typename?: 'Comment' }
+      & Pick<Types.Comment, 'id' | 'text'>
+      & { commentsOn: (
+        { __typename?: 'Post' }
+        & { comments: Array<(
+          { __typename?: 'Comment' }
+          & Pick<Types.Comment, 'id' | 'text'>
+          & { author: (
+            { __typename?: 'User' }
+            & Pick<Types.User, 'username' | 'displayName' | 'avatarImg'>
+          ) }
+        )> }
+      ), author: (
+        { __typename?: 'User' }
+        & Pick<Types.User, 'username' | 'displayName' | 'avatarImg'>
+      ) }
+    )> }
   )>>> }
 );
 
@@ -300,12 +325,46 @@ export type QueryPermissionQueryHookResult = ReturnType<typeof useQueryPermissio
 export type QueryPermissionLazyQueryHookResult = ReturnType<typeof useQueryPermissionLazyQuery>;
 export type QueryPermissionQueryResult = ApolloReactCommon.QueryResult<QueryPermissionQuery, QueryPermissionQueryVariables>;
 export const FilterPostsDocument = gql`
-    query filterPosts($filter: PostFilter) {
-  queryPost(filter: $filter) {
-    ...postData
+    query filterPosts($filter: PostFilter, $categoryID: [ID!]) {
+  queryPost(filter: $filter) @cascade {
+    id
+    title
+    text
+    tags
+    datePublished
+    likes
+    category(filter: {id: $categoryID}) {
+      id
+      name
+    }
+    author {
+      username
+      displayName
+      avatarImg
+    }
+    comments {
+      id
+      text
+      commentsOn {
+        comments {
+          id
+          text
+          author {
+            username
+            displayName
+            avatarImg
+          }
+        }
+      }
+      author {
+        username
+        displayName
+        avatarImg
+      }
+    }
   }
 }
-    ${PostDataFragmentDoc}`;
+    `;
 
 /**
  * __useFilterPostsQuery__
@@ -320,6 +379,7 @@ export const FilterPostsDocument = gql`
  * const { data, loading, error } = useFilterPostsQuery({
  *   variables: {
  *      filter: // value for 'filter'
+ *      categoryID: // value for 'categoryID'
  *   },
  * });
  */
