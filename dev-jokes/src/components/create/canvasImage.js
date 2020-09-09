@@ -12,6 +12,12 @@ import BGGallery from "./bgGallery";
 
 const IMAGES =  [
     {
+        src: "/background/light-green.jpg",
+        thumbnail: "/background/light-green.jpg",
+        thumbnailWidth: 200,
+        thumbnailHeight: 200,
+    },
+    {
         src: "/background/blue.jpg",
         thumbnail: "/background/blue.jpg",
         thumbnailWidth: 200,
@@ -22,12 +28,6 @@ const IMAGES =  [
     {
         src: "/background/green.jpg",
         thumbnail: "/background/green.jpg",
-        thumbnailWidth: 200,
-        thumbnailHeight: 200,
-    },
-    {
-        src: "/background/light-green.jpg",
-        thumbnail: "/background/light-green.jpg",
         thumbnailWidth: 200,
         thumbnailHeight: 200,
     },

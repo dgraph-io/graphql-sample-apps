@@ -93,6 +93,7 @@ export default function PostCard({
   updateCache,
   id,
   location,
+  clickable
 }) {
   const classes = useStyles();
   const { isLoading, user } = useAuth0();
@@ -250,6 +251,7 @@ export default function PostCard({
 
   return (
     <div className={"card"} style={{borderRadius: "10px"}}>
+      { clickable ?
       <Link
         to={{
           pathname: `/post/${id}`,
@@ -258,7 +260,10 @@ export default function PostCard({
       >
         <img src={img} className="pic" alt={"preview"} width={"100%"} height={"auto"} 
         style={{borderRadius: "10px"}}/>
-      </Link>
+      </Link> : 
+        <img src={img} className="pic" alt={"preview"} width={"100%"} height={"auto"} 
+        style={{borderRadius: "10px"}}/>
+      }
       <CardActions disableSpacing style={{padding: "0"}}>
         {isApproved ? (
           <>

@@ -39,6 +39,7 @@ const MasonaryGrid = ({data, isApproved, allTags, updateCache}) => {
           location={location}
           allTags={allTags}
           updateCache={updateCache}
+          clickable={true}
         />
       ))}
     </Masonry>
