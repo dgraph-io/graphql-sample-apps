@@ -1,0 +1,13 @@
+query hasCommentsCategoryAdmin($username: String!) {
+  queryComment {
+    commentsOn {
+      category {
+        permissions(filter: { role: { eq: ADMINISTRATOR } }) {
+          user(filter: { username: { eq: $username } }) {
+            username
+          }
+        }
+      }
+    }
+  }
+}

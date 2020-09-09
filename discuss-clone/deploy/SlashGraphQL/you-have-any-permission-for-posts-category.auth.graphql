@@ -1,7 +1,7 @@
-query hasWritePermission($username: String!) {
+query youHaveAnyPostPermission($username: String!) {
   queryPost {
     category {
-      permissions(filter: { role: { eq: WRITER }}) {
+      permissions {
         user(filter: { username: { eq: $username } }) {
           username
         }

@@ -1,8 +1,5 @@
-query authorAndHasWritePermission($username: String!) {
+query youHaveWritePermissionToComment($username: String!) {
   queryComment {
-    author(filter: { username: { eq: $username } }) {
-      username
-    }
     commentsOn {
       category {
         permissions(filter: { role: { eq: WRITER } }) {

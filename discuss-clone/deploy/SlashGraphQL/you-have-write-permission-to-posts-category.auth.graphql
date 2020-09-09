@@ -1,0 +1,14 @@
+query youAuthoredAndHaveWritePermissionForPost($username: String!) {
+  queryPost {
+    author(filter: { username: { eq: $username } }) {
+      username
+    }
+    category {
+      permissions(filter: { role: { eq: WRITER } }) {
+        user(filter: { username: { eq: $username } }) {
+          username
+        }
+      }
+    }
+  }
+}

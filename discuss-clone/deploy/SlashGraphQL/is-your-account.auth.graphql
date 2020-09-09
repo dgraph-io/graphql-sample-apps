@@ -1,4 +1,4 @@
-query isThisUser($username: String!) {
+query isYourAccount($username: String!) {
   queryUser(filter: { username: { eq: $username } }) {
     username
   }
