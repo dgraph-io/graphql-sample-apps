@@ -40,6 +40,7 @@ query {
     fields(order: { asc: order }) {
       entries {
         date
+        netPromoterScore
         rating
         singleChoice @cascade {
           title
