@@ -42,6 +42,15 @@ query allPosts {
   }
 }
 
+query queryPermission {
+  queryPermission(filter: { role: { eq: ADMINISTRATOR } }) {
+    user {
+      username
+    }
+    role
+  }
+}
+
 query filterPosts($filter: PostFilter) {
 queryPost(filter: $filter) {
   ...postData

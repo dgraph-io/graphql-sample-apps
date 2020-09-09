@@ -17,6 +17,7 @@ import {
   AllPostsDocument,
   AllPostsQuery,
   namedOperations,
+  useQueryPermissionQuery
 } from "./types/operations";
 import { avatar } from "./avatar";
 import { useCategories } from "./categories";
@@ -31,12 +32,26 @@ export function AppHeader() {
   const [name, setName] = useState("");
   const [avatarImg, setAvatarImg] = useState("");
   const [currentUser, setCurrentUser] = useState("");
-  const { loginWithRedirect, logout, user, isAuthenticated } = useAuth0();
+  const [adminStatus, setAdminStatus] = useState(false);
+  const [tokenValue, setTokenValue] = useState("");
+  const {
+    loginWithRedirect,
+    logout,
+    user,
+    isAuthenticated,
+    getIdTokenClaims,
+  } = useAuth0();
+
   const { data, loading, error } = useGetUserQuery({
     variables: { username: isAuthenticated ? user.email : "" },
   });
+  const { data: perm, loading: permLoading, error: permError } = useQueryPermissionQuery();
   const [updateUserMutation] = useUpdateUserMutation({
-    refetchQueries: [namedOperations.Query.getUser, namedOperations.Query.getPost, namedOperations.Query.allPosts],
+    refetchQueries: [
+      namedOperations.Query.getUser,
+      namedOperations.Query.getPost,
+      namedOperations.Query.allPosts,
+    ],
   });
   const {
     allWriteableCategories,
@@ -74,11 +89,22 @@ export function AppHeader() {
     });
   }
 
-  if (loading || catLoading ) return <Loader />;
+  if (loading || catLoading || permLoading) return <Loader />;
   if (error) return <div>`Error! ${error.message}`</div>;
   if (catError) return <div>`Error! ${catError.message}`</div>;
 
   const currentSettings = () => {
+    const permData = perm?.queryPermission;
+    permData?.forEach( async (perm) => {
+      if (perm?.user.username === user.email) {
+        setAdminStatus(true)
+        const token = isAuthenticated ? await getIdTokenClaims() : "";
+        const tokenVal = token ? token.__raw : "";
+        setTokenValue(tokenVal)
+        return
+      }
+    })
+    
     setName(data?.getUser?.displayName ? data.getUser.displayName : "");
     setAvatarImg(
       data?.getUser?.avatarImg ? data.getUser.avatarImg : "/" + avatar + ".svg"
@@ -87,7 +113,7 @@ export function AppHeader() {
   };
 
   const submitSettings = () => {
-    setUpdateSettings(false)
+    setUpdateSettings(false);
     updateUserMutation({
       variables: {
         username: currentUser,
@@ -147,10 +173,10 @@ export function AppHeader() {
             </Form.Field>
             <Form.Field>
               <label>Tags (optional)</label>
-                <input
-                  placeholder="Enter space separated tags..."
-                  onChange={(e) => setTags(e.target.value)}
-                />
+              <input
+                placeholder="Enter space separated tags..."
+                onChange={(e) => setTags(e.target.value)}
+              />
             </Form.Field>
             <Form.Field>
               <label>Your Message</label>
@@ -207,6 +233,15 @@ export function AppHeader() {
                 onChange={(e, data) => setAvatarImg(data.value + "")}
               />
             </Form.Field>
+            {adminStatus && tokenValue && (
+              <Form.Field>
+                <label>Token</label>
+                <TextArea
+                  readOnly
+                  value={tokenValue}
+                />
+              </Form.Field>
+            )}
           </Form>
         </Modal.Description>
       </Modal.Content>
@@ -266,10 +301,7 @@ export function AppHeader() {
     </span>
   ) : (
     <span>
-      <Button
-        className="dgraph-btn"
-        onClick={() => loginWithRedirect()}
-      >
+      <Button className="dgraph-btn" onClick={() => loginWithRedirect()}>
         Log In
       </Button>
     </span>
@@ -280,23 +312,15 @@ export function AppHeader() {
       {showSettings}
       {showCreatePost}
       <div className="ui clearing segment header-seg">
-        <h3
-          className="ui right floated header header-seg-right"
-        >
-          {userItem}
-        </h3>
-        <h3
-          className="ui left floated header header-seg-left"
-        >
+        <h3 className="ui right floated header header-seg-right">{userItem}</h3>
+        <h3 className="ui left floated header header-seg-left">
           <Link to="/">
             <div className="flex">
               <span>
                 <Image size="tiny" src="/diggy.png" className="mr-5" />{" "}
               </span>
               <div>
-                <p className="header-text">
-                  Dgraph
-                </p>
+                <p className="header-text">Dgraph</p>
                 <p className="t-size">DISCUSS</p>
               </div>
             </div>

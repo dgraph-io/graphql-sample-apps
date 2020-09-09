@@ -43,6 +43,21 @@ export type AllPostsQuery = (
   )>>> }
 );
 
+export type QueryPermissionQueryVariables = Types.Exact<{ [key: string]: never; }>;
+
+
+export type QueryPermissionQuery = (
+  { __typename?: 'Query' }
+  & { queryPermission?: Types.Maybe<Array<Types.Maybe<(
+    { __typename?: 'Permission' }
+    & Pick<Types.Permission, 'role'>
+    & { user: (
+      { __typename?: 'User' }
+      & Pick<Types.User, 'username'>
+    ) }
+  )>>> }
+);
+
 export type FilterPostsQueryVariables = Types.Exact<{
   filter?: Types.Maybe<Types.PostFilter>;
 }>;
@@ -249,6 +264,41 @@ export function useAllPostsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHoo
 export type AllPostsQueryHookResult = ReturnType<typeof useAllPostsQuery>;
 export type AllPostsLazyQueryHookResult = ReturnType<typeof useAllPostsLazyQuery>;
 export type AllPostsQueryResult = ApolloReactCommon.QueryResult<AllPostsQuery, AllPostsQueryVariables>;
+export const QueryPermissionDocument = gql`
+    query queryPermission {
+  queryPermission(filter: {role: {eq: ADMINISTRATOR}}) {
+    user {
+      username
+    }
+    role
+  }
+}
+    `;
+
+/**
+ * __useQueryPermissionQuery__
+ *
+ * To run a query within a React component, call `useQueryPermissionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useQueryPermissionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQueryPermissionQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useQueryPermissionQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<QueryPermissionQuery, QueryPermissionQueryVariables>) {
+        return ApolloReactHooks.useQuery<QueryPermissionQuery, QueryPermissionQueryVariables>(QueryPermissionDocument, baseOptions);
+      }
+export function useQueryPermissionLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<QueryPermissionQuery, QueryPermissionQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<QueryPermissionQuery, QueryPermissionQueryVariables>(QueryPermissionDocument, baseOptions);
+        }
+export type QueryPermissionQueryHookResult = ReturnType<typeof useQueryPermissionQuery>;
+export type QueryPermissionLazyQueryHookResult = ReturnType<typeof useQueryPermissionLazyQuery>;
+export type QueryPermissionQueryResult = ApolloReactCommon.QueryResult<QueryPermissionQuery, QueryPermissionQueryVariables>;
 export const FilterPostsDocument = gql`
     query filterPosts($filter: PostFilter) {
   queryPost(filter: $filter) {
@@ -544,6 +594,7 @@ export type UpdatePostMutationOptions = ApolloReactCommon.BaseMutationOptions<Up
 export const namedOperations = {
   Query: {
     allPosts: 'allPosts',
+    queryPermission: 'queryPermission',
     filterPosts: 'filterPosts',
     getPost: 'getPost',
     getUser: 'getUser',
