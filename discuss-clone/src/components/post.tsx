@@ -220,9 +220,6 @@ export function Post() {
                 <Comment.Author as="a">
                   {comment.author.displayName}
                 </Comment.Author>
-                {/* <Comment.Metadata>
-                      <div>Just now</div>
-                    </Comment.Metadata> */}
                 <Comment.Text>{comment.text}</Comment.Text>
               </Comment.Content>
             </Comment>

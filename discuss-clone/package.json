@@ -26,8 +26,8 @@
     "yarn": "^1.22.5"
   },
   "scripts": {
-    "start": "npm run build:css && react-scripts start",
-    "build": "npm run build:css && react-scripts build",
+    "start": "yarn run build:css && react-scripts start",
+    "build": "yarn run build:css && react-scripts build",
     "build:css": "postcss src/styles/tailwind.css -o src/styles/main.css",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
