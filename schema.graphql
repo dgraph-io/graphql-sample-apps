@@ -1,4 +1,8 @@
-type User @auth(add: {rule: "{$role: {eq: \"AddUser\"}}"}) {
+type User @auth(
+    add: {rule: "{$role: {eq: \"AddUser\"}}"},
+    delete: {rule: "{$role: {eq: \"ADMIN\"}}"},
+    update: {rule: "{$role: {eq: \"ADMIN\"}}"}
+) {
   id: ID!
   email: String! @id @search(by: [hash])
   name: String
@@ -6,7 +10,10 @@ type User @auth(add: {rule: "{$role: {eq: \"AddUser\"}}"}) {
   forms: [Form] @hasInverse(field: creator)
 }
 
-type Form {
+type Form @withSubscription @auth(
+    delete: {rule: "{$role: {eq: \"ADMIN\"}}"},
+    update: {rule: "{$role: {eq: \"ADMIN\"}}"}
+    ) {
   id: ID!
   title: String! @search(by: [hash])
   fields: [Field!]!
@@ -14,7 +21,34 @@ type Form {
   creator: User!
 }
 
-type Field {
+type Field @withSubscription @auth(
+  delete: {
+    rule: """
+    query ($USER: String!) {
+        queryField {
+            form {
+              creator(filter: { email: { eq:  $USER } } ) {
+                email
+              }
+            }
+        }
+    }
+    """
+  },
+  update: {
+    rule: """
+    query ($USER: String!) {
+        queryField {
+            form {
+              creator(filter: { email: { eq:  $USER } } ) {
+                email
+              }
+            }
+        }
+    }
+    """
+  }) 
+  {
   id: ID!
   order: Int!
   type: FieldType!
@@ -42,7 +76,20 @@ type FieldOption {
 
 type Response
 @auth(
-  query: {
+  delete: {
+    rule: """
+    query ($USER: String!) {
+        queryResponse {
+            form {
+              creator(filter: { email: { eq:  $USER } } ) {
+                email
+              }
+            }
+        }
+    }
+    """
+  },
+  update: {
     rule: """
     query ($USER: String!) {
         queryResponse {
@@ -63,7 +110,7 @@ type Response
 
 type Entry
 @auth(
-  query: {
+  delete: {
     rule: """
     query ($USER: String!) {
         queryEntry {
@@ -75,7 +122,22 @@ type Entry
                 }
             }
         }
-    }
+    },
+    """
+  }, 
+  update: {
+    rule: """
+    query ($USER: String!) {
+        queryEntry {
+            field {
+                form {
+                    creator(filter: { email: { eq:  $USER } } ) {
+                        email
+                    }
+                }
+            }
+        }
+    },
     """
   }
 ) {
