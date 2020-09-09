@@ -16,6 +16,7 @@ import {
   useAddPostMutation,
   AllPostsDocument,
   AllPostsQuery,
+  namedOperations,
 } from "./types/operations";
 import { avatar } from "./avatar";
 import { useCategories } from "./categories";
@@ -34,7 +35,9 @@ export function AppHeader() {
   const { data, loading, error } = useGetUserQuery({
     variables: { username: isAuthenticated ? user.email : "" },
   });
-  const [updateUserMutation] = useUpdateUserMutation();
+  const [updateUserMutation] = useUpdateUserMutation({
+    refetchQueries: [namedOperations.Query.getUser, namedOperations.Query.getPost, namedOperations.Query.allPosts],
+  });
   const {
     allWriteableCategories,
     loading: catLoading,

@@ -210,11 +210,10 @@ export function Post() {
     <div className="mt-3">
       {data.getPost.comments.map((comment) => {
         return (
-          <Comment.Group>
+          <Comment.Group key={comment.id}>
             <Comment>
               <Comment.Avatar
                 src={avatar(comment.author.avatarImg)}
-                rounded
                 size="mini"
               />
               <Comment.Content>
