@@ -84,9 +84,9 @@ function App() {
         <></>
         <>
         <SidebarItem label="Home" icon={HomeIcon} link="/" />
+        <SidebarItem label="Create" icon={EditIcon} link="/create"/>
       { isAuthenticated ? <>
         <SidebarItem label="Profile" icon={PersonIcon} link="/profile" />
-        <SidebarItem label="Create" icon={EditIcon} link="/create"/>
         <AdminSidebarItem role={role}/>
         </> : null
       }
