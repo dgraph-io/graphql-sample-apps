@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 
 import Content from "../components/content";
 import { Navbar } from "../components/navbar";
-import { Sort } from "../components/sort";
+import { Selector } from "../components/selector";
 import SearchBar from "material-ui-search-bar";
-import TagSelector from "../components/tagSelector";
 import MasonartGrid from "../components/masonryGrid";
 
 import {
@@ -16,20 +15,25 @@ import {
 } from "../gql/queryData";
 import useImperativeQuery from "../utils/imperativeQuery";
 
-import { g2aTags, sortBy } from "../utils/utils";
+import { sortBy } from "../utils/utils";
 import { useQuery } from "@apollo/react-hooks";
 
-import Background from '../assets/images/background.jpeg';
+const sortByOptions = [
+  {"name": "Newest", "value":"new"},
+  {"name": "Oldest", "value":"old"},
+  {"name": "Most Liked", "value":"liked"}, 
+]
 
 const Home = () => {
   const [mydata, setMydata] = useState(null);
-  const [tags, setTags] = useState([]);
-  const [names, setNames] = useState([]);
+  const [tagOptions, setTagOptions] = useState([]);
   const [textString, setTextString] = useState("");
+  const [searchTag, setSearchTag] = useState("");
 
   const searchPosts = useImperativeQuery(SEARCH_POSTS);
   const searchPostsByTag = useImperativeQuery(SEARCH_POST_BY_TAG);
   const searchByTextAndTags = useImperativeQuery(SEARCH_BY_TEXT_AND_TAGS);
+  const resetSearch = useImperativeQuery(GET_APPROVED_POST);
   const { data: postData, loading: ploading, error: perror } = useQuery(
     GET_APPROVED_POST
   );
@@ -39,7 +43,13 @@ const Home = () => {
 
   useEffect(() => {
     if (!tloading && !terror) {
-      setNames(g2aTags(tagsData.queryTag));
+      var options = []
+      tagsData.queryTag.forEach((element) => {
+        options.push({name:element["name"], value:element["name"]})
+      })
+      // sort alphabetically
+      options.sort( (a, b) => { return a.name.localeCompare(b.name);  })
+      setTagOptions(options);
     }
   }, [tagsData, tloading, terror]);
 
@@ -49,13 +59,19 @@ const Home = () => {
     }
   }, [postData, ploading, perror]);
 
-  const handleClick = async () => {
+  const reset = async () => {
+    const {data} = await resetSearch();
+    setMydata(data);
+  }
+
+  const search = async (textString = "", tag = "") => {
     // No input defined.
-    if ((tags.length === 0) & (textString === "")) {
+    if ((tag === "") & (textString === "")) {
+      reset()
       return;
     }
     // Search by text
-    if (tags.length === 0) {
+    if (tag === "") {
       const { data } = await searchPosts({
         text: textString,
       });
@@ -63,10 +79,9 @@ const Home = () => {
       return;
     }
     // Search by tags
-    const tagString = tags.join(" ");
     if (textString === "") {
       const { data } = await searchPostsByTag({
-        input: tagString,
+        input: tag,
       });
       let queryPost = [];
       data.queryTag.forEach((element) => {
@@ -78,7 +93,7 @@ const Home = () => {
     // search by both
     const { data } = await searchByTextAndTags({
       text: textString,
-      tags: tagString,
+      tags: tag,
     });
 
     let queryPost = [];
@@ -87,20 +102,34 @@ const Home = () => {
     });
     console.log("Search by tag:", queryPost);
     setMydata({ queryPost: queryPost });
+  }
+
+  const handleClick = async () => {
+    search(textString, searchTag)
     return;
   };
 
   const SortBy = async (by) => {
+    if (by === "")
+      return
     let data = mydata;
     console.log("Sorting by:", by);
     setMydata({ queryPost: sortBy(data.queryPost, by) });
     return;
   };
 
+  const FilterByTag = async (by) => {
+    console.log("Filtering Tags by:", by);
+    console.log(textString, by)
+    setSearchTag(by)
+    search(textString, by)
+    return;
+  }
+
   return (
     <>
       <Navbar title="Home" color="primary" />
-      <Content background={Background}>
+      <Content>
         {mydata != null && (
           <>
             <div style={{ display: "flex", alignItems: "center", flexWrap:"wrap", background: "white", borderRadius: "10px" }}>
@@ -109,15 +138,16 @@ const Home = () => {
                 label="Search your joke here"
                 onChange={(newText) => setTextString(newText)}
                 onRequestSearch={handleClick}
+                onCancelSearch={() => {setTextString(""); search("", searchTag)}}
                 style={{minWidth:"300px"}}
               />
-              <TagSelector
-                names={names}
-                tags={tags}
-                handleChange={(e) => setTags(e.target.value)}
+              <Selector
+                label={"Tags"}
+                options={tagOptions}
+                cb={FilterByTag}
               />
               <div style={{ marginLeft: "auto", alignItems: "center"}}>
-                <Sort cb={SortBy}/>
+                <Selector label={"Sort By"} options={sortByOptions} cb={SortBy}/>
               </div>
             </div>
             <br />

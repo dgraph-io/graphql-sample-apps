@@ -21,7 +21,7 @@ export const SidebarItem = ({ key, label, icon: Icon, open, className, onClick, 
     <div key={key}>
       <ListItem button onClick={link ? () => window.location = link : onClick} className={className}>
         {Icon && <ListItemIcon>
-          <Icon style={{color:"white"}}/>
+          <Icon/>
         </ListItemIcon>}
         <ListItemText primary={label} />
         {children.length > 0 ? (
@@ -68,7 +68,7 @@ export const Sidebar = ({children = []}) => {
           <img src={Logo} alt="logo" style={{maxWidth:"-webkit-fill-available"}}/>
         </div>
         <Divider />
-        <List style={{color:"white"}}>
+        <List>
           {children.map((child, index) => React.cloneElement(child, {
             key: index,
             open: openSubmenu[index] || false,

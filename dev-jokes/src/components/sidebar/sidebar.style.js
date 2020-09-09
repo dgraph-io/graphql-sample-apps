@@ -13,7 +13,6 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerPaper: {
     width: drawerWidth,
-    background: "#19192c",
     flexShrink:0,
     [theme.breakpoints.down('xs')]: {
       width: drawerWidthSm,
