@@ -163,7 +163,7 @@ export default React.forwardRef(function CanvasImage({text}, ref) {
     const bgImagePromise = useMemo(() => imagePromise(image), [image])
 
     const margin = 50
-    const sideMargin = 10
+    const sideMargin = 20
 
     const classes = useStyles();
     
