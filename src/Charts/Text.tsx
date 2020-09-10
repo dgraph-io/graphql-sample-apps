@@ -6,7 +6,9 @@ import {removeStopwords} from 'stopword';
 
 export default function Chart(props: ChartProps) {
   const count = counter(
-    props!.entries!.flatMap(entry => removeStopwords(entry!.text!.split(/\s+/)))
+    props!.entries!.flatMap(entry =>
+      removeStopwords((entry?.text || '').split(/\s+/))
+    )
   );
 
   const words = Object.entries(count).map(([text, value]) => ({
