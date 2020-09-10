@@ -22,7 +22,9 @@ export function PostFeed() {
   const [
     getFilteredPosts,
     { loading: filterLoading, data: filteredData, error: filterError },
-  ] = useFilterPostsLazyQuery();
+  ] = useFilterPostsLazyQuery({
+    fetchPolicy: "cache-and-network"
+  });
 
   const { allCategories, loading: catLoading, error: catError } = useCategories(
     user?.email ?? ""
