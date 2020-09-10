@@ -17,7 +17,7 @@ import {
   AllPostsDocument,
   AllPostsQuery,
   namedOperations,
-  useQueryPermissionQuery
+  useQueryPermissionQuery,
 } from "./types/operations";
 import { avatar } from "./avatar";
 import { useCategories } from "./categories";
@@ -45,7 +45,10 @@ export function AppHeader() {
   const { data, loading, error } = useGetUserQuery({
     variables: { username: isAuthenticated ? user.email : "" },
   });
-  const { data: perm, loading: permLoading, error: permError } = useQueryPermissionQuery();
+  const {
+    data: perm,
+    loading: permLoading,
+  } = useQueryPermissionQuery();
   const [updateUserMutation] = useUpdateUserMutation({
     refetchQueries: [
       namedOperations.Query.getUser,
@@ -89,22 +92,22 @@ export function AppHeader() {
     });
   }
 
-  if (loading || catLoading || permLoading) return <Loader />;
+  if (loading || catLoading || permLoading) return <Loader active />;
   if (error) return <div>`Error! ${error.message}`</div>;
   if (catError) return <div>`Error! ${catError.message}`</div>;
 
   const currentSettings = () => {
     const permData = perm?.queryPermission;
-    permData?.forEach( async (perm) => {
+    permData?.forEach(async (perm) => {
       if (perm?.user.username === user.email) {
-        setAdminStatus(true)
+        setAdminStatus(true);
         const token = isAuthenticated ? await getIdTokenClaims() : "";
         const tokenVal = token ? token.__raw : "";
-        setTokenValue(tokenVal)
-        return
+        setTokenValue(tokenVal);
+        return;
       }
-    })
-    
+    });
+
     setName(data?.getUser?.displayName ? data.getUser.displayName : "");
     setAvatarImg(
       data?.getUser?.avatarImg ? data.getUser.avatarImg : "/" + avatar + ".svg"
@@ -236,10 +239,7 @@ export function AppHeader() {
             {adminStatus && tokenValue && (
               <Form.Field>
                 <label>Token</label>
-                <TextArea
-                  readOnly
-                  value={tokenValue}
-                />
+                <TextArea readOnly value={tokenValue} />
               </Form.Field>
             )}
           </Form>

@@ -1,5 +1,5 @@
-import React, { useState, FormEvent } from "react"
-import { useParams } from "react-router-dom"
+import React, { useState, FormEvent } from "react";
+import { useParams } from "react-router-dom";
 import {
   Container,
   Header,
@@ -13,62 +13,62 @@ import {
   Button,
   TextAreaProps,
   Comment,
-} from "semantic-ui-react"
+} from "semantic-ui-react";
 import {
   useGetPostQuery,
   useAddCommentMutation,
   useUpdatePostMutation,
   useGetUserQuery,
   namedOperations,
-} from "./types/operations"
-import { DateTime } from "luxon"
-import { useAuth0 } from "@auth0/auth0-react"
-import { useCategories } from "./categories"
-import { avatar } from "./avatar"
+} from "./types/operations";
+import { DateTime } from "luxon";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useCategories } from "./categories";
+import { avatar } from "./avatar";
 
 interface PostParams {
-  id: string
+  id: string;
 }
 
 export function Post() {
-  const { id } = useParams<PostParams>()
+  const { id } = useParams<PostParams>();
 
-  const { user, isAuthenticated } = useAuth0()
+  const { user, isAuthenticated } = useAuth0();
 
   const { data: currentUser, loading: userLoading } = useGetUserQuery({
     variables: { username: isAuthenticated ? user.email : "" },
-  })
+  });
   const { data, loading, error } = useGetPostQuery({
     variables: { id: id },
-  })
+  });
   const {
     allWriteableCategories,
     loading: catLoading,
     error: catError,
-  } = useCategories(user?.email ?? "")
+  } = useCategories(user?.email ?? "");
 
   const [addCommentMutation] = useAddCommentMutation({
     refetchQueries: [namedOperations.Query.getPost],
-  })
+  });
   const [updatePostMutation] = useUpdatePostMutation({
     refetchQueries: [namedOperations.Query.getPost],
-  })
+  });
 
-  const [title, setTitle] = useState("")
-  const [tags, setTags]: any = useState("")
-  const [category, setCategory]: any = useState("")
-  const [text, setText]: any = useState("")
-  const [editPost, setEditPost] = useState(false)
-  const [commentText, setCommentText] = useState("")
+  const [title, setTitle] = useState("");
+  const [tags, setTags]: any = useState("");
+  const [category, setCategory]: any = useState("");
+  const [text, setText]: any = useState("");
+  const [editPost, setEditPost] = useState(false);
+  const [commentText, setCommentText] = useState("");
 
-  if (loading || userLoading || catLoading) return <Loader />
+  if (loading || userLoading || catLoading) return <Loader active />;
   if (error) {
     return (
       <Container text className="mt-24">
         <Header as="h1">Ouch! That page didn't load</Header>
         <p>Here's why : {error.message}</p>
       </Container>
-    )
+    );
   }
   if (catError) {
     return (
@@ -88,22 +88,22 @@ export function Post() {
     );
   }
 
-  const canEditThisPost = data.getPost.author.username === user?.email
-  const canPostComments = isAuthenticated && !!allWriteableCategories.find(
-    (c) => c?.id === data.getPost?.category.id
-  )
+  const canEditThisPost = data.getPost.author.username === user?.email;
+  const canPostComments =
+    isAuthenticated &&
+    !!allWriteableCategories.find((c) => c?.id === data.getPost?.category.id);
 
   const writableCategoriesOptions = allWriteableCategories.map((category) => {
-    return { key: category?.id, text: category?.name, value: category?.id }
-  })
+    return { key: category?.id, text: category?.name, value: category?.id };
+  });
 
   const setdata = () => {
-    setEditPost(true)
-    setTitle(data.getPost?.title + "")
-    setTags(data.getPost?.tags)
-    setText(data?.getPost?.text)
-    setCategory(data?.getPost?.category?.id)
-  }
+    setEditPost(true);
+    setTitle(data.getPost?.title + "");
+    setTags(data.getPost?.tags);
+    setText(data?.getPost?.text);
+    setCategory(data?.getPost?.category?.id);
+  };
 
   const addComment = () => {
     addCommentMutation({
@@ -115,31 +115,33 @@ export function Post() {
         },
       },
       update(cache, { data }) {
-        console.log(data)
+        console.log(data);
       },
-    })
-  }
+    });
+  };
 
-  let dateStr = "at some unknown time"
+  let dateStr = "at some unknown time";
   if (data.getPost.datePublished) {
     dateStr =
-      DateTime.fromISO(data.getPost.datePublished).toRelative() ?? dateStr
+      DateTime.fromISO(data.getPost.datePublished).toRelative() ?? dateStr;
   }
 
-  const paras = data.getPost.text.split("\n").map((str) => <p key={str}>{str}</p>)
+  const paras = data.getPost.text
+    .split("\n")
+    .map((str) => <p key={str}>{str}</p>);
 
   const updatePost = () => {
-    setEditPost(false)
+    setEditPost(false);
     const post = {
       text: text,
       title: title,
       tags: tags,
       // likes: 0,
       category: { id: category },
-    }
+    };
 
-    updatePostMutation({ variables: { post: post, id: id } })
-  }
+    updatePostMutation({ variables: { post: post, id: id } });
+  };
 
   const showEditPost = (
     <Modal
@@ -224,10 +226,10 @@ export function Post() {
               </Comment.Content>
             </Comment>
           </Comment.Group>
-        )
+        );
       })}
     </div>
-  )
+  );
 
   return (
     <div className="layout-margin">

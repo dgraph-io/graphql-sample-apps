@@ -22,13 +22,11 @@ export function PostFeed() {
   const [
     getFilteredPosts,
     { loading: filterLoading, data: filteredData, error: filterError },
-  ] = useFilterPostsLazyQuery({onCompleted: () => setSearchStatus(true)});
+  ] = useFilterPostsLazyQuery();
 
-  const {
-    allCategories,
-    loading: catLoading,
-    error: catError,
-  } = useCategories(user?.email ?? "");
+  const { allCategories, loading: catLoading, error: catError } = useCategories(
+    user?.email ?? ""
+  );
 
   const [searchText, setSearchText] = useState("");
   const [category, setCategory]: any = useState("");
@@ -36,45 +34,58 @@ export function PostFeed() {
   const [searchStatus, setSearchStatus] = useState(false);
   const categoriesSet: any = [];
 
-  if (loading || catLoading || filterLoading) return <Loader />;
+  if (loading || catLoading || filterLoading) return <Loader active />;
   if (error) return `Error! ${error.message}`;
   if (catError) return `Error! ${catError.message}`;
   if (filterError) return `Error! ${filterError.message}`;
 
   const categoriesOptions = allCategories.map((category) => {
-    categoriesSet.push(category?.id)
+    if (categoriesSet.indexOf(category?.id)) {
+      categoriesSet.push(category?.id);
+    }
     return { key: category?.id, text: category?.name, value: category?.id };
   });
 
+  const clearSearch = () => {
+    setTags("");
+    setCategory("");
+    setSearchText("");
+    setSearchStatus(false);
+  };
+
   const searchPosts = () => {
     let filter;
+    setSearchStatus(true);
     if (searchText === "" && tags !== "") {
       filter = {
-          tags: { allofterms: tags },
-        }
-    } else if (searchText !== "" && tags === ""){
-      filter= {
-          title: { anyofterms: searchText },
-          or: { text: { anyoftext: searchText } },
-        }
-    } else if(searchText !== "" && tags !== "") {
+        tags: { allofterms: tags },
+      };
+    } else if (searchText !== "" && tags === "") {
+      filter = {
+        title: { anyofterms: searchText },
+        or: { text: { anyoftext: searchText } },
+      };
+    } else if (searchText !== "" && tags !== "") {
       filter = {
         title: { anyofterms: searchText },
         tags: { allofterms: tags },
         or: { text: { anyoftext: searchText } },
       };
     } else {
-      filter= {}
+      filter = {};
+      if (!category) {
+        setSearchStatus(false);
+      }
     }
     getFilteredPosts({
       variables: {
         filter: filter,
-        categoryID: category? [category]:categoriesSet
+        categoryID: category ? [category] : categoriesSet,
       },
     });
   };
 
-  const dataset = searchStatus? filteredData?.queryPost : data?.queryPost
+  const dataset = searchStatus ? filteredData?.queryPost : data?.queryPost;
 
   const items = dataset?.map((post) => {
     const likes = post?.likes ?? 0;
@@ -143,6 +154,7 @@ export function PostFeed() {
           fluid
           search
           selection
+          clearable
           className="mr-3 category-field"
           defaultValue={category}
           options={categoriesOptions}
@@ -154,12 +166,14 @@ export function PostFeed() {
           value={tags}
           onChange={(e) => setTags(e.target.value)}
         />
-        <Button
-          className="dgraph-btn mr-1"
-          onClick={searchPosts}
-        >
+        <Button className="dgraph-btn mr-2" onClick={searchPosts}>
           Search
         </Button>
+        {searchStatus && (
+          <Button className="dgraph-btn" onClick={clearSearch}>
+            Clear
+          </Button>
+        )}
       </div>
       <Table basic="very">
         <Table.Header>
