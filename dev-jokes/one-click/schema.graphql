@@ -10,6 +10,12 @@ type Tag {
     name: String! @id @search(by: [fulltext])
     posts: [Post] @hasInverse(field: tags)
 }
+
+type Dummy {
+  id: ID!
+  key: Boolean!
+}
+
 type Post {
     id: ID!
     text: String @search(by: [fulltext])
@@ -18,6 +24,7 @@ type Post {
     timeStamp: DateTime @search
     isApproved: Boolean @search
     likes: [User] @hasInverse(field: likedPost)
+    dummyLikes: [Dummy]
     flags: [User] @hasInverse(field: flaggedPost)
     numFlags: Int @search
     img: String
@@ -81,6 +88,12 @@ type Tag @auth(
     name: String! @id @search(by: [fulltext])
     posts: [Post] @hasInverse(field: tags)
 }
+
+type Dummy {
+  id: ID!
+  key: Boolean!
+}
+
 type Post @auth(
   add: { rule: """
         query ($USER: String!) {
@@ -100,6 +113,7 @@ type Post @auth(
     timeStamp: DateTime @search
     isApproved: Boolean @search
     likes: [User] @hasInverse(field: likedPost)
+    dummyLikes: [Dummy]
     flags: [User] @hasInverse(field: flaggedPost)
     numFlags: Int @search
     img: String

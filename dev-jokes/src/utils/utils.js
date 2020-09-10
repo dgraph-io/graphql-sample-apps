@@ -39,7 +39,7 @@ export const sortBy = (data, by) => {
   } else if (by === "liked") {
     newData = data
       .slice()
-      .sort((a, b) => b.likes.length - a.likes.length);
+      .sort((a, b) => (b.likes.length + b.dummyLikes.length) - (a.likes.length + a.dummyLikes.length));
   }
   return newData
 }

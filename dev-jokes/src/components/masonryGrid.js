@@ -40,6 +40,7 @@ const MasonaryGrid = ({data, isApproved, allTags, updateCache}) => {
           allTags={allTags}
           updateCache={updateCache}
           clickable={true}
+          dummyLikes={post.dummyLikes}
         />
       ))}
     </Masonry>

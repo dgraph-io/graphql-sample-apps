@@ -1,86 +1,14 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { CirclePicker } from 'react-color'
+import React, { useEffect, useMemo } from "react";
 
-import IconButton from '@material-ui/core/IconButton';
-import Collapse from '@material-ui/core/Collapse';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-
-// import styles
-import { makeStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
-import BGGallery from "./bgGallery";
-
+// Keeping it as it for good memory. Will remove later :)
 const IMAGES =  [
-    {
-        src: "/background/light-green.jpg",
-        thumbnail: "/background/light-green.jpg",
-        thumbnailWidth: 200,
-        thumbnailHeight: 200,
-    },
-    {
-        src: "/background/blue.jpg",
-        thumbnail: "/background/blue.jpg",
-        thumbnailWidth: 200,
-        thumbnailHeight: 200,
-        tags: [{value: "Blue", title: "Blue"}, {value: "Solid", title: "Solid"}],
-        caption: "Solid Blue ( The color of peace)"
-    },
-    {
-        src: "/background/green.jpg",
-        thumbnail: "/background/green.jpg",
-        thumbnailWidth: 200,
-        thumbnailHeight: 200,
-    },
-    {
-        src: "/background/pink.jpg",
-        thumbnail: "/background/pink.jpg",
-        thumbnailWidth: 200,
-        thumbnailHeight: 200,
-    },
-    {
-        src: "/background/red.jpg",
-        thumbnail: "/background/red.jpg",
-        thumbnailWidth: 200,
-        thumbnailHeight: 200,
-    },
-    {
-        src: "/background/skin.jpg",
-        thumbnail: "/background/skin.jpg",
-        thumbnailWidth: 200,
-        thumbnailHeight: 200,
-    },
     {
         src: "/background/white.jpg",
         thumbnail: "/background/white.jpg",
         thumbnailWidth: 200,
         thumbnailHeight: 200,
-    },
-    {
-        src: "/background/yellow.jpg",
-        thumbnail: "/background/yellow.jpg",
-        thumbnailWidth: 200,
-        thumbnailHeight: 200,
-    },
-].splice(0,8);
-
-const useStyles = makeStyles((theme) => ({
-    expand: {
-      transform: 'rotate(0deg)',
-      marginLeft: 'auto',
-      transition: theme.transitions.create('transform', {
-        duration: theme.transitions.duration.shortest,
-      }),
-    },
-    expandOpen: {
-      transform: 'rotate(180deg)',
-    },
-    circle: {
-        width: 100,
-        height: 100,
-        borderRadius: 100/2,
-        backgroundColor: 'red'
     }
-  }));
+].splice(0,1);
 
 function imagePromise(src) {
     return new Promise(resolve => {
@@ -156,16 +84,11 @@ async function getPrintableLines(ctx, phrase, maxPxLength, maxPxHeight, margin, 
 }
 
 export default React.forwardRef(function CanvasImage({text}, ref) {
-    const [image, setImage] = useState(IMAGES[0]['src'])
-    const [color, setColor] = useState('red')
-    const [expanded, setExpanded] = React.useState(false);
-    const [expandedBG, setExpandedBG] = React.useState(false);
+    const image = IMAGES[0]['src'];
     const bgImagePromise = useMemo(() => imagePromise(image), [image])
 
     const margin = 50
     const sideMargin = 20
-
-    const classes = useStyles();
     
     useEffect(() => {
         const canvas = ref.current;
@@ -177,8 +100,8 @@ export default React.forwardRef(function CanvasImage({text}, ref) {
             ctx.clearRect(0, 0, canvas.width, canvas.height)
             ctx.drawImage(await bgImagePromise, 0, 0, canvas.width, canvas.height)
             ctx.textAlign = "center";
-            ctx.fillStyle = color;
-            ctx.strokeStyle = color;
+            ctx.fillStyle = "black";
+            ctx.strokeStyle = "black";
 
             const arr = await getPrintableLines(ctx, text, canvas.width, canvas.height, margin, sideMargin)
             const lines = arr.get('lines')
@@ -190,47 +113,10 @@ export default React.forwardRef(function CanvasImage({text}, ref) {
                 ctx.strokeText(line, canvas.width / 2, head+idx*textHeight);
             });
         })()
-    }, [image, bgImagePromise, ref, text, color]) // rerender if image, text or canvas size updates
+    }, [bgImagePromise, ref, text]) // rerender if image, text or canvas size updates
     return (
     <div>
-        <canvas ref={ref} width={300} height={200} />
-        <div style={{"display":"flex"}}>
-            <div>
-                <span style={{width:"20px", height:"20px" , border:"1px", background: color, display:"inline", float:"left"}} /> 
-                &nbsp; &nbsp; Text Color
-                <IconButton
-                className={clsx(classes.expand, {
-                    [classes.expandOpen]: expanded,
-                })}
-                onClick={() => setExpanded(!expanded)}
-                aria-expanded={expanded}
-                aria-label="show more"
-                >
-                <ExpandMoreIcon />
-                </IconButton>
-            </div>
-            <Collapse in={expanded} timeout="auto" unmountOnExit>
-                <CirclePicker onChangeComplete={(clr, evt) => {setColor(clr["hex"])}}/>
-            </Collapse>
-        </div>
-        <div>
-            <div>
-                &nbsp; &nbsp; Background
-                <IconButton
-                className={clsx(classes.expand, {
-                    [classes.expandOpen]: expandedBG,
-                })}
-                onClick={() => setExpandedBG(!expandedBG)}
-                aria-expanded={expandedBG}
-                aria-label="show more"
-                >
-                <ExpandMoreIcon />
-                </IconButton>
-            </div>
-            <Collapse in={expandedBG} timeout="auto" unmountOnExit>
-                <BGGallery IMAGES={IMAGES} setBgImage={setImage}/>
-            </Collapse>
-        </div>
+        <canvas ref={ref} width={400} height={400} />
     </div>
     
     )

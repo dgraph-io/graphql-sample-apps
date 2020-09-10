@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 
+import MetaTags from 'react-meta-tags';
 import { Link } from "react-router-dom";
 
 // import styles
@@ -12,10 +13,8 @@ import TransitionModal from "./postModal";
 
 // import material UI
 import Box from "@material-ui/core/Box";
-import CardHeader from "@material-ui/core/CardHeader";
 import CardActions from "@material-ui/core/CardActions";
 import Collapse from "@material-ui/core/Collapse";
-import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import { red, blue, grey, orange } from "@material-ui/core/colors";
@@ -25,11 +24,11 @@ import CancelIcon from "@material-ui/icons/Cancel";
 import FlagSharpIcon from "@material-ui/icons/FlagSharp";
 import EditIcon from "@material-ui/icons/Edit";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import TwitterIcon from "@material-ui/icons/Twitter";
+import FacebookIcon from "@material-ui/icons/Facebook";
 
 // other imports
 import DateTimeFormat from "dateformat";
-import { TwitterShareButton } from "react-share";
+import { FacebookShareButton } from "react-share";
 
 // import GQL
 import { useMutation } from "@apollo/react-hooks";
@@ -41,6 +40,7 @@ import {
   FLAG_POST,
   UNFLAG_POST,
   EDIT_POST,
+  ADD_DUMMY_LIKE,
 } from "../../gql/queryData";
 
 // import auth0
@@ -66,6 +66,9 @@ const useStyles = makeStyles((theme) => ({
   share: {
     marginLeft: "auto",
   },
+  flag: {
+    marginRight: "10px",
+  },
   likeCount: {
     fontSize: "large",
   },
@@ -85,6 +88,7 @@ export default function PostCard({
   flagCount,
   postID,
   likes,
+  dummyLikes,
   time,
   tags,
   flags,
@@ -115,10 +119,24 @@ export default function PostCard({
   const [flagPost] = useMutation(FLAG_POST);
   const [unflagPost] = useMutation(UNFLAG_POST);
   const [editPost] = useMutation(EDIT_POST);
+  const [dummyLike] = useMutation(ADD_DUMMY_LIKE);
 
   const handleLike = () => {
     if (!user) {
-      alert("Login to like the post");
+      console.log("Like by dummy user..")
+      if(!liked){
+        dummyLike(({
+          variables: {
+            postId: postID
+          }
+        }))
+        setLiked(true)
+        setnumlikes(numlikes+1)
+      }
+      else {
+        setLiked(false)
+        setnumlikes(numlikes-1)
+      }
       return;
     }
     if (liked) {
@@ -219,14 +237,19 @@ export default function PostCard({
 
   // set likes
   useEffect(() => {
-    if (!likes) return;
-    likes.forEach((item) => {
-      if (item["username"] === user.email) {
-        setLiked(true);
-      }
-    });
-    setnumlikes(likes.length);
-  }, [user,likes]);
+    var totalLikes = 0
+    if (likes){
+      likes.forEach((item) => {
+        if (item["username"] === user.email) {
+          setLiked(true);
+        }
+      });
+      totalLikes += likes.length
+    }
+    if(dummyLikes)
+      totalLikes += dummyLikes.length
+    setnumlikes(totalLikes)
+  }, [user,likes, dummyLikes]);
 
   // set flags
   useEffect(() => {
@@ -250,6 +273,18 @@ export default function PostCard({
   }
 
   return (
+    <>
+    <MetaTags>
+          <meta name="og:description" content="DevJoke Application" />
+          <meta property="og:title" content="DevJoke" />
+          <meta property="og:image" content={img} />
+          <meta property="og:url" content={"https://" + window.location.host + "/post/" + postID}/>
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:image" content={img} />
+          <meta name="twitter:title" content="DevJoke" />
+          <meta name="twitter:description" content="DevJoke Application" />
+
+        </MetaTags>
     <div className={"card"} style={{borderRadius: "10px"}}>
       { clickable ?
       <Link
@@ -290,23 +325,15 @@ export default function PostCard({
             >
               {numlikes}
             </Typography>
-            <IconButton
-              aria-label="flag"
-              value="check"
-              style={{ color: flagged ? red[500] : grey[500] }}
-              onClick={handleFlag}
-              selected={flagged}
-            >
-              <FlagSharpIcon fontSize="small" />
-            </IconButton>
-            <TwitterShareButton
+            <FacebookShareButton
               className={classes.share}
               style={{ color: blue[500] }}
-              url={window.location.host + "/post/" + postID}
-              title="Check this out "
+              url={img}
+              quote={"Do checkout this nice joke!! #DevJoke"}
+              hashtag={"DevJoke"}
             >
-              <TwitterIcon fontSize="small" />
-            </TwitterShareButton>
+              <FacebookIcon fontSize="small" />
+            </FacebookShareButton>
           </>
         ) : (
           <>
@@ -352,15 +379,20 @@ export default function PostCard({
         </IconButton>
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardHeader
-          avatar={
-            <Avatar aria-label="recipe" className={classes.avatar}>
-              {author[0].toUpperCase()}
-            </Avatar>
-          }
-          title={author}
-          subheader={DateTimeFormat(time, "mmm dS, h:MM")}
-        />
+        <div>
+         {DateTimeFormat(time, "mmm dS, h:MM")}
+         <IconButton
+            aria-label="flag"
+            className={classes.flag}
+            value="check"
+            style={{ color: flagged ? red[500] : grey[500] }}
+            onClick={handleFlag}
+            selected={flagged}
+          >
+          <FlagSharpIcon fontSize="small" />
+         </IconButton>
+        </div>
+
         {isApproved ? (
           <></>
         ) : (
@@ -368,9 +400,11 @@ export default function PostCard({
             {postText}
           </Typography>
         )}
+        
         <TagList tags={postTags} />
       </Collapse>
     </div>
+    </>
   );
 }
 

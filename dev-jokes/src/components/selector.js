@@ -1,5 +1,5 @@
 /* eslint-disable no-use-before-define */
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
@@ -21,6 +21,11 @@ export function Selector({label, cb, options}) {
     name: 'hai',
   });
 
+  //Sort by default by Newest
+  useEffect(()=> {
+    cb(options[0]["value"])
+  },[] )
+
   const handleChange = (event) => {
     const name = event.target.name;
     setState({
@@ -32,10 +37,11 @@ export function Selector({label, cb, options}) {
   };
 
   return (
-    <FormControl className={classes.formControl}>
+    <FormControl className={classes.formControl} >
       <InputLabel htmlFor="outlined-age-native-simple">{label}</InputLabel>
       <Select
         native
+        defaultValue={{label: options[2]["name"],value: options[2]["value"]}}
         onChange={handleChange}
         label={label}
         inputProps={{
@@ -43,7 +49,7 @@ export function Selector({label, cb, options}) {
           id: 'outlined-age-native-simple',
         }}
       >
-        <option aria-label="None" value="" />
+      
         {options.map((option) => (
           <option value={option["value"]}> {option["name"]}</option>
         ))}
