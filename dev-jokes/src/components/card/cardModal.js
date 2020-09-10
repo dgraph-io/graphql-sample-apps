@@ -53,9 +53,8 @@ const CardModal = (props) => {
             outline: 'none',
             position: 'absolute',
             left: '50%',
-            top: '40%',
+            top: '50%',
             width: '500px',
-            height: '700px',
             transform: 'translate(-50%, -50%)',
           }}
         >
