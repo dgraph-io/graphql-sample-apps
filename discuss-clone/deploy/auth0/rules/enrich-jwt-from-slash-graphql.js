@@ -21,6 +21,19 @@ function enrichJWTFromSlashGraphQL(user, context, callback) {
   // Fill this in with the custom claims namespace for your app.
   const namespace = "<<app-claims-namespace>>"
 
+  const getLoggedInUser = `
+    query getLoggedInUser($username: String!) {
+      getUser(username: $username) {
+        roles {
+          role
+          forCategory {
+            id
+          }
+        }
+      }
+    }
+  `
+
   axios
     .post(authorizationHook, {
       client_id: clientID,
@@ -34,19 +47,7 @@ function enrichJWTFromSlashGraphQL(user, context, callback) {
       })
 
       client
-        .request(
-          `query getLoggedInUser($username: String!) {
-        getUser(username: $username) {
-          roles {
-            role
-            forCategory {
-							id
-						}
-          }
-        }
-      }`,
-          { username: user.email }
-        )
+        .request(getLoggedInUser, { username: user.email })
         .then((data, err) => {
           // console.log(data)
           const hasAdminRole = !!(
@@ -63,5 +64,8 @@ function enrichJWTFromSlashGraphQL(user, context, callback) {
         .catch((error) => {
           callback(error, user, context)
         })
+    })
+    .catch(function (error) {
+      callback(error, user, context)
     })
 }
