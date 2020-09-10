@@ -1,8 +1,8 @@
 function enrichJWTFromSlashGraphQL(user, context, callback) {
-  // Roles should only be set to verified users.
-  if (!user.email || !user.email_verified) {
-    return callback(null, user, context)
-  }
+  // In a production app, roles should only be set to verified users.
+  // if (!user.email || !user.email_verified) {
+  //   return callback(null, user, context)
+  // }
 
   const axios = require("axios@0.19.2")
   const { GraphQLClient } = require("graphql-request@1.8.2")
@@ -54,7 +54,7 @@ function enrichJWTFromSlashGraphQL(user, context, callback) {
             data &&
             data.getUser &&
             data.getUser.roles.find(
-              (p) => (p.role = "ADMINISTRATOR" && !p.forCategory)
+              (p) => (p.role === "ADMINISTRATOR" && !p.forCategory)
             )
           )
           context.idToken[namespace].role = hasAdminRole ? "Admin" : "User"
