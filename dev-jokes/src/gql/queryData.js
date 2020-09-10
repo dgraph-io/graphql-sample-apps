@@ -65,6 +65,9 @@ export const SEARCH_POST_BY_TAG = gql`
             likes{
               username
             }
+            dummyLikes {
+              key
+            }
             tags{
                 name
             }
@@ -89,6 +92,9 @@ query{
       timeStamp
       likes {
         username
+      }
+      dummyLikes {
+        key
       }
       tags {
         name
@@ -115,6 +121,9 @@ query{
     likes {
       username
     }
+    dummyLikes {
+      key
+    }
     tags {
       name
     }
@@ -139,6 +148,9 @@ query{
       timeStamp
       likes {
         username
+      }
+      dummyLikes {
+        key
       }
       isApproved
       tags{
@@ -316,6 +328,9 @@ query($text:String!){
     likes{
       username
     }
+    dummyLikes {
+        key
+      }
     tags{
         name
     }
@@ -340,6 +355,9 @@ query($tags: String!, $text: String!){
     timeStamp
     likes{
       username
+    }
+    dummyLikes {
+      key
     }
     tags{
         name
@@ -366,6 +384,9 @@ export const GET_POST_BY_ID = gql`
       likes{
         username
       }
+      dummyLikes {
+        key
+      }
       tags{
           name
       }
@@ -377,3 +398,19 @@ export const GET_POST_BY_ID = gql`
     }
   }
 `;
+
+export const ADD_DUMMY_LIKE = gql`
+mutation($postId: ID!)  {
+  updatePost(input: {filter: {id: [$postId]}, set:{dummyLikes: [{key: true}]}}){
+    post {
+      id
+      likes {
+        username
+      }
+      dummyLikes{
+        id
+        key
+      }
+    }
+  }
+}`;

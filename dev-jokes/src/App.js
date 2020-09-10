@@ -17,17 +17,11 @@ import Approve from "./pages/approve"
 import NotFound from "./pages/not-found";
 import Flagged from "./pages/flagged"
 import PrivateRoute from "./components/privateRoute"
-import {Sidebar, SidebarItem} from './components/sidebar';
 import Loading from "./components/loading"
 import CardModal from "./components/card/cardModal"
 
 // imports material UI
 import { makeStyles } from "@material-ui/core/styles";
-import HomeIcon from '@material-ui/icons/Home';
-import PersonIcon from '@material-ui/icons/Person';
-import EditIcon from '@material-ui/icons/Edit';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import FlagIcon from '@material-ui/icons/Flag';
 import CssBaseline from "@material-ui/core/CssBaseline";
 
 // import styles
@@ -49,7 +43,6 @@ const useStyles = makeStyles((theme) => ({
 function App() {
   
   const [idToken, setIdToken] = useState("");
-  const [role, setRole] = useState('USER');
 
   const classes = useStyles();
   const { isLoading, isAuthenticated, getIdTokenClaims } = useAuth0();
@@ -59,7 +52,6 @@ function App() {
       if (isAuthenticated) {
         const idTokenClaims = await getIdTokenClaims();
         setIdToken(idTokenClaims.__raw);
-        setRole(idTokenClaims['https://dgraph.io/jwt/claims']['ROLE'])
       }
     };
     initAuth0();
@@ -80,18 +72,6 @@ function App() {
     <ApolloProvider client={client}>
     <div className={classes.root}>
       <CssBaseline />
-      <Sidebar>
-        <></>
-        <>
-        <SidebarItem label="Home" icon={HomeIcon} link="/" />
-        <SidebarItem label="Create" icon={EditIcon} link="/create"/>
-      { isAuthenticated ? <>
-        <SidebarItem label="Profile" icon={PersonIcon} link="/profile" />
-        <AdminSidebarItem role={role}/>
-        </> : null
-      }
-      </>
-      </Sidebar>
       <Router history={history}>
         <Suspense fallback={<div />}>
           <ModalSwitch />
@@ -119,16 +99,6 @@ function ModalSwitch(){
        {background && <Route path="/post/:postId" exact={true} component={CardModal}/>}
     </div>
   );
-}
-
-function AdminSidebarItem({role}) {
-  return role === 'ADMIN' ? 
-  <>
-  <SidebarItem label="Approve" icon={CheckCircleIcon} link="/approve"/>
-  <SidebarItem label="Flagged" icon={FlagIcon} link="/flagged"/>
-  </>
-  :
-  <></>
 }
 
 export default App;

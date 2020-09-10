@@ -17,12 +17,13 @@ import useImperativeQuery from "../utils/imperativeQuery";
 
 import { sortBy } from "../utils/utils";
 import { useQuery } from "@apollo/react-hooks";
+import { Tagger } from "../components/tagger";
 
 const sortByOptions = [
-  {"name": "Newest", "value":"new"},
-  {"name": "Oldest", "value":"old"},
-  {"name": "Most Liked", "value":"liked"}, 
-]
+  { name: "Newest", value: "new" },
+  { name: "Oldest", value: "old" },
+  { name: "Most Liked", value: "liked" },
+];
 
 const Home = () => {
   const [mydata, setMydata] = useState(null);
@@ -43,12 +44,14 @@ const Home = () => {
 
   useEffect(() => {
     if (!tloading && !terror) {
-      var options = []
+      var options = [];
       tagsData.queryTag.forEach((element) => {
-        options.push({name:element["name"], value:element["name"]})
-      })
+        options.push({ name: element["name"], value: element["name"] });
+      });
       // sort alphabetically
-      options.sort( (a, b) => { return a.name.localeCompare(b.name);  })
+      options.sort((a, b) => {
+        return a.name.localeCompare(b.name);
+      });
       setTagOptions(options);
     }
   }, [tagsData, tloading, terror]);
@@ -60,14 +63,14 @@ const Home = () => {
   }, [postData, ploading, perror]);
 
   const reset = async () => {
-    const {data} = await resetSearch();
+    const { data } = await resetSearch();
     setMydata(data);
-  }
+  };
 
   const search = async (textString = "", tag = "") => {
     // No input defined.
     if ((tag === "") & (textString === "")) {
-      reset()
+      reset();
       return;
     }
     // Search by text
@@ -102,29 +105,30 @@ const Home = () => {
     });
     console.log("Search by tag:", queryPost);
     setMydata({ queryPost: queryPost });
-  }
+  };
 
   const handleClick = async () => {
-    search(textString, searchTag)
+    search(textString, searchTag);
     return;
   };
 
+  const handleChange = async (text) => {
+    setTextString(text);
+    search(text, searchTag);
+  };
+
   const SortBy = async (by) => {
-    if (by === "")
-      return
+    if (by === "") return;
     let data = mydata;
     console.log("Sorting by:", by);
     setMydata({ queryPost: sortBy(data.queryPost, by) });
     return;
   };
 
-  const FilterByTag = async (by) => {
-    console.log("Filtering Tags by:", by);
-    console.log(textString, by)
-    setSearchTag(by)
-    search(textString, by)
-    return;
-  }
+  const onChangeTag = (tag) => {
+    setSearchTag(tag);
+    search(textString, tag);
+  };
 
   return (
     <>
@@ -132,26 +136,44 @@ const Home = () => {
       <Content>
         {mydata != null && (
           <>
-            <div style={{ display: "flex", alignItems: "center", flexWrap:"wrap", background: "white", borderRadius: "10px" }}>
-              <SearchBar
-                value={textString}
-                label="Search your joke here"
-                onChange={(newText) => setTextString(newText)}
-                onRequestSearch={handleClick}
-                onCancelSearch={() => {setTextString(""); search("", searchTag)}}
-                style={{minWidth:"300px"}}
-              />
-              <Selector
-                label={"Tags"}
-                options={tagOptions}
-                cb={FilterByTag}
-              />
-              <div style={{ marginLeft: "auto", alignItems: "center"}}>
-                <Selector label={"Sort By"} options={sortByOptions} cb={SortBy}/>
+            <div className="homepage-container">
+              <div className="homepage-sidebar">
+                <Tagger
+                  tags={tagOptions}
+                  onChange={(e) => {
+                    onChangeTag(e.target.value);
+                  }}
+                />
+              </div>
+
+              <div className="homepage-content-container">
+                <div className="homepage-search-container">
+                  <div className="searchbar-container ">
+                    <SearchBar
+                      value={textString}
+                      label="Search your joke here"
+                      onChange={(newText) => handleChange(newText)}
+                      onRequestSearch={handleClick}
+                      onCancelSearch={() => {
+                        setTextString("");
+                        search("", searchTag);
+                      }}
+                      style={{ width: "100%" }}
+                    />
+                  </div>
+
+                  <div style={{ alignItems: "center" }}>
+                    <Selector
+                      label={"Sort By"}
+                      options={sortByOptions}
+                      cb={SortBy}
+                    />
+                  </div>
+                </div>
+                <br />
+                <MasonartGrid data={mydata} isApproved={true} />
               </div>
             </div>
-            <br />
-            <MasonartGrid data={mydata} isApproved={true}/>
           </>
         )}
       </Content>
