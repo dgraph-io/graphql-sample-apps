@@ -1,37 +1,37 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
 import MetaTags from 'react-meta-tags';
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 // import styles
-import { makeStyles } from "@material-ui/core/styles";
-import clsx from "clsx";
+import { makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
 
 // import components
-import Loading from "../loading";
-import TransitionModal from "./postModal";
+import Loading from '../loading';
+import TransitionModal from './postModal';
 
 // import material UI
-import Box from "@material-ui/core/Box";
-import CardActions from "@material-ui/core/CardActions";
-import Collapse from "@material-ui/core/Collapse";
-import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
-import { red, blue, grey, orange } from "@material-ui/core/colors";
-import EmojiEmotionsIcon from "@material-ui/icons/EmojiEmotions";
-import CheckCircleIcon from "@material-ui/icons/CheckCircle";
-import CancelIcon from "@material-ui/icons/Cancel";
-import FlagSharpIcon from "@material-ui/icons/FlagSharp";
-import EditIcon from "@material-ui/icons/Edit";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import FacebookIcon from "@material-ui/icons/Facebook";
+import Box from '@material-ui/core/Box';
+import CardActions from '@material-ui/core/CardActions';
+import Collapse from '@material-ui/core/Collapse';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import { red, blue, grey, orange } from '@material-ui/core/colors';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import CancelIcon from '@material-ui/icons/Cancel';
+import FlagSharpIcon from '@material-ui/icons/FlagSharp';
+import EditIcon from '@material-ui/icons/Edit';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import FacebookIcon from '@material-ui/icons/Facebook';
 
 // other imports
-import DateTimeFormat from "dateformat";
-import { FacebookShareButton } from "react-share";
+import DateTimeFormat from 'dateformat';
+import { FacebookShareButton } from 'react-share';
 
 // import GQL
-import { useMutation } from "@apollo/react-hooks";
+import { useMutation } from '@apollo/react-hooks';
 import {
   DELETE_POST,
   APPROVE_POST,
@@ -41,39 +41,39 @@ import {
   UNFLAG_POST,
   EDIT_POST,
   ADD_DUMMY_LIKE,
-} from "../../gql/queryData";
+} from '../../gql/queryData';
 
 // import auth0
-import { useAuth0 } from "@auth0/auth0-react";
-import { a2gTags, g2aTags } from "../../utils/utils";
+import { useAuth0 } from '@auth0/auth0-react';
+import { a2gTags, g2aTags } from '../../utils/utils';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: 345,
   },
   media: {
-    height: "100%",
-    paddingTop: "56.25%", // 16:9
-    width: "100%",
+    height: '100%',
+    paddingTop: '56.25%', // 16:9
+    width: '100%',
   },
   expand: {
-    transform: "rotate(0deg)",
+    transform: 'rotate(0deg)',
     // marginLeft: "auto",
-    transition: theme.transitions.create("transform", {
+    transition: theme.transitions.create('transform', {
       duration: theme.transitions.duration.shortest,
     }),
   },
   share: {
-    marginLeft: "auto",
+    marginLeft: 'auto',
   },
   flag: {
-    marginRight: "10px",
+    marginRight: '10px',
   },
   likeCount: {
-    fontSize: "large",
+    fontSize: 'large',
   },
   expandOpen: {
-    transform: "rotate(180deg)",
+    transform: 'rotate(180deg)',
   },
   avatar: {
     backgroundColor: red[500],
@@ -97,7 +97,7 @@ export default function PostCard({
   updateCache,
   id,
   location,
-  clickable
+  clickable,
 }) {
   const classes = useStyles();
   const { isLoading, user } = useAuth0();
@@ -105,7 +105,7 @@ export default function PostCard({
   const [expanded, setExpanded] = useState(false);
   const [liked, setLiked] = useState(false);
   const [flagged, setFlagged] = useState(false);
-  const [numlikes, setnumlikes] = useState(0);
+  const [numlikes, setnumlikes] = useState(likes.length + dummyLikes.length);
   const [postText, setPostText] = useState(text);
   const [postTags, setPostTags] = useState(null);
   const [open, setOpen] = useState(false);
@@ -123,24 +123,23 @@ export default function PostCard({
 
   const handleLike = () => {
     if (!user) {
-      console.log("Like by dummy user..")
-      if(!liked){
-        dummyLike(({
+      console.log('Like by dummy user..');
+      if (!liked) {
+        dummyLike({
           variables: {
-            postId: postID
-          }
-        }))
-        setLiked(true)
-        setnumlikes(numlikes+1)
-      }
-      else {
-        setLiked(false)
-        setnumlikes(numlikes-1)
+            postId: postID,
+          },
+        });
+        setLiked(true);
+        setnumlikes(numlikes + 1);
+      } else {
+        setLiked(false);
+        setnumlikes(numlikes - 1);
       }
       return;
     }
     if (liked) {
-      console.log("Unliking post...", postID);
+      console.log('Unliking post...', postID);
       unlikePost({
         variables: {
           input: postID,
@@ -150,7 +149,7 @@ export default function PostCard({
       setLiked(false);
       setnumlikes(numlikes - 1);
     } else {
-      console.log("Liking post...", postID);
+      console.log('Liking post...', postID);
       likePost({
         variables: {
           input: postID,
@@ -164,11 +163,11 @@ export default function PostCard({
 
   const handleFlag = () => {
     if (!user) {
-      alert("Login to Flag the post");
+      alert('Login to Flag the post');
       return;
     }
     if (flagged) {
-      console.log("Unflagging post...", postID);
+      console.log('Unflagging post...', postID);
       unflagPost({
         variables: {
           input: postID,
@@ -178,7 +177,7 @@ export default function PostCard({
       });
       setFlagged(false);
     } else {
-      console.log("flagging post...", postID);
+      console.log('flagging post...', postID);
       flagPost({
         variables: {
           input: postID,
@@ -191,10 +190,10 @@ export default function PostCard({
   };
 
   const handleApprove = () => {
-    console.log("Approving post...", postText, author);
+    console.log('Approving post...', postText, author);
     var flagList = [];
     flags.forEach((element) => {
-      flagList.push({ username: element["username"] });
+      flagList.push({ username: element['username'] });
     });
     approvePost({
       variables: {
@@ -205,7 +204,7 @@ export default function PostCard({
   };
 
   const handleReject = () => {
-    console.log("Rejecting post...", postText, author);
+    console.log('Rejecting post...', postText, author);
     const delPost = {
       id: [postID],
     };
@@ -217,7 +216,7 @@ export default function PostCard({
   };
 
   const handleEdit = async (newText, newTags) => {
-    console.log("editing post...", postID, newTags, postTags);
+    console.log('editing post...', postID, newTags, postTags);
     var removeTags = postTags.filter((x) => !newTags.includes(x));
     var addTags = newTags.filter((x) => !postTags.includes(x));
 
@@ -237,25 +236,20 @@ export default function PostCard({
 
   // set likes
   useEffect(() => {
-    var totalLikes = 0
     if (likes){
       likes.forEach((item) => {
-        if (item["username"] === user.email) {
+        if (item['username'] === user.email) {
           setLiked(true);
         }
       });
-      totalLikes += likes.length
     }
-    if(dummyLikes)
-      totalLikes += dummyLikes.length
-    setnumlikes(totalLikes)
-  }, [user,likes, dummyLikes]);
+  }, [user,likes]);
 
   // set flags
   useEffect(() => {
     if (!flags) return;
     flags.forEach((item) => {
-      if (item["username"] === user.email) {
+      if (item['username'] === user.email) {
         setFlagged(true);
       }
     });
@@ -274,143 +268,162 @@ export default function PostCard({
 
   return (
     <>
-    <MetaTags>
-          <meta name="og:description" content="DevJoke Application" />
-          <meta property="og:title" content="DevJoke" />
-          <meta property="og:image" content={img} />
-          <meta property="og:url" content={"https://" + window.location.host + "/post/" + postID}/>
-          <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:image" content={img} />
-          <meta name="twitter:title" content="DevJoke" />
-          <meta name="twitter:description" content="DevJoke Application" />
-
-        </MetaTags>
-    <div className={"card"} style={{borderRadius: "10px"}}>
-      { clickable ?
-      <Link
-        to={{
-          pathname: `/post/${id}`,
-          state: { background: location },
-        }}
-      >
-        <img src={img} className="pic" alt={"preview"} width={"100%"} height={"auto"} 
-        style={{borderRadius: "10px"}}/>
-      </Link> : 
-        <img src={img} className="pic" alt={"preview"} width={"100%"} height={"auto"} 
-        style={{borderRadius: "10px"}}/>
-      }
-      <CardActions disableSpacing style={{padding: "0"}}>
-        {isApproved ? (
-          <>
-            <IconButton
-              aria-label="add to favorites"
-              style={{
-                color: liked === true ? orange[500] : grey[500],
-                paddingRight: "4px",
-              }}
-              onClick={handleLike}
-              selected={liked}
-            >
-              <EmojiEmotionsIcon fontSize="small" />
-            </IconButton>
-            <Typography
-              variant="button"
-              style={{
-                color: liked ? orange[500] : grey[500],
-                font: "15px arial",
-              }}
-              className={classes.likeCount}
-              color="primary"
-              component="p"
-            >
-              {numlikes}
-            </Typography>
-            <FacebookShareButton
-              className={classes.share}
-              style={{ color: blue[500] }}
-              url={img}
-              quote={"Do checkout this nice joke!! #DevJoke"}
-              hashtag={"DevJoke"}
-            >
-              <FacebookIcon fontSize="small" />
-            </FacebookShareButton>
-          </>
-        ) : (
-          <>
-            <IconButton aria-label="approve" onClick={handleApprove}>
-              <CheckCircleIcon htmlColor="green" />
-            </IconButton>
-            <IconButton aria-label="reject" onClick={handleReject}>
-              <CancelIcon htmlColor="red" />
-            </IconButton>
-            <IconButton
-              aria-label="edit"
-              onClick={() => {
-                setOpen(true);
-              }}
-            >
-              <EditIcon htmlColor="blue" />
-            </IconButton>
-            <TransitionModal
-              open={open}
-              setOpen={setOpen}
-              text={editText}
-              setText={setText}
-              tags={editTags}
-              setTags={setTags}
-              postText={postText}
-              setPostText={setPostText}
-              postTags={postTags}
-              setPostTags={setPostTags}
-              allTags={allTags}
-              handleEdit={handleEdit}
-            />
-          </>
-        )}
-        <IconButton
-          className={clsx(classes.expand, {
-            [classes.expandOpen]: expanded,
-          })}
-          onClick={() => setExpanded(!expanded)}
-          aria-expanded={expanded}
-          aria-label="show more"
-        >
-          <ExpandMoreIcon />
-        </IconButton>
-      </CardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <div>
-         {DateTimeFormat(time, "mmm dS, h:MM")}
-         <IconButton
-            aria-label="flag"
-            className={classes.flag}
-            value="check"
-            style={{ color: flagged ? red[500] : grey[500] }}
-            onClick={handleFlag}
-            selected={flagged}
+      <MetaTags>
+        <meta name="og:description" content="DevJoke Application" />
+        <meta property="og:title" content="DevJoke" />
+        <meta property="og:image" content={img} />
+        <meta
+          property="og:url"
+          content={'https://' + window.location.host + '/post/' + postID}
+        />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content={img} />
+        <meta name="twitter:title" content="DevJoke" />
+        <meta name="twitter:description" content="DevJoke Application" />
+      </MetaTags>
+      <div className={'card'} style={{ borderRadius: '10px' }}>
+        {clickable ? (
+          <Link
+            to={{
+              pathname: `/post/${id}`,
+              state: { background: location },
+            }}
           >
-          <FlagSharpIcon fontSize="small" />
-         </IconButton>
-        </div>
-
-        {isApproved ? (
-          <></>
+            <img
+              src={img}
+              className="pic"
+              alt={'preview'}
+              width={'100%'}
+              height={'auto'}
+              style={{
+                borderRadius: '10px',
+              }}
+            />
+          </Link>
         ) : (
-          <Typography variant="body2" color="textSecondary" backcomponent="p">
-            {postText}
-          </Typography>
+          <img
+            src={img}
+            className="pic"
+            alt={'preview'}
+            width={'100%'}
+            height={'auto'}
+            style={{
+              borderRadius: '10px',
+            }}
+          />
         )}
-        
-        <TagList tags={postTags} />
-      </Collapse>
-    </div>
+        <CardActions disableSpacing style={{ padding: '0' }}>
+          {isApproved ? (
+            <>
+              <IconButton
+                aria-label="add to favorites"
+                style={{
+                  color: liked === true ? red[500] : grey[500],
+                  paddingRight: '4px',
+                }}
+                onClick={handleLike}
+                selected={liked}
+              >
+                <FavoriteIcon fontSize="small" />
+              </IconButton>
+              <Typography
+                variant="button"
+                style={{
+                  color: liked ? orange[500] : grey[500],
+                  font: '15px arial',
+                }}
+                className={classes.likeCount}
+                color="primary"
+                component="p"
+              >
+                {numlikes}
+              </Typography>
+              <FacebookShareButton
+                className={classes.share}
+                style={{ color: blue[500] }}
+                url={img}
+                quote={'Do checkout this nice joke!! #DevJoke'}
+                hashtag={'DevJoke'}
+              >
+                <FacebookIcon fontSize="small" />
+              </FacebookShareButton>
+            </>
+          ) : (
+            <>
+              <IconButton aria-label="approve" onClick={handleApprove}>
+                <CheckCircleIcon htmlColor="green" />
+              </IconButton>
+              <IconButton aria-label="reject" onClick={handleReject}>
+                <CancelIcon htmlColor="red" />
+              </IconButton>
+              <IconButton
+                aria-label="edit"
+                onClick={() => {
+                  setOpen(true);
+                }}
+              >
+                <EditIcon htmlColor="blue" />
+              </IconButton>
+              <TransitionModal
+                open={open}
+                setOpen={setOpen}
+                text={editText}
+                setText={setText}
+                tags={editTags}
+                setTags={setTags}
+                postText={postText}
+                setPostText={setPostText}
+                postTags={postTags}
+                setPostTags={setPostTags}
+                allTags={allTags}
+                handleEdit={handleEdit}
+              />
+            </>
+          )}
+          <IconButton
+            className={clsx(classes.expand, {
+              [classes.expandOpen]: expanded,
+            })}
+            onClick={() => setExpanded(!expanded)}
+            aria-expanded={expanded}
+            aria-label="show more"
+          >
+            <ExpandMoreIcon />
+          </IconButton>
+        </CardActions>
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <div>
+            {DateTimeFormat(time, 'mmm dS, h:MM')}
+            <IconButton
+              aria-label="flag"
+              className={classes.flag}
+              value="check"
+              style={{ color: flagged ? red[500] : grey[500] }}
+              onClick={handleFlag}
+              selected={flagged}
+            >
+              <FlagSharpIcon fontSize="small" />
+            </IconButton>
+          </div>
+
+          {isApproved ? (
+            <></>
+          ) : (
+            <Typography variant="body2" color="textSecondary" backcomponent="p">
+              {postText}
+            </Typography>
+          )}
+
+          <TagList tags={postTags} />
+        </Collapse>
+      </div>
     </>
   );
 }
 
 function TagList({ tags }) {
   return (
-    <div style={{display:"flex", flexWrap:"wrap"}}>
+    <div style={{ display: 'flex', flexWrap: 'wrap' }}>
       {tags.map((tag) => (
         <Box component="div" display="inline" p={1} m={1} bgcolor="yellow">
           {tag}

@@ -1,22 +1,22 @@
-import React from "react";
-import { useLocation } from "react-router-dom";
-import Masonry from "react-masonry-css";
+import React from 'react';
+import { useLocation } from 'react-router-dom';
+import Masonry from 'react-masonry-css';
 
-import PostCard from "./card/postCard";
+import PostCard from './card/postCard';
 
 const breakpointColumnsObj = {
-  default: 4,
+  default: 3,
   1200: 3,
   900: 2,
-  675: 1
+  675: 1,
 };
 
-const MasonaryGrid = ({data, isApproved, allTags, updateCache}) => {
+const MasonaryGrid = ({ data, isApproved, allTags, updateCache }) => {
   const location = useLocation();
   const getShortName = (username) => {
-    return username.split('@')[0]
-  }
-  return(
+    return username.split('@')[0];
+  };
+  return (
     <Masonry
       breakpointCols={breakpointColumnsObj}
       className="my-masonry-grid"
@@ -24,7 +24,7 @@ const MasonaryGrid = ({data, isApproved, allTags, updateCache}) => {
     >
       {data.queryPost.map((post) => (
         <PostCard
-          size={"345px"}
+          size={'345px'}
           author={getShortName(post.createdby.username)}
           text={post.text}
           postID={post.id}
@@ -44,7 +44,7 @@ const MasonaryGrid = ({data, isApproved, allTags, updateCache}) => {
         />
       ))}
     </Masonry>
-  )
-}
+  );
+};
 
 export default MasonaryGrid;

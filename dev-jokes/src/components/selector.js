@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
 
 export function Selector({label, cb, options}) {
   const classes = useStyles();
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     name: 'hai',
   });
 

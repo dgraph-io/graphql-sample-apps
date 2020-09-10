@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
+import { isMobile } from 'react-device-detect';
 
-import Content from "../components/content";
-import { Navbar } from "../components/navbar";
-import { Selector } from "../components/selector";
-import SearchBar from "material-ui-search-bar";
-import MasonartGrid from "../components/masonryGrid";
+import Content from '../components/content';
+import { Navbar } from '../components/navbar';
+import { Selector } from '../components/selector';
+import SearchBar from 'material-ui-search-bar';
+import MasonartGrid from '../components/masonryGrid';
+import { makeStyles } from '@material-ui/core/styles';
 
 import {
   GET_TAGS,
@@ -12,24 +14,41 @@ import {
   SEARCH_POSTS,
   SEARCH_BY_TEXT_AND_TAGS,
   SEARCH_POST_BY_TAG,
-} from "../gql/queryData";
-import useImperativeQuery from "../utils/imperativeQuery";
+} from '../gql/queryData';
+import useImperativeQuery from '../utils/imperativeQuery';
 
-import { sortBy } from "../utils/utils";
-import { useQuery } from "@apollo/react-hooks";
-import { Tagger } from "../components/tagger";
+import { sortBy } from '../utils/utils';
+import { useQuery } from '@apollo/react-hooks';
+import { Tagger } from '../components/tagger';
 
 const sortByOptions = [
-  { name: "Newest", value: "new" },
-  { name: "Oldest", value: "old" },
-  { name: "Most Liked", value: "liked" },
+  { name: 'Newest', value: 'new' },
+  { name: 'Oldest', value: 'old' },
+  { name: 'Most Liked', value: 'liked' },
 ];
+
+const useStyles = makeStyles((theme) => ({
+  search: {
+    marginLeft: '30%',
+    [theme.breakpoints.down('md')]: {
+      marginLeft: '0%',
+    },
+  },
+  sort: {
+    marginLeft: '14%',
+    padding: '10px',
+    [theme.breakpoints.down('md')]: {
+      marginLeft: '0%',
+    },
+  },
+}));
 
 const Home = () => {
   const [mydata, setMydata] = useState(null);
   const [tagOptions, setTagOptions] = useState([]);
-  const [textString, setTextString] = useState("");
-  const [searchTag, setSearchTag] = useState("");
+  const [textString, setTextString] = useState('');
+  const [searchTag, setSearchTag] = useState('');
+  const classes = useStyles();
 
   const searchPosts = useImperativeQuery(SEARCH_POSTS);
   const searchPostsByTag = useImperativeQuery(SEARCH_POST_BY_TAG);
@@ -46,7 +65,7 @@ const Home = () => {
     if (!tloading && !terror) {
       var options = [];
       tagsData.queryTag.forEach((element) => {
-        options.push({ name: element["name"], value: element["name"] });
+        options.push({ name: element['name'], value: element['name'] });
       });
       // sort alphabetically
       options.sort((a, b) => {
@@ -67,14 +86,14 @@ const Home = () => {
     setMydata(data);
   };
 
-  const search = async (textString = "", tag = "") => {
+  const search = async (textString = '', tag = '') => {
     // No input defined.
-    if ((tag === "") & (textString === "")) {
+    if ((tag === '') & (textString === '')) {
       reset();
       return;
     }
     // Search by text
-    if (tag === "") {
+    if (tag === '') {
       const { data } = await searchPosts({
         text: textString,
       });
@@ -82,13 +101,13 @@ const Home = () => {
       return;
     }
     // Search by tags
-    if (textString === "") {
+    if (textString === '') {
       const { data } = await searchPostsByTag({
         input: tag,
       });
       let queryPost = [];
       data.queryTag.forEach((element) => {
-        queryPost.push(...element["posts"]);
+        queryPost.push(...element['posts']);
       });
       setMydata({ queryPost: queryPost });
       return;
@@ -103,7 +122,7 @@ const Home = () => {
     data.queryPostByTextAndTags.forEach((element) => {
       queryPost.push(element);
     });
-    console.log("Search by tag:", queryPost);
+    console.log('Search by tag:', queryPost);
     setMydata({ queryPost: queryPost });
   };
 
@@ -118,12 +137,20 @@ const Home = () => {
   };
 
   const SortBy = async (by) => {
-    if (by === "") return;
+    if (by === '') return;
     let data = mydata;
-    console.log("Sorting by:", by);
+    console.log('Sorting by:', by);
     setMydata({ queryPost: sortBy(data.queryPost, by) });
     return;
   };
+
+  // const FilterByTag = async (by) => {
+  //   console.log("Filtering Tags by:", by);
+  //   console.log(textString, by);
+  //   setSearchTag(by);
+  //   search(textString, by);
+  //   return;
+  // };
 
   const onChangeTag = (tag) => {
     setSearchTag(tag);
@@ -143,28 +170,32 @@ const Home = () => {
                   onChange={(e) => {
                     onChangeTag(e.target.value);
                   }}
+                  expand={isMobile ? false : true}
                 />
               </div>
 
               <div className="homepage-content-container">
-                <div className="homepage-search-container">
-                  <div className="searchbar-container ">
+                <div
+                  // className="homepage-search-container"
+                  className={classes.search}
+                >
+                  <div className="searchbar-container">
                     <SearchBar
                       value={textString}
                       label="Search your joke here"
                       onChange={(newText) => handleChange(newText)}
                       onRequestSearch={handleClick}
                       onCancelSearch={() => {
-                        setTextString("");
-                        search("", searchTag);
+                        setTextString('');
+                        search('', searchTag);
                       }}
-                      style={{ width: "100%" }}
+                      style={{ width: '100%' }}
                     />
                   </div>
 
-                  <div style={{ alignItems: "center" }}>
+                  <div className={classes.sort}>
                     <Selector
-                      label={"Sort By"}
+                      label={'Sort By'}
                       options={sortByOptions}
                       cb={SortBy}
                     />
