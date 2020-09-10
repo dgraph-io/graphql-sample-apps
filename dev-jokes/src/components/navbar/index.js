@@ -20,14 +20,14 @@ import useStyles from './navbar.style';
 import Logo from '../../assets/images/logo.svg';
 
 const AuthNav = ({ history }) => {
-  const { user, isAuthenticated } = useAuth0();
+  const { user, isAuthenticated, loginWithRedirect } = useAuth0();
   const location = useLocation();
   const classes = useStyles();
   return (
     <div className={classes.navRight}>
       {location && location.pathname !== '/create' ? (
         <Button
-          onClick={() => history.push('/create')}
+          onClick={() => {isAuthenticated? history.push("/create"): loginWithRedirect()}}
           variant="contained"
           color="secondary"
           className="btn-margin"
