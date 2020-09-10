@@ -40,7 +40,7 @@ export function PostFeed() {
   if (filterError) return `Error! ${filterError.message}`;
 
   const categoriesOptions = allCategories.map((category) => {
-    if (categoriesSet.indexOf(category?.id)) {
+    if (categoriesSet.indexOf(category?.id) === -1) {
       categoriesSet.push(category?.id);
     }
     return { key: category?.id, text: category?.name, value: category?.id };
