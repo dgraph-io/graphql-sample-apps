@@ -73,6 +73,9 @@ type Query{
   			likes: Post.likes{
   			  username: User.username		
 				}
+        dummyLikes: Post.dummyLikes {
+          key: Dummy.key
+        }
   			numFlags: Post.numFlags
   			flags: Post.flags{
   				username: User.username

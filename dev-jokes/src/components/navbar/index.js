@@ -33,7 +33,7 @@ const AuthNav = ({ history }) => {
           className="btn-margin"
           startIcon={<AddIcon />}
         >
-          <span class="button-text">Create</span>
+          Create
         </Button>
       ) : null}
       &nbsp;

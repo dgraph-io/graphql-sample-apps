@@ -40,7 +40,7 @@ function FlaggedList({loading, error, data, allTags}) {
     }
     client.writeQuery({
       query: GET_FLAGGED_POST,
-      data: {queryPost: [newFlagged, ...existing_flagged.queryPost]}
+      data: [newFlagged, ...existing_flagged.queryPost]
     })
   }
 
@@ -50,7 +50,7 @@ function FlaggedList({loading, error, data, allTags}) {
       Something Went Wrong. Did you remember to set the REACT_APP_GRAPHQL_ENDPOINT environment variable?
     </Typography>
   }
-  return <MasonaryGrid data={data} isApproved={false} updateCache={updateCache} allTags={allTags}/>
+  return <MasonaryGrid data={data.queryPost} isApproved={false} updateCache={updateCache} allTags={allTags}/>
 }
 
 export default Flagged;
