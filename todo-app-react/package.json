@@ -13,7 +13,7 @@
     "apollo-link-context": "^1.0.20",
     "apollo-link-http": "^1.5.16",
     "classnames": "^2.2.6",
-    "dgraph-js-http": "^1.1.0-rc21",
+    "dgraph-js-http": "^20.07.0",
     "graphql": "^14.6.0",
     "graphql-tag": "^2.10.3",
     "history": "^4.10.1",
