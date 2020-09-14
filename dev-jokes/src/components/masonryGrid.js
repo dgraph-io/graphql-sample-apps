@@ -22,8 +22,9 @@ const MasonaryGrid = ({ data, isApproved, allTags, updateCache }) => {
       className="my-masonry-grid"
       columnClassName="my-masonry-grid_column"
     >
-      {data.queryPost.map((post) => (
+      {data.map((post) => (
         <PostCard
+          key={post.id}
           size={'345px'}
           author={getShortName(post.createdby.username)}
           text={post.text}

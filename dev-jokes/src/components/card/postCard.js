@@ -100,12 +100,12 @@ export default function PostCard({
   clickable,
 }) {
   const classes = useStyles();
-  const { isLoading, user } = useAuth0();
+  const { isLoading, user, isAuthenticated } = useAuth0();
 
   const [expanded, setExpanded] = useState(false);
   const [liked, setLiked] = useState(false);
   const [flagged, setFlagged] = useState(false);
-  const [numlikes, setnumlikes] = useState(likes.length + dummyLikes.length);
+  const [numlikes, setnumlikes] = useState(0);
   const [postText, setPostText] = useState(text);
   const [postTags, setPostTags] = useState(null);
   const [open, setOpen] = useState(false);
@@ -122,8 +122,8 @@ export default function PostCard({
   const [dummyLike] = useMutation(ADD_DUMMY_LIKE);
 
   const handleLike = () => {
-    if (!user) {
-      console.log('Like by dummy user..');
+    if (!isAuthenticated) {
+      console.log('Like by dummy user..', liked, isLoading, isAuthenticated, user);
       if (!liked) {
         dummyLike({
           variables: {
@@ -162,7 +162,7 @@ export default function PostCard({
   };
 
   const handleFlag = () => {
-    if (!user) {
+    if (!isAuthenticated) {
       alert('Login to Flag the post');
       return;
     }
@@ -236,24 +236,34 @@ export default function PostCard({
 
   // set likes
   useEffect(() => {
+    var totalLikes = 0
     if (likes){
-      likes.forEach((item) => {
-        if (item['username'] === user.email) {
-          setLiked(true);
-        }
-      });
+
+      if (isLoading || !user){
+        //
+      } else {
+        likes.forEach((item) => {
+          if (item['username'] === user.email) {
+            setLiked(true);
+          }
+        });
+      }
+      totalLikes += likes.length
     }
-  }, [user,likes]);
+    if(dummyLikes)
+      totalLikes += dummyLikes.length
+    setnumlikes(totalLikes)
+  }, [user,likes, isLoading, isAuthenticated, dummyLikes]);
 
   // set flags
   useEffect(() => {
-    if (!flags) return;
+    if (!flags || isLoading || !user) return;
     flags.forEach((item) => {
       if (item['username'] === user.email) {
         setFlagged(true);
       }
     });
-  }, [user, flags]);
+  }, [isAuthenticated, user, isLoading, flags]);
 
   // set Tags
   useEffect(() => {
@@ -329,7 +339,7 @@ export default function PostCard({
               <Typography
                 variant="button"
                 style={{
-                  color: liked ? orange[500] : grey[500],
+                  color: liked ? red[500] : grey[500],
                   font: '15px arial',
                 }}
                 className={classes.likeCount}
@@ -425,7 +435,7 @@ function TagList({ tags }) {
   return (
     <div style={{ display: 'flex', flexWrap: 'wrap' }}>
       {tags.map((tag) => (
-        <Box component="div" display="inline" p={1} m={1} bgcolor="yellow">
+        <Box component="div" display="inline" p={1} m={1} bgcolor="yellow" key={tag}>
           {tag}
         </Box>
       ))}

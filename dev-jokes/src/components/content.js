@@ -39,7 +39,8 @@ const Content = ({ children }) => {
     <main className={clsx(classes.content, classes.contentShift)}>
       <div className={classes.drawerHeader} />
       {children}
-      <img src={Logo} style={{position: "fixed", bottom:"0", right:"0", borderTopLeftRadius:"10px", width:"15%", minWidth:"120px"}} alt="slash-graphql"/>
+      <img src={Logo} alt={"#DevJoke"}
+      style={{position: "fixed", bottom:"0", right:"0", borderTopLeftRadius:"10px", width:"15%", minWidth:"120px"}}/>
     </main>
   );
 };

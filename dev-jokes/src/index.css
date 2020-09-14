@@ -72,10 +72,6 @@ a {
   .card {
     /* width: 250px; */
   }
-
-  .button-text {
-    display: none;
-  }
   
   .my-masonry-grid {
     display: -webkit-box; /* Not needed if autoprefixing */
