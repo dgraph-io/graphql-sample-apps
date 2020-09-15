@@ -1,0 +1,7 @@
+mutation DeletePokemon {
+  deletePokemon(filter: { name: { alloftext: "Bulbasaur" } }) {
+    pokemon {
+      name
+    }
+  }
+}

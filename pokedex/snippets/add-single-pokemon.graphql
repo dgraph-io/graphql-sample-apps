@@ -1,0 +1,21 @@
+mutation AddPokemon {
+  addPokemon(
+    input: [
+      {
+        id: 1
+        name: "Bulbasaur"
+        captured: false
+        imgUrl: "http://img.pokemondb.net/artwork/bulbasaur.jpg"
+        pokemonTypes: [Grass, Poison]
+      }
+    ]
+  ) {
+    pokemon {
+      id
+      name
+      captured
+      imgUrl
+      pokemonTypes
+    }
+  }
+}

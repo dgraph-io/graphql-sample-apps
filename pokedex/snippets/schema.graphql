@@ -1,0 +1,28 @@
+enum PokemonType {
+  Bug
+  Dark
+  Dragon
+  Electric
+  Fairy
+  Fighting
+  Fire
+  Flying
+  Ghost
+  Grass
+  Ground
+  Ice
+  Normal
+  Poison
+  Psychic
+  Rock
+  Steel
+  Water
+}
+
+type Pokemon {
+  id: Int! @search
+  name: String! @search(by: [fulltext])
+  captured: Boolean! @search
+  imgUrl: String!
+  pokemonTypes: [PokemonType!]! @search
+}

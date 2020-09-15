@@ -1,0 +1,43 @@
+{
+  "name": "pokedex-slash-graphql",
+  "description": "Pokédex React app implemented with a Slash GraphQL backend",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "http://tylerhawkins.info/pokedex-slash-graphql/build",
+  "scripts": {
+    "build": "react-scripts build",
+    "eject": "react-scripts eject",
+    "format": "prettier --write .",
+    "format-watch": "onchange . -- prettier --write {{changed}}",
+    "start": "react-scripts start",
+    "test": "react-scripts test"
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.11.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "onchange": "^7.0.2",
+    "prettier": "^2.0.5",
+    "react-scripts": "3.4.1"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

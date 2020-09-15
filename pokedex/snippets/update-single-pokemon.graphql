@@ -1,0 +1,7 @@
+mutation UpdatePokemon {
+  updatePokemon(input: { filter: { id: { eq: 1 } }, set: { captured: true } }) {
+    pokemon {
+      name
+    }
+  }
+}

@@ -1,0 +1,5 @@
+query GetAllPokemonNames {
+  queryPokemon {
+    name
+  }
+}

@@ -1,0 +1,9 @@
+query GetAllCapturedPokemon {
+  queryPokemon(filter: { captured: true }) {
+    id
+    name
+    captured
+    imgUrl
+    pokemonTypes
+  }
+}
