@@ -3,7 +3,6 @@
   "description": "Pokédex React app implemented with a Slash GraphQL backend",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://tylerhawkins.info/pokedex-slash-graphql/build",
   "scripts": {
     "build": "react-scripts build",
     "eject": "react-scripts eject",
