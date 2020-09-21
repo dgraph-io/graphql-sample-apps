@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "react-scripts build",
+    "build": "CI= react-scripts build",
     "eject": "react-scripts eject",
     "format": "prettier --write .",
     "format-watch": "onchange . -- prettier --write {{changed}}",
