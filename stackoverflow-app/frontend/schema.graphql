@@ -1,0 +1,30 @@
+type Author {
+   username: String! @id
+   email: String!
+   dob: DateTime
+   questions: [Question] @hasInverse(field: author)
+   answers: [Answer] @hasInverse(field: author)
+ }
+
+ interface Post {
+   id: ID!
+   text: String! @search(by: [fulltext])
+   datePublished: DateTime @search
+   likes: Int
+   author: Author!
+   comments: [Comment] @hasInverse(field: commentsOn)
+ }
+
+ type Question implements Post {
+   title: String! @search(by: [term])
+   tags: [String] @search(by: [exact])
+   answers: [Answer] @hasInverse(field: inAnswerTo)
+ }
+
+ type Answer implements Post {
+   inAnswerTo: Question!
+ }
+
+ type Comment implements Post {
+   commentsOn: Post!
+ }

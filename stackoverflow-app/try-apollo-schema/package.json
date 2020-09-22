@@ -1,0 +1,27 @@
+{
+  "name": "try-apollo-schema",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "@apollo/federation": "^0.16.0",
+    "apollo-link": "^1.2.14",
+    "apollo-link-http": "^1.5.17",
+    "apollo-server": "^2.13.1",
+    "dgraph-js": "^20.3.0",
+    "graphql": "^15.0.0",
+    "graphql-tools": "^5.0.0",
+    "grpc": "^1.24.2",
+    "node-fetch": "^2.6.0"
+  },
+  "devDependencies": {
+    "esm": "^3.2.25",
+    "object-assign": "^4.1.1"
+  },
+  "scripts": {
+    "start": "node -r esm index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

@@ -1,0 +1,147 @@
+type Query {
+    # # Expose only some of the queries from the Dgraph backend
+    getQuestion(id: ID!): Question
+    getAnswer(id: ID!): Answer
+    getComment(id: ID!): Comment
+    queryQuestion(filter: QuestionFilter, order: QuestionOrder, first: Int, offset: Int): [Question]
+
+    # # And add some extra queries
+    myTopQuestions: [Question]
+}
+
+type Mutation {
+    # # Keep some of the mutations from the backend
+    addQuestion(input: AddQuestionInput!): Question
+    addAnswer(input: AddAnswerInput!): Answer
+    addComment(input: AddCommentInput!): Comment
+
+    # # Change the updatePost mutation to some more intentional operations
+    editPostText(id: ID!, newText: String!): Post
+    likePost(id: ID!, likes: Int!): Post
+}
+
+type Author {
+  username: String! 
+  email: String!
+  dob: DateTime
+  questions: [Question]
+  answers: [Answer]
+}
+
+interface Post {
+  id: ID!
+  text: String 
+  datePublished: DateTime
+  likes: Int
+  author: Author!
+}
+
+type Question implements Post {
+  id: ID!
+  text: String 
+  datePublished: DateTime
+  likes: Int
+  author: Author!
+  title: String!
+  tags: [String]
+  answers: [Answer]
+  comments: [Comment]
+}
+
+type Answer implements Post {
+  id: ID!
+  text: String 
+  datePublished: DateTime
+  likes: Int
+  author: Author!
+  inAnswerTo: Question!
+  comments: [Comment]
+}
+
+type Comment implements Post {
+  id: ID!
+  text: String 
+  datePublished: DateTime
+  likes: Int
+  author: Author!
+  commentsOn: Post!
+  comments: [Comment]
+}
+
+scalar DateTime
+
+input AddQuestionInput {
+    text: String!
+    title: String!
+    tags: [String]
+}
+
+input AddAnswerInput {
+    text: String!
+    inAnswerTo: QuestionRef!
+}
+
+input AddCommentInput {
+    text: String!
+    commentsOn: PostRef!
+}
+
+input AddAuthorInput {
+    username: String!
+    password: String!
+    email: String!
+    dob: DateTime
+}
+
+input QuestionRef {
+    id: ID!
+}
+
+input PostRef {
+    id: ID!
+}
+
+enum QuestionOrderable {
+    likes
+    datePublished
+}
+
+input QuestionFilter {
+    title: StringTermFilter
+    tags: StringExactFilter
+    text: StringFullTextFilter
+    datePublished: DateTimeFilter
+    or: QuestionFilter
+}
+
+input QuestionOrder {
+    asc: QuestionOrderable
+    desc: QuestionOrderable
+    then: QuestionOrder
+}
+
+input StringFullTextFilter {
+    alloftext: String
+    anyoftext: String
+}
+
+input StringTermFilter {
+    allofterms: String
+    anyofterms: String
+}
+
+input StringHashFilter {
+    eq: String
+}
+
+input DateTimeFilter {
+    eq: DateTime
+    le: DateTime
+    lt: DateTime
+    ge: DateTime
+    gt: DateTime
+}
+
+input StringExactFilter {
+    eq: String
+}

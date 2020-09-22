@@ -1,0 +1,8 @@
+{
+  "short_name": "Dgraph GraphQL Demo",
+  "name": "Dgraph GraphQL Demo",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}

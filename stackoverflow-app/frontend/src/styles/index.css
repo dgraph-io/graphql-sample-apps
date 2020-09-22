@@ -1,0 +1,45 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.navbar-direction {
+  flex-direction: row-reverse;
+}
+
+.card-pointer {
+  cursor: pointer;
+}
+
+.delete-post {
+  float: right;
+  cursor: pointer;
+}
+
+.edit-post {
+  float: right;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.text-post {
+  white-space: pre-wrap;
+  margin-bottom: 10px;
+}
+
+.tagsset-post {
+  float: right;
+}
+
+.tag-post {
+  margin: 2px;
+}
