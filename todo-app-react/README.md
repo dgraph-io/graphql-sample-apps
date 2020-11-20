@@ -5,7 +5,7 @@
     <a href="https://dgraph.io/slash-graphql" target="_blank">
       <img src="https://dgraph.io/assets/images/slashgraphql-logo.svg" alt="Slash GraphQL" />
     </a><br />
-    A fully managed GraphQL backend service
+    A fully-managed GraphQL backend service
   </h2>
 </div>
 
