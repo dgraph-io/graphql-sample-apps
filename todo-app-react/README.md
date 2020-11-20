@@ -11,7 +11,7 @@
 
 <h3 align="center"><a href="https://slash.dgraph.io/_/one-click?app=todo" target="_blank">Deploy Now</a> for free!</h3>
 
-To-Do is a sample app that lets uers manage the tasks on their personal to-do list. Developers can see how to use react hooks with apollo client to easily create, read, update, and delete To-Do items. Deploying this app on Slash deploys both the back-end database service and a front-end react app in a single click, no credit card required. To learn more about this sample app, see: [Building a To-Do List React App with Dgraph](https://dgraph.io/blog/post/building-todo-list-react-dgraph/)
+To-Do is a sample app that lets users manage the tasks on their personal to-do list. This app demonstrates how to use React hooks with an Apollo client to easily create, read, update, and delete to-do list items. Deploying this app on Slash GraphQL deploys both the back-end database service and a front-end React app in a single click, no credit card required. To learn more about this sample app, see: [Building a To-Do List React App with Dgraph](https://dgraph.io/blog/post/building-todo-list-react-dgraph/)
 
 ### Features
 - Add a new task
