@@ -11,9 +11,26 @@ type User @auth(
 }
 
 type Form @withSubscription @auth(
-    delete: {rule: "{$role: {eq: \"ADMIN\"}}"},
-    update: {rule: "{$role: {eq: \"ADMIN\"}}"}
-    ) {
+    update: {rule: """
+        query ($USER: String!) {
+            queryForm {
+                	creator(filter: { email: { eq:  $USER } } ) {
+                    email
+                }
+            }
+        }
+        """
+},
+    delete: {rule: """
+        query ($USER: String!) {
+            queryForm {
+                	creator(filter: { email: { eq:  $USER } } ) {
+                    email
+                }
+            }
+        }
+        """
+}) {
   id: ID!
   title: String! @search(by: [hash])
   fields: [Field!]!
