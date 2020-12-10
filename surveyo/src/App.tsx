@@ -11,6 +11,7 @@ import {useAuth0, withAuthenticationRequired} from '@auth0/auth0-react';
 import createApolloClient from './ApolloConfig';
 import logoLight from './images/logoLight.svg';
 import logoDark from './images/logoDark.svg';
+import slashLogo from './images/slash-logo.png';
 import {Typography} from 'antd';
 import FormCreator from './FormCreator';
 import history from './history';
@@ -142,6 +143,17 @@ function App() {
                   />
                 </Switch>
               )}
+
+              <img
+                style={{
+                  position: 'absolute',
+                  right: 0,
+                  bottom: 0,
+                  borderTopLeftRadius: '10px',
+                }}
+                src={slashLogo}
+                alt="slash-logo"
+              />
             </main>
           </div>
         </div>
