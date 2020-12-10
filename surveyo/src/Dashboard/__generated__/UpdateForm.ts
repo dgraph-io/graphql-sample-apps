@@ -9,7 +9,7 @@
 
 export interface UpdateForm_updateForm_form {
   __typename: "Form";
-  isClosed: boolean;
+  isClosed: boolean | null;
 }
 
 export interface UpdateForm_updateForm {
