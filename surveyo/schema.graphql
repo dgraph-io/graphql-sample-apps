@@ -36,6 +36,7 @@ type Form @withSubscription @auth(
   fields: [Field!]!
   responses: [Response!] @hasInverse(field: form)
   creator: User!
+  isClosed: Boolean!
 }
 
 type Field @withSubscription @auth(

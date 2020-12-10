@@ -5,6 +5,7 @@ export const GET_FORM = gql`
     getForm(id: $id) {
       id
       title
+      isClosed
       fields(order: {asc: order}) {
         id
         title

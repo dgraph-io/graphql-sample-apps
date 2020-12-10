@@ -2,6 +2,7 @@ mutation {
   addForm(input: [{
     title: "Surveyo: Hello World!", 
     creator: {email: "rahul@dgraph.io"}, 
+    isClosed: false,
     fields: [
       {
         title: "Which Cartoon/Anime do you relate to the most?"

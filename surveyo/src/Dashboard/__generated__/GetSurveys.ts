@@ -17,6 +17,7 @@ export interface GetSurveys_getUser_forms {
   id: string;
   title: string;
   responses: GetSurveys_getUser_forms_responses[] | null;
+  isClosed: boolean;
 }
 
 export interface GetSurveys_getUser {

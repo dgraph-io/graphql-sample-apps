@@ -304,7 +304,8 @@ function FormCreator() {
                   var form = {
                     title: surveyTitle,
                     fields: questions,
-                    creator: {email: user.email},
+                    creator: { email: user.email },
+                    isClosed: false
                   };
 
                   console.log('Form: ', form);

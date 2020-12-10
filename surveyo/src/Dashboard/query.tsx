@@ -9,6 +9,7 @@ export const GET_FORMS = gql`
         responses {
           id
         }
+        isClosed
       }
     }
   }
@@ -24,9 +25,21 @@ export const DELETE_FORM = gql`
   }
 `;
 
+export const UPDATE_FORM = gql`
+  mutation UpdateForm($id: ID!, $isClosed: Boolean!) {
+    updateForm(input: {filter: {id: [$id]}, set: {isClosed: $isClosed}}) {
+      numUids
+      form {
+        isClosed
+      }
+    }
+  }
+`;
+
 export const GET_CSV = gql`
   query GetCsvResponses($id: ID!) {
     getForm(id: $id) {
+      isClosed
       fields(order: {asc: order}) {
         id
         type
