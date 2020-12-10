@@ -20,7 +20,7 @@ export interface AddFormInput {
   fields: FieldRef[];
   responses?: ResponseRef[] | null;
   creator: UserRef;
-  isClosed: boolean;
+  isClosed?: boolean | null;
 }
 
 export interface AddResponseInput {

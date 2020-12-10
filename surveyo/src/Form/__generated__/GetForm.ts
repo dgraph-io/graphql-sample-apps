@@ -29,7 +29,7 @@ export interface GetForm_getForm {
   __typename: "Form";
   id: string;
   title: string;
-  isClosed: boolean;
+  isClosed: boolean | null;
   fields: GetForm_getForm_fields[];
 }
 
