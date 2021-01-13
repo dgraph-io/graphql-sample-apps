@@ -16,7 +16,6 @@ import Login from "./Login";
 import SignUp from "./SignUp";
 import PrivateRoute from "./PrivateRoute";
 import config from "./config.json";
-import './App.css';
 
 const createApolloClient = token => {
   const httpLink = createHttpLink({
