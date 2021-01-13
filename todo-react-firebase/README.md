@@ -1,233 +1,108 @@
-# Todo React App powered by Dgraph
+# Todo React App with Firebase Auth
 
-Todo React App using GraphQL powered by Dgraph.
+This Repo contains a Todo app which uses Firebase for Authentication.
+For more context about setting up Todo App with Dgraph GraphQL, please refer to [here](https://github.com/dgraph-io/graphql-sample-apps/blob/master/todo-app-react/README.md).
 
-### GraphQL Schema Design for Dgraph
-
-At first, when we visualize the main components of Todo App, we get node as shown below:
-
-![Todo Graph](./todo-graph.png)
-
-Equivalent GraphQL schema for the graph above would be as follow:
-
-```graphql
-type Task {
-    ...
-}
+# Firebase Auth
+Authentication with Firebase is done through the JWKURL, where the Json Web Key sets are hosted by the firebase. Since firebase shares the JWKs among multiple tenants, you must provide your firebase `project-Id` to the `Audience` field.
+So the `Dgraph.Authorization` header will look like this:
 ```
-
-So what do you think we should have for a Todo node?
-
-We have mainly a title and a status to check if the Todo was completed.
-We represent that in the GraphQL schema shown below:
-
-```graphql
-type Task {
-    id: ID!
-    title: String!
-    completed: Boolean!
-}
+{"Header":"your-header", "Namespace":"namespace-of-custom-claims","JWKURL": "your-firebase-jwk-url", "Audience":[your-projectID]}
 ```
+You don't need to set the `VerificationKey` and `Algo` in the `Authorization` header. Doing so will result in error.
 
-_Note: You will be required to add custom directives to support additional functionalities of Dgraph._
+# Setting up Firebase Auth with Dgraph GraphQL'
 
-### Set Up the Environment
+## Step 1 - Create Firebase App
+Go to the [Firebase Website](https://firebase.google.com/) and create a new project. In the Authentication section, enable `Email/Password` signin.
+In this app, we have used signin by `Email/Password`. 
+Configure `Authorized domain` below according to where you want to deploy your app. By defaut localhost is added to the list.
+We are done here. We will now be able to use the `jwt` tokens provided by firebase to login into your app. But for handling `authorization` we need to add custom claims to our token. 
 
-Before we begin, make sure that you have [Docker](https://docs.docker.com/install/)
-installed on your machine.
+## Step 2 - Add Custom Claims
+In order to add custom claims to the `jwt` you need to host a `cloud function` which will insert claims to the `jwt` on user creation.
+This is our cloud function which inserts `USER`: `email` claim under the Namespace `https://dgraph.io/jwt/claims`.
+```js
+const functions = require('firebase-functions');
+const admin = require('firebase-admin');
+admin.initializeApp();
 
-Let's begin by starting Dgraph standalone by running the command below:
-
-```bash
-docker run --rm -it -p 8080:8080 -v ~/dgraph:/dgraph dgraph/standalone:v20.03.1
+exports.addUserClaim = functions.https.onCall((data, context) => {
+	return admin.auth().getUserByEmail(data.email).then(user=>{
+		return admin.auth().setCustomUserClaims(user.uid, {
+			"https://dgraph.io/jwt/claims":{
+				"USER": data.email
+			}
+		});
+	}).then(() => {
+		return {
+			message: `Success!`
+		}
+	}).catch(err => {
+		 return err
+	})
+})
 ```
+To deploy the firebase cloud function please follow the [deployment guide](https://firebase.google.com/docs/functions/get-started) and replace `index.js` with the snippet above.
 
-Save the content below as `schema.graphql`.
-
-```graphql
-type Task {
-  id: ID!
-  title: String! @search(by: [fulltext])
-  completed: Boolean! @search
-}
-```
-
-Let's load up the GraphQL schema file to Dgraph:
-
-```bash
-curl -X POST localhost:8080/admin/schema --data-binary '@schema.graphql'
-```
-
-If you’ve followed the steps above correctly, there’s a GraphQL server up and running.
-You can access that GraphQL endpoint with any of the great GraphQL developer tools.
-Good choices include GraphQL Playground, Insomnia, GraphiQL and Altair.
-
-Set up any of them and point it at `http://localhost:8080/graphql`. If you know lots about GraphQL, you might want to explore the schema, queries and mutations that were generated from the input.
-
-### Mutating Data
-
-Let's add two todos in our Todo App.
-
-```graphql
-mutation {
-  addTask(input: [
-    {
-      title: "Avoid crowd",
-      completed: true
-    },
-    {
-      title: "Wash your hands often",
-      completed: true
-    },
-    {
-      title: "Avoid touching your face",
-      completed: false
-    },
-    {
-      title: "Stay safe",
-      completed: false
-    }
-  ]) {
-    task {
-      id
-      title
-    }
-  }
-}
-```
-
-### Querying Data
-
-Let's fetch the todos to list in our Todo App:
-
-```graphql
-query {
-  queryTask {
-    id
-    title
-    completed
-  }
-}
-```
-
-Running the query above should return JSON response as shown below:
-
+## Step 3 - Using it inside our React App.
+First, Set up your console configuration and your `Dgraph GraphQL` endpoint in the  [config.json](https://github.com/dgraph-io/graphql-sample-apps/blob/minhaj/add-todo-firebase-app/todo-react-firebase/src/config.json). It looks like this:
 ```json
 {
-  "data": {
-    "queryTask": [
-      {
-        "id": "0x2",
-        "title": "Stay safe",
-        "completed": false
-      },
-      {
-        "id": "0x3",
-        "title": "Avoid crowd",
-        "completed": true
-      },
-      {
-        "id": "0x4",
-        "title": "Wash your hands often",
-        "completed": true
-      },
-      {
-        "id": "0x5",
-        "title": "Avoid touching your face",
-        "completed": false
+    "apiKey": "your-firebase-apiKey",
+    "authDomain": "your-firebase-authDomain",
+    "databaseURL": "your-firebase-databaseURL",
+    "projectId": "your-firebase-projectId",
+    "storageBucket": "your-firebase-storageBucket",
+    "messagingSenderId": "your-firebase-messagingSenderId",
+    "appId": "your-firebase-appId",
+    "graphqlUrl": "your-graphql-endpoint"
+}
+```
+Auth.js:
+```js
+import React, { useEffect, useState } from "react";
+import app from "./base.js";
+import firebase from "firebase/app";
+import "firebase/functions";
+
+import App from "./App";
+export const AuthContext = React.createContext();
+
+export const AuthProvider = ({ children }) => {
+  const [currentUser, setCurrentUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [idToken, setIdToken] = useState("");
+  const addUserClaim = firebase.functions().httpsCallable('addUser');
+
+
+  useEffect(() => {
+    app.auth().onAuthStateChanged( async user => {
+      setLoading(false)
+      setCurrentUser(user)
+      if (user) {
+        addUserClaim({email: user.email})
+        const token = await user.getIdToken(); 
+        setIdToken(token);
       }
-    ]
+    });
+  }, []);
+
+  if(loading){
+    return <>Loading...</>
   }
-}
+  return (
+    <AuthContext.Provider
+      value={{
+        loading,
+        currentUser,
+      }}
+    >
+      {children}
+      <App idToken = {idToken}/>
+    </AuthContext.Provider>
+  );
+};
 ```
-
-### Querying Data with Filters
-
-Before we get into querying data with filters, we will be required
-to define search indexes to the specific fields.
-
-Let's say we have to run a query on the _completed_ field, for which
-we add `@search` directive to the field as shown in the schema below:
-
-```graphql
-type Task {
-  id: ID!
-  title: String!
-  completed: Boolean! @search
-}
-```
-
-The `@search` directive are added to support the native search indexes of **Dgraph**.
-
-Now, let's fetch all todos which are completed :
-
-```graphql
-query {
-  queryTask(filter: {
-    complete: {
-      eq: "true"
-    }
-  }) {
-    id
-    title
-  }
-}
-```
-
-Next, let's say we have to run a query on the _title_ field, for which
-we add another `@search` directive to the field as shown in the schema below:
-
-```graph
-type Task {
-    id: ID!
-    title: String! @search(by: [fulltext])
-    completed: Boolean! @search
-}
-```
-
-The `fulltext` search index provides the advanced search capability to perform equality
-comparision as well as matching with language specific stemming and stopwords.
-
-Now, let's try to fetch todos whose title has the word _"remember"_ :
-
-```graphql
-query {
-  queryTask(filter: {
-    title: {
-      alloftext: "remember"
-    }
-  }) {
-    id
-    title
-    completed
-  }
-}
-```
-
-## Bring up ToDo App
-
-### `npm install`
-
-Install the dependencies needed to bring up the application.
-
-### `npm start`
-
-If you are not running Dgraph locally, then be sure to modify *graphqlUrl*
-in `src/config.json`  to point at accurate GraphQL endpoint before starting
-the application.
-
-Runs the Todo application.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-### `npm run build`
-
-Compiles the Todo application and minifies to generate the production build.
-
-## Screenshots
-
-![Todo App 1](./todo-1.png)
-
-![Todo App 2](./todo-2.png)
-
----
+This is the main component related to the Auth. It is simple to understand that whenever there will be `state` change, `currentUser` will be set to the new `user` and Context will return `App` with the new `idToken`. `App` will initialize new apollo client which will send this `idToken` in header along with every GraphQL request.
 
