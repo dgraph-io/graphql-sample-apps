@@ -35,26 +35,6 @@ const TodoApp = () => {
 
   const {currentUser} = useContext(AuthContext);
 
-  const createUser = () => {
-    if (currentUser === undefined) {
-      return null;
-    }
-    const { data: getUser } = getUsers({
-      username: currentUser.email
-    });
-    if (getUser && getUser.getUser === null) {
-      const newUser = {
-        username: currentUser.email,
-        name: currentUser.nickname,
-      };
-      addUser({
-        variables: {
-          user: newUser
-        }
-      })
-    }
-  }
-
   const { loading, error, data } = useQuery(GET_TODOS);
   const getData = () => {
     if (loading) {
