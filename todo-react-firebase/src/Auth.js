@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [idToken, setIdToken] = useState("");
-  const addAdminRole = firebase.functions().httpsCallable('addAdminRole');
+  const addUserClaim = firebase.functions().httpsCallable('addUser');
 
 
   useEffect(() => {
@@ -18,10 +18,10 @@ export const AuthProvider = ({ children }) => {
       setLoading(false)
       setCurrentUser(user)
       if (user) {
-        addAdminRole({email: user.email})
+        addUserClaim({email: user.email})
         const token = await user.getIdToken(); 
         setIdToken(token);
-      } 
+      }
     });
   }, []);
 
