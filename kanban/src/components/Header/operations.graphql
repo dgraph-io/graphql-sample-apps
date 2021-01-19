@@ -1,0 +1,6 @@
+query projectNames {
+  queryProject {
+    projID
+    name
+  }
+}

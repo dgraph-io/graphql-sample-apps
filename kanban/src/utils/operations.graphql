@@ -1,0 +1,46 @@
+fragment UserNames on User {
+  username
+  displayName
+  image
+}
+
+query getUser ($username: String!) {
+  getUser(username: $username) {
+    ...UserNames
+  }
+}
+
+query countUsersAndSearch($username: String!) {
+  aggregateUser {
+    count
+  }
+  getUser(username: $username) {
+    ...UserNames
+  }
+}
+
+mutation addUser($username: String!, $displayName: String!, $image: String) {
+  addUser(input:[{
+    username: $username
+    displayName: $displayName
+    image: $image
+  }]) {
+    user {
+      ...UserNames
+    }
+  }
+}
+
+mutation updateUser($username: String!, $displayName: String, $image: String) {
+  updateUser(input: {
+    filter: { username: { eq: $username } }
+    set: {
+      displayName: $displayName
+      image: $image
+    }
+  }) {
+    user {
+      ...UserNames
+    }
+  }
+}
