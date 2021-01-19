@@ -1,0 +1,117 @@
+type User {
+  username: String! @id
+  displayName: String
+  image: String
+  isAdmin: Boolean
+  tickets: [Ticket] @hasInverse(field: assignedTo)
+  authoredComments: [Comment] @hasInverse(field: author)
+}
+
+type Project
+  @withSubscription
+  @auth(
+    query: {
+      or: [
+        {
+          rule: "query ($username: String!) { queryProject { admin(filter: {username: {eq: $username}}) { username } } }"
+        }
+        {
+          rule: "query ($username: String!) { queryProject { roles { assignedTo(filter: {username: {eq: $username}}) { username } } } }"
+        }
+      ]
+    }
+  ) {
+  projID: ID!
+  name: String! @search(by: [term])
+  url: String
+  description: String
+  admin: User
+  roles: [Role]
+  columns: [Column] @hasInverse(field: inProject)
+  "A JSON array storing the order of the columns by id"
+  order: String
+}
+
+type Role {
+  id: ID!
+  permission: [Permission!]! @search
+  assignedTo: [User]
+}
+
+enum Permission {
+  VIEW
+  EDIT
+  DELETE
+}
+
+type Column
+  @withSubscription
+  @auth(
+    query: {
+      or: [
+        {
+          rule: "query ($username: String!) { queryColumn { inProject { admin(filter: {username: {eq: $username}}) { username } } } }"
+        }
+        {
+          rule: "query ($username: String!) { queryColumn { inProject { roles { assignedTo(filter: {username: {eq: $username}}) { username } } } } }"
+        }
+      ]
+    }
+  ) {
+  colID: ID!
+  inProject: Project!
+  name: String!
+  orderPreference: Int
+    @deprecated(reason: "To order columns inside projects use Project.order")
+  tickets: [Ticket] @hasInverse(field: onColumn)
+  "A JSON array storing the order of the tickets by id"
+  order: String
+}
+
+type Ticket
+  @withSubscription
+  @auth(
+    query: {
+      or: [
+        {
+          rule: "query ($username: String!) { queryTicket { onColumn { inProject { admin(filter: {username: {eq: $username}}) { username } } } } }"
+        }
+        {
+          rule: "query ($username: String!) { queryTicket { onColumn { inProject { roles { assignedTo(filter: {username: {eq: $username}}) { username } } } } } }"
+        }
+      ]
+    }
+  ) {
+  id: ID!
+  onColumn: Column!
+  title: String! @search(by: [term])
+  datetime: DateTime @search
+  description: String
+  orderPreference: Int
+    @deprecated(reason: "To order tickets inside columns use Column.order")
+  assigned: User
+  comments: [Comment] @hasInverse(field: onTicket)
+}
+
+type Comment
+  @withSubscription
+  @auth(
+    query: {
+      or: [
+        {
+          rule: "query ($username: String!) { queryComment { onTicket { onColumn { inProject { admin(filter: {username: {eq: $username}}) { username } } } } } }"
+        }
+        {
+          rule: "query ($username: String!) { queryComment { onTicket { onColumn { inProject { roles { assignedTo(filter: {username: {eq: $username}}) { username } } } } } } }"
+        }
+      ]
+    }
+  ) {
+  id: ID!
+  datetime: DateTime! @search
+  text: String!
+  onTicket: Ticket
+  author: User!
+}
+
+# Dgraph.Authorization {"Header":"token","Namespace":"https://dgraph.io/claims/graphqlkanban","Algo":"RS256","Audience":["eaNlZ3Hi019Ty8kfJ1cZ8iL4abmpZP24","VerificationKey":"-----BEGIN CERTIFICATE-----\nMIIDDTCCAfWgAwIBAgIJLQRlaTIoZyKuMA0GCSqGSIb3DQEBCwUAMCQxIjAgBgNV\nBAMTGWRldi05M2tlYmZqcy51cy5hdXRoMC5jb20wHhcNMjAxMTI3MDEzMzI2WhcN\nMzQwODA2MDEzMzI2WjAkMSIwIAYDVQQDExlkZXYtOTNrZWJmanMudXMuYXV0aDAu\nY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1On2d0G5ew0QVUrZ\nR9mGyIgS0cw+IpELf+BuyoKAO+8cRjmQiidN7C8K7lF8cvbdt7wpPXAx07VlxLb9\nGOACcwWjvf0gzcR9doCT1pJ+OkuqE8OKFBKrTTTm9uV/0dQzWbxYRtlFN2Fpopbj\nQCL3jK2muDElc2ZUyZ/y3A/2YXhHbAsMmRh3ZTea1SYW2PdJscSyARIpKs5655vu\nNK+X1ILZmzF6r0JBW8UidUnsCKvUXu6q++Ci6t+t2tMth0Yy1LR3ejqCis5k/K1n\n9UIbtmxwamBh46ZXEkeqH63DPeANBXtWeHZx07/6eYsyTBIKGId07Odt/TrLidNW\nBedAmQIDAQABo0IwQDAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBT/KocLZscp\nGIRtJ+S9UMcwKdQ2tzAOBgNVHQ8BAf8EBAMCAoQwDQYJKoZIhvcNAQELBQADggEB\nAHjXFKbHrYJZq2wlpAEBCHc1SmHlDdFf4FcjrjHcyTLnhIufUedpX0wgwmkU8IYF\nit7FklKvbuqZp1xGCzSOPeXzlrzN0+/Dls4VoRuQBJ898wjRioy5xlrbv5MgBbcQ\ns1FQn4NmPtppDr38QbS/gwKgdMNqYHE69zfokzB43R7NqEXzoJXmXdIeiadc02Wv\nI1PT4zLELJh1s+5ouGWOrcjGr9qr8WvV0qVBs+NaIOauf6U1bw7RFWsjk1E0QrMW\ntzSAOmt/e3l45QBpImyTVaeW4bDlEvn3tGwD/ZcTjzGfLPlELpAjD+Wu4v1d1p4a\nWXA8gqQe+RvhMd6FTizbX2A=\n-----END CERTIFICATE-----"]}

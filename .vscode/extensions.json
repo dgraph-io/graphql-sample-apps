@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "apollographql.vscode-apollo",
+    "esbenp.prettier-vscode",
+    "exodiusstudios.comment-anchors",
+    "coenraads.bracket-pair-colorizer-2",
+    "msjsdiag.debugger-for-chrome",
+    "dsznajder.es7-react-js-snippets"
+  ]
+}
