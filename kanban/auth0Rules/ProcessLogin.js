@@ -8,7 +8,7 @@ function (user, context, callback) {
   
   if (context.clientID!==CLIENT_ID) return callback(null, user, context);
   
-  context.idToken[CLAIMS] = {username: user.username};
+  context.idToken[CLAIMS] = {username: user.email};
   return callback(null, user, context);
 
   /**
