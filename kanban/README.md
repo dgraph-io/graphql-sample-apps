@@ -42,6 +42,18 @@ Integrate with Auth0:
 10. Replace all line breaks with the `\n` characters. (e.g. `-----BEGIN CERTIFICATE-----\n...\n...\n-----END CERTIFICATE-----`)
 11. Copy the updated contents of this file and Paste into the last line of `/src/schema.graphql` replacing the value for the key `VerificationKey`
 
+Deploy Auth0 Rule:
+
+1. Copy the value for REACT_APP_AUTH0_CLAIMS_KEY from your environment variables, and paste into `auth0Rules/ProcessLogin.js` on line 6 for the `CLAIMS` value.
+2. Copy the value for REACT_APP_AUTH0_CLIENT_ID from your environment variables, and paste into `auth0Rules/ProcessLogin.js` on line 7 for the `CLIENT_ID` value.
+3. Copy the contents of `auth0Rules/ProcessLogin.js`.
+4. On your Auth0 Dashboard, navigate to your Auth Pipeline -> Rules.
+5. Click "+ Create Rule".
+6. Pick the "Empty rule" template.
+7. Enter a name for the rule.
+8. Replace the contents of Script using the contents you copied in step 3 above.
+9. Click "Save Changes" to deploy the rule.
+
 Integrate with Slash GraphQL:
 
 1. Sign up for Slash GraphQL at https://slash.dgraph.io/
