@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "./App.css";
 import { ApolloProvider } from "@apollo/client";
 import { KanbanBoard, Header, Projects } from "./components";
@@ -13,7 +13,6 @@ const CLAIMS = process.env.REACT_APP_AUTH0_CLAIMS_KEY as string;
 const App = () => {
   const { user, isAuthenticated, isLoading, getIdTokenClaims } = useAuth0();
   const currentUser = user?.[CLAIMS] || {};
-  useEffect(() => {}, [isAuthenticated]);
   return (
     <ApolloProvider
       client={createApolloClient(isAuthenticated ? getIdTokenClaims : null)}
@@ -31,7 +30,6 @@ const App = () => {
                   {isAuthenticated && (
                     <Projects
                       {...props}
-                      // withProjectEdits={currentUser.isAdmin === true}
                       withProjectEdits={
                         isAuthenticated && Boolean(currentUser.username)
                       }
