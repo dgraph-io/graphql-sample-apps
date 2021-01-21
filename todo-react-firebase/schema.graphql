@@ -26,4 +26,4 @@ type User {
   tasks: [Task] @hasInverse(field: user)
 }
 
-# Dgraph.Authorization {"JWKUrl":"your-jwk-url", "Namespace": "https://dgraph.io/jwt/claims", "Audience": ["your-project-id"], "Header": "X-Auth-Token"}
+# Dgraph.Authorization {"JWKUrl":"https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com", "Namespace": "https://dgraph.io/jwt/claims", "Audience": ["your-project-id"], "Header": "X-Auth-Token"}
