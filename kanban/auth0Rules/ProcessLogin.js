@@ -3,12 +3,12 @@ function (user, context, callback) {
   // const { request } = require('graphql-request');
   // const API = "https://[your-slash].[location].[service].cloud.dgraph.io/graphql";
 
-  const CLAIMS = "https://dgraph.io/claims/graphqlkanban"; // REACT_APP_AUTH0_CLAIMS_KEY
-  const CLIENT_ID = "eaNlZ3Hi019Ty8kfJ1cZ8iL4abmpZP24"; // REACT_APP_AUTH0_CLIENT_ID
+  const CLAIMS = "https://dgraph.io/jwt/claims"; // REACT_APP_AUTH0_CLAIMS_KEY
+  const CLIENT_ID = "Q1nC2kLsN6KQTX1UPdiBS6AhXRx9KwKl"; // REACT_APP_AUTH0_CLIENT_ID
   
   if (context.clientID!==CLIENT_ID) return callback(null, user, context);
   
-  context.idToken[CLAIMS] = {username: user.email};
+  context.idToken[CLAIMS] = {USER: user.email};
   return callback(null, user, context);
 
   /**
@@ -85,6 +85,7 @@ function (user, context, callback) {
   //     });
   //     const { getUser } = getUserRes;
   //     if (getUser===null) return checkUser();
+  //     getUser.USER = getUser.email;
   //     getUser.IS_ADMIN = (getUser && typeof getUser.isAdmin === 'boolean') ? getUser.isAdmin.toString() : "false";
   //     context.idToken[CLAIMS] = getUser;
   //     return callback(null, user, context);

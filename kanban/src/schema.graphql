@@ -13,10 +13,10 @@ type Project
     query: {
       or: [
         {
-          rule: "query ($username: String!) { queryProject { admin(filter: {username: {eq: $username}}) { username } } }"
+          rule: "query ($USER: String!) { queryProject { admin(filter: {username: {eq: $USER}}) { username } } }"
         }
         {
-          rule: "query ($username: String!) { queryProject { roles { assignedTo(filter: {username: {eq: $username}}) { username } } } }"
+          rule: "query ($USER: String!) { queryProject { roles { assignedTo(filter: {username: {eq: $USER}}) { username } } } }"
         }
       ]
     }
@@ -50,10 +50,10 @@ type Column
     query: {
       or: [
         {
-          rule: "query ($username: String!) { queryColumn { inProject { admin(filter: {username: {eq: $username}}) { username } } } }"
+          rule: "query ($USER: String!) { queryColumn { inProject { admin(filter: {username: {eq: $USER}}) { username } } } }"
         }
         {
-          rule: "query ($username: String!) { queryColumn { inProject { roles { assignedTo(filter: {username: {eq: $username}}) { username } } } } }"
+          rule: "query ($USER: String!) { queryColumn { inProject { roles { assignedTo(filter: {username: {eq: $USER}}) { username } } } } }"
         }
       ]
     }
@@ -74,10 +74,10 @@ type Ticket
     query: {
       or: [
         {
-          rule: "query ($username: String!) { queryTicket { onColumn { inProject { admin(filter: {username: {eq: $username}}) { username } } } } }"
+          rule: "query ($USER: String!) { queryTicket { onColumn { inProject { admin(filter: {username: {eq: $USER}}) { username } } } } }"
         }
         {
-          rule: "query ($username: String!) { queryTicket { onColumn { inProject { roles { assignedTo(filter: {username: {eq: $username}}) { username } } } } } }"
+          rule: "query ($USER: String!) { queryTicket { onColumn { inProject { roles { assignedTo(filter: {username: {eq: $USER}}) { username } } } } } }"
         }
       ]
     }
@@ -99,10 +99,10 @@ type Comment
     query: {
       or: [
         {
-          rule: "query ($username: String!) { queryComment { onTicket { onColumn { inProject { admin(filter: {username: {eq: $username}}) { username } } } } } }"
+          rule: "query ($USER: String!) { queryComment { onTicket { onColumn { inProject { admin(filter: {username: {eq: $USER}}) { username } } } } } }"
         }
         {
-          rule: "query ($username: String!) { queryComment { onTicket { onColumn { inProject { roles { assignedTo(filter: {username: {eq: $username}}) { username } } } } } } }"
+          rule: "query ($USER: String!) { queryComment { onTicket { onColumn { inProject { roles { assignedTo(filter: {username: {eq: $USER}}) { username } } } } } } }"
         }
       ]
     }
@@ -114,4 +114,4 @@ type Comment
   author: User!
 }
 
-# Dgraph.Authorization {"Header":"token","Namespace":"https://dgraph.io/claims/graphqlkanban","Algo":"RS256","Audience":["eaNlZ3Hi019Ty8kfJ1cZ8iL4abmpZP24","VerificationKey":"-----BEGIN CERTIFICATE-----\nMIIDDTCCAfWgAwIBAgIJLQRlaTIoZyKuMA0GCSqGSIb3DQEBCwUAMCQxIjAgBgNV\nBAMTGWRldi05M2tlYmZqcy51cy5hdXRoMC5jb20wHhcNMjAxMTI3MDEzMzI2WhcN\nMzQwODA2MDEzMzI2WjAkMSIwIAYDVQQDExlkZXYtOTNrZWJmanMudXMuYXV0aDAu\nY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1On2d0G5ew0QVUrZ\nR9mGyIgS0cw+IpELf+BuyoKAO+8cRjmQiidN7C8K7lF8cvbdt7wpPXAx07VlxLb9\nGOACcwWjvf0gzcR9doCT1pJ+OkuqE8OKFBKrTTTm9uV/0dQzWbxYRtlFN2Fpopbj\nQCL3jK2muDElc2ZUyZ/y3A/2YXhHbAsMmRh3ZTea1SYW2PdJscSyARIpKs5655vu\nNK+X1ILZmzF6r0JBW8UidUnsCKvUXu6q++Ci6t+t2tMth0Yy1LR3ejqCis5k/K1n\n9UIbtmxwamBh46ZXEkeqH63DPeANBXtWeHZx07/6eYsyTBIKGId07Odt/TrLidNW\nBedAmQIDAQABo0IwQDAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBT/KocLZscp\nGIRtJ+S9UMcwKdQ2tzAOBgNVHQ8BAf8EBAMCAoQwDQYJKoZIhvcNAQELBQADggEB\nAHjXFKbHrYJZq2wlpAEBCHc1SmHlDdFf4FcjrjHcyTLnhIufUedpX0wgwmkU8IYF\nit7FklKvbuqZp1xGCzSOPeXzlrzN0+/Dls4VoRuQBJ898wjRioy5xlrbv5MgBbcQ\ns1FQn4NmPtppDr38QbS/gwKgdMNqYHE69zfokzB43R7NqEXzoJXmXdIeiadc02Wv\nI1PT4zLELJh1s+5ouGWOrcjGr9qr8WvV0qVBs+NaIOauf6U1bw7RFWsjk1E0QrMW\ntzSAOmt/e3l45QBpImyTVaeW4bDlEvn3tGwD/ZcTjzGfLPlELpAjD+Wu4v1d1p4a\nWXA8gqQe+RvhMd6FTizbX2A=\n-----END CERTIFICATE-----"]}
+# Dgraph.Authorization {"Header":"X-Auth-Token","Namespace":"https://dgraph.io/jwt/claims","Algo":"RS256","Audience":["Q1nC2kLsN6KQTX1UPdiBS6AhXRx9KwKl"],"VerificationKey":"-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAp/qw/KXH23bpOuhXzsDp\ndo9bGNqjd/OkH2LkCT0PKFx5i/lmvFXdd04fhJD0Z0K3pUe7xHcRn1pIbZWlhwOR\n7siaCh9L729OQjnrxU/aPOKwsD19YmLWwTeVpE7vhDejhnRaJ7Pz8GImX/z/Xo50\nPFSYdX28Fb3kssfo+cMBz2+7h1prKeLZyDk30ItK9MMj9S5y+UKHDwfLV/ZHSd8m\nVVEYRXUNNzLsxD2XaEC5ym2gCjEP1QTgago0iw3Bm2rNAMBePgo4OMgYjH9wOOuS\nVnyvHhZdwiZAd1XtJSehORzpErgDuV2ym3mw1G9mrDXDzX9vr5l5CuBc3BjnvcFC\nFwIDAQAB\n-----END PUBLIC KEY-----"}

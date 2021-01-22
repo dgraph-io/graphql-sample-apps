@@ -44,7 +44,7 @@ function createApolloClient(
     return {
       headers: {
         ...headers,
-        token: idTokenClaims.__raw,
+        "X-Auth-Token": idTokenClaims.__raw,
       },
     };
   });
