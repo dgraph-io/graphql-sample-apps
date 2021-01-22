@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [idToken, setIdToken] = useState("");
-  const addUserClaim = firebase.functions().httpsCallable('addUser');
+  const addUserClaim = firebase.functions().httpsCallable('addUserClaim');
 
 
   useEffect(() => {
@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
       setCurrentUser(user)
       if (user) {
         addUserClaim({email: user.email})
-        const token = await user.getIdToken(); 
+        const token = await user.getIdToken();
         setIdToken(token);
       }
     });
