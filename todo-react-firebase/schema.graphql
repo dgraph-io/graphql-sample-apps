@@ -1,0 +1,29 @@
+type Task @auth(
+		query: { rule: """
+        query($USER: String!) {
+            queryTask {
+                user(filter: { username: { eq: $USER } }) {
+                    __typename
+                }
+            }
+        }"""}
+		add: { rule: """
+        query($USER: String!) {
+            queryTask {
+                user(filter: { username: { eq: $USER } }) {
+                    __typename
+                }
+            }
+        }"""}){
+    id: ID!
+    title: String! @search(by: [fulltext])
+    completed: Boolean! @search
+    user: User!
+}
+type User {
+  username: String! @id @search(by: [hash])
+  name: String
+  tasks: [Task] @hasInverse(field: user)
+}
+
+# Dgraph.Authorization {"JWKUrl":"https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com", "Namespace": "https://dgraph.io/jwt/claims", "Audience": ["your-project-id"], "Header": "X-Auth-Token"}

@@ -3,152 +3,181 @@ type User @auth(
     delete: {rule: "{$role: {eq: \"ADMIN\"}}"},
     update: {rule: "{$role: {eq: \"ADMIN\"}}"}
 ) {
-  id: ID!
-  email: String! @id @search(by: [hash])
-  name: String
-  # A user can create multiple forms.
-  forms: [Form] @hasInverse(field: creator)
+    id: ID!
+    email: String! @id @search(by: [hash])
+    name: String
+    # A user can create multiple forms.
+    forms: [Form] @hasInverse(field: creator)
 }
 
 type Form @withSubscription @auth(
-    delete: {rule: "{$role: {eq: \"ADMIN\"}}"},
-    update: {rule: "{$role: {eq: \"ADMIN\"}}"}
-    ) {
-  id: ID!
-  title: String! @search(by: [hash])
-  fields: [Field!]!
-  responses: [Response!] @hasInverse(field: form)
-  creator: User!
+    update: {rule: """
+        query ($USER: String!) {
+            queryForm {
+                	creator(filter: { email: { eq:  $USER } } ) {
+                    email
+                }
+            }
+        }
+        """
+    },
+    delete: {rule: """
+        query ($USER: String!) {
+            queryForm {
+                	creator(filter: { email: { eq:  $USER } } ) {
+                    email
+                }
+            }
+        }
+        """
+}) {
+    id: ID!
+    title: String! @search(by: [hash])
+    fields: [Field!]!
+    responses: [Response!] @hasInverse(field: form)
+    creator: User!
+    isClosed: Boolean @search
 }
 
 type Field @withSubscription @auth(
-  delete: {
-    rule: """
-    query ($USER: String!) {
-        queryField {
-            form {
-              creator(filter: { email: { eq:  $USER } } ) {
-                email
-              }
+    delete: {
+        rule: """
+        query ($USER: String!) {
+            queryField {
+                form {
+                    creator(filter: { email: { eq:  $USER } } ) {
+                        email
+                    }
+                }
             }
         }
-    }
-    """
-  },
-  update: {
-    rule: """
-    query ($USER: String!) {
-        queryField {
-            form {
-              creator(filter: { email: { eq:  $USER } } ) {
-                email
-              }
+        """
+    },
+    update: {
+        rule: """
+        query ($USER: String!) {
+            queryField {
+                form {
+                    creator(filter: { email: { eq:  $USER } } ) {
+                        email
+                    }
+                }
             }
         }
-    }
-    """
-  }) 
-  {
-  id: ID!
-  order: Int!
-  type: FieldType!
-  form: Form! @hasInverse(field: fields)
-  entries: [Entry!] @hasInverse(field: field)
-  title: String! @search(by: [hash])
-  options: [FieldOption!]
-  required: Boolean!
-  count: Int
+        """
+}) 
+{
+    id: ID!
+    order: Int!
+    type: FieldType!
+    form: Form! @hasInverse(field: fields)
+    entries: [Entry!] @hasInverse(field: field)
+    title: String! @search(by: [hash])
+    options: [FieldOption!]
+    required: Boolean!
+    count: Int
 }
 
 enum FieldType {
-  Date
-  NetPromoterScore
-  Rating
-  SingleChoice
-  Text
+    Date
+    NetPromoterScore
+    Rating
+    SingleChoice
+    Text
 }
 
 type FieldOption {
-  id: ID!
-  order: Int!
-  title: String! @search(by: [hash])
+    id: ID!
+    order: Int!
+    title: String! @search(by: [hash])
 }
 
 type Response
 @auth(
-  delete: {
-    rule: """
-    query ($USER: String!) {
-        queryResponse {
-            form {
-              creator(filter: { email: { eq:  $USER } } ) {
-                email
-              }
+    add: {
+        rule: """
+        query {
+            queryResponse {
+                form (filter: { isClosed :  false }) {
+                    isClosed
+                }
             }
         }
-    }
-    """
-  },
-  update: {
-    rule: """
-    query ($USER: String!) {
-        queryResponse {
-            form {
-              creator(filter: { email: { eq:  $USER } } ) {
-                email
-              }
+        """
+    },
+    delete: {
+        rule: """
+        query ($USER: String!) {
+            queryResponse {
+                form {
+                    creator(filter: { email: { eq:  $USER } } ) {
+                        email
+                    }
+                }
             }
         }
+        """
+    },
+    update: {
+        rule: """
+        query ($USER: String!) {
+            queryResponse {
+                form {
+                    creator(filter: { email: { eq:  $USER } } ) {
+                        email
+                    }
+                }
+            }
+        }
+        """
     }
-    """
-  }
 ) {
-  id: ID!
-  form: Form!
-  entries: [Entry!]!
+    id: ID!
+    form: Form!
+    entries: [Entry!]!
 }
 
 type Entry
 @auth(
-  delete: {
-    rule: """
-    query ($USER: String!) {
-        queryEntry {
-            field {
-                form {
-                    creator(filter: { email: { eq:  $USER } } ) {
-                        email
+    delete: {
+        rule: """
+        query ($USER: String!) {
+            queryEntry {
+                field {
+                    form {
+                        creator(filter: { email: { eq:  $USER } } ) {
+                            email
+                        }
                     }
                 }
             }
-        }
-    },
-    """
-  }, 
-  update: {
-    rule: """
-    query ($USER: String!) {
-        queryEntry {
-            field {
-                form {
-                    creator(filter: { email: { eq:  $USER } } ) {
-                        email
+        },
+        """
+    }, 
+    update: {
+        rule: """
+        query ($USER: String!) {
+            queryEntry {
+                field {
+                    form {
+                        creator(filter: { email: { eq:  $USER } } ) {
+                            email
+                        }
                     }
                 }
             }
-        }
-    },
-    """
-  }
+        },
+        """
+    }
 ) {
-  id: ID!
-  field: Field!
-
-  date: DateTime
-  netPromoterScore: Int
-  rating: Int
-  singleChoice: FieldOption
-  text: String
+    id: ID!
+    field: Field!
+    
+    date: DateTime
+    netPromoterScore: Int
+    rating: Int
+    singleChoice: FieldOption
+    text: String
 }
 
 # Dgraph.Authorization {"Header":"X-Auth-Token","Namespace":"https://dgraph.io/jwt/claims","Algo":"RS256","Audience":["mx6dY2HXVRxDLbUknPivqlqNhwil40qP", "https://dev-m2uanjnq.us.auth0.com/api/v2/"],"VerificationKey":"-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsVic6D2j0wUerAAnR3Yf\nbSP9sCv4Lkk6r8CWRY8HapjFea0zRmNXVf0q9Em+Jwawe6bm4rya/5/qrwe9BKMA\n3+d7pmtC5qADZxH2GoV0qtH9vZWro//NtyYZ+mTXf/3GNouItmQ09p3Msb8jiYyx\nsl/0GhHDcful7VJ7+hEhcNjcHUrc4E8vJ88JfHPVhmZPBDM0T3yeSgbFi1n2ma+x\n9Guhtm7T3jOtAIflD7AA11j0H4poO8hgn3lU2CKydUJ1VPtpJu5YyIT6kPh0yqDU\nhn59tKE5hxlPW9kceSsMWYQO+8hai04aXSLk3A67gmTMS8IlvkeFrC4zgZSs65sL\npwIDAQAB\n-----END PUBLIC KEY-----"}

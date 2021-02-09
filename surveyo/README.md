@@ -14,13 +14,14 @@
 Surveyo is a sample app that provides users with a survey tool that they can use to quickly create and respond to surveys. Advanced users can use Surveyo’s GraphQL endpoint to run complex queries on survey results. This app demonstrates how to use React hooks with Apollo client to create surveys, collect responses, visualize responses with charts, export responses into CSV, and delete surveys. Deploying this app on Slash GraphQL deploys both the back-end database service and a front-end React app in a single click, no credit card required. To learn about this sample app, see: [Building a Survey Forms App with GraphQL](https://dgraph.io/blog/post/surveyo-into/).
 
 ### Features
+
 - Supports Short Answer, Multiple-Choice Question, Date Query and Rating type of questions
 - Visualize responses collected as Pie Chart, Word Cloud and Bar chart
 - Provides inline GraphiQL IDE to make GraphQL queries to chart data directly
 - Export survey responses into CSV.
 
-
 ### Front-end
+
 - [React](https://reactjs.org/) (3.4.1)—a JavaScript library for building user interfaces.
 - [Apollo Client](https://www.npmjs.com/package/apollo-client) (3.1.1)—a comprehensive state management library for JavaScript that enables you to manage both local and remote data with GraphQL.
 - [Auth0 React](https://github.com/auth0/auth0-react)—Auth0 SDK for React Single Page Applications (SPA).
@@ -30,11 +31,12 @@ Surveyo is a sample app that provides users with a survey tool that they can use
 - [GraphiQL](https://github.com/graphql/graphiql)—a graphical interactive in-browser GraphQL IDE
 
 ### Back-end
+
 - [Slash GraphQL](https://dgraph.io/slash-graphql)—a fully managed GraphQL backend service
 - [Auth0](https://auth0.com/)—Secure access for everyone.
 
-
 ### Links
+
 - [Deploy Now](https://slash.dgraph.io/_/one-click?app=surveyo)
 - [Blog: Building a Survey Forms App with GraphQL](https://dgraph.io/blog/post/surveyo-into/)
 - [Demo](https://surveyo.one-click.cloud.dgraph.io/)
@@ -47,4 +49,20 @@ Surveyo is a sample app that provides users with a survey tool that they can use
 <img src="public/Create-Form.gif" />
 
 #### Visualizations of responses
+
 <img src="public/Charts.gif" />
+
+## Forking and running locally
+
+### Environment variables
+
+- To configure Surveyo with Slash GraphQL, create a `.env` file and add `REACT_APP_GRAPHQL_ENDPOINT` to the endpoint of your Slash cluster.
+
+- In Slash GraphQl, Load the schema from schema.graphql present in this repo
+
+- Start the frontend
+
+### Auth0 Configuration
+
+We use Auth0 for authorisation. The snippets for auth0 configuration are checked in the code [here](https://github.com/rahulgurnani/surveyo/tree/master/auth0_snippets). The steps of configuring Auth0 dashboard are mentioned in the blog post [here](https://dgraph.io/blog/post/surveyo-into/).
+After configuring Auth0 dashboard, update the Auth0 config used in the code present in src/AuthConfig.json.

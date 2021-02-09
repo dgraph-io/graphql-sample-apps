@@ -43,6 +43,7 @@ export interface GetCsvResponses_getForm_responses {
 
 export interface GetCsvResponses_getForm {
   __typename: "Form";
+  isClosed: boolean | null;
   fields: GetCsvResponses_getForm_fields[];
   responses: GetCsvResponses_getForm_responses[] | null;
 }

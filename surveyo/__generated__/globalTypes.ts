@@ -20,6 +20,7 @@ export interface AddFormInput {
   fields: FieldRef[];
   responses?: ResponseRef[] | null;
   creator: UserRef;
+  isClosed?: boolean | null;
 }
 
 export interface AddResponseInput {
@@ -61,6 +62,7 @@ export interface FormRef {
   fields?: FieldRef[] | null;
   responses?: ResponseRef[] | null;
   creator?: UserRef | null;
+  isClosed?: boolean | null;
 }
 
 export interface ResponseRef {

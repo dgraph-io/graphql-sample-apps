@@ -3,7 +3,7 @@ import {SyForm} from './form';
 import {useParams} from 'react-router-dom';
 import {GetForm, GetFormVariables} from './__generated__/GetForm';
 import {useQuery} from '@apollo/client';
-import {Result404, Result500} from '../common';
+import {Result404, Result500, FormClosed} from '../common';
 import {PageHeader, Row, Col, Card} from 'antd';
 import {GET_FORM} from './query';
 
@@ -25,6 +25,10 @@ export default function Page() {
 
   if (!data?.getForm) {
     return <Result404 />;
+  }
+  
+  if (data && data.getForm && data.getForm.isClosed) {
+    return <FormClosed/>
   }
 
   return <SyForm data={data.getForm} />;
