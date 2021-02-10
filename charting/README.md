@@ -1,25 +1,39 @@
-## Available Scripts
+<div style="padding-top: 5px; padding-bottom: 10px;">
+  <h1 align="center">Charts</h1>
+  <h2 align="center">
+    A One-Click Deployable App with<br />
+    <a href="https://dgraph.io/slash-graphql" target="_blank">
+      <img src="https://dgraph.io/assets/images/slashgraphql-logo.svg" alt="Slash GraphQL" />
+    </a><br />
+    A fully-managed GraphQL backend service
+  </h2>
+</div>
 
-In the project directory, you can run:
+<h3 align="center"><a href="https://slash.dgraph.io/_/one-click?app=charting" target="_blank">Deploy Now</a> for free!</h3>
 
-### `npm install && npm start`
+Charts is a sample app that lets users build online charts using metrics that they provide. For example, you could provide this app with data from an e-commerce site and use it to track site statistics such as the number of page views and revenue. This app demonstrates how to use React hooks with Apollo client to add and read related data. Deploying this app on Slash GraphQL deploys both the back-end database service and a front-end React app in a single click, no credit card required. To learn more about this sample app, see the [Charting Sample App on GitHub](https://github.com/dgraph-io/graphql-sample-apps/tree/master/charting).
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Features
+- Create multiple metrics
+- Data entry collection
+- Plot metrics on line charts with controllable time period
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+### Front-end
+- [React](https://reactjs.org/) (3.4.1)—a JavaScript library for building user interfaces.
+- [Apollo Client](https://www.npmjs.com/package/apollo-client) (3.0+)—a comprehensive state management library for JavaScript that enables you to manage both local and remote data with GraphQL.
+- [Material-UI](https://material-ui.com/)—a user interface framework for faster and easier web development.
+- [React Google Charts](https://react-google-charts.com/)—a declarative API to make rendering charts fun and easy.
 
-### Pointing to a Slash Endpoint
+### Back-end
+- [Slash GraphQL](https://dgraph.io/slash-graphql)—a fully managed GraphQL backend service
 
-By default, this points to the tweet app Slash GraphQL endpoint. You can change this by starting the app with the following environment variable
 
-```
-REACT_APP_GRAPHQL_ENDPOINT=https://beneficial-baseball-9463.us-west-2.aws.cloud.dgraph.io/graphql npm start
-```
+### Links
+- [Deploy Now](https://slash.dgraph.io/_/one-click?app=charting)
+- [Community Support](https://discuss.dgraph.io/)
 
-### Adding a new page
+### Screenshots
 
-The quickest way to add a new page would be to
-1) Clone the src/components/home.js, and save it to your new type. Change the default exported constant from Home to whatever your page is
-2) Add the page to the routes in src/App.js
+![Todo App 1](./screenshots/home.png)
+
+![Todo App 2](./screenshots/metrics.png)

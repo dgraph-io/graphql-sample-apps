@@ -1,32 +1,58 @@
-# Surveyo
+<div style="padding-top: 5px; padding-bottom: 10px;">
+  <h1 align="center">Surveyo</h1>
+  <h2 align="center">
+    A One-Click Deployable App with<br />
+    <a href="https://dgraph.io/slash-graphql" target="_blank">
+      <img src="https://dgraph.io/assets/images/slashgraphql-logo.svg" alt="Slash GraphQL" />
+    </a><br />
+    A fully-managed GraphQL backend service
+  </h2>
+</div>
 
-A simple survey form-creator application that can be used to create forms, collect responses, and visualize the aggregate data. It also gives users a GraphQL interface to perform complex queries on the collected data. Code respositroy is [here](https://github.com/rahulgurnani/surveyo).
+<h3 align="center"><a href="https://slash.dgraph.io/_/one-click?app=surveyo" target="_blank">Deploy Now</a> for free!</h3>
 
-Hosted [here](https://surveyo.one-click.cloud.dgraph.io/) and create your first form!
+Surveyo is a sample app that provides users with a survey tool that they can use to quickly create and respond to surveys. Advanced users can use Surveyo’s GraphQL endpoint to run complex queries on survey results. This app demonstrates how to use React hooks with Apollo client to create surveys, collect responses, visualize responses with charts, export responses into CSV, and delete surveys. Deploying this app on Slash GraphQL deploys both the back-end database service and a front-end React app in a single click, no credit card required. To learn about this sample app, see: [Building a Survey Forms App with GraphQL](https://dgraph.io/blog/post/surveyo-into/).
 
-**Front-end**: [React](https://reactjs.org/), [ANT Design](https://ant.design/)
+### Features
 
-**Back-end**: [Slash GraphQL (Database)](https://dgraph.io/slash-graphql), [Auth0](https://auth0.com/) is used for creating JWT and create user hook
-
-## Features
-
-- Supports Short Answer, MCQs, Date Query and Rating type of questions.
+- Supports Short Answer, Multiple-Choice Question, Date Query and Rating type of questions
 - Visualize responses collected as Pie Chart, Word Cloud and Bar chart
-- Provides GraphiQL IDE to make GraphQL queries
+- Provides inline GraphiQL IDE to make GraphQL queries to chart data directly
+- Export survey responses into CSV.
 
-## Demo
+### Front-end
 
-### Creating a form
+- [React](https://reactjs.org/) (3.4.1)—a JavaScript library for building user interfaces.
+- [Apollo Client](https://www.npmjs.com/package/apollo-client) (3.1.1)—a comprehensive state management library for JavaScript that enables you to manage both local and remote data with GraphQL.
+- [Auth0 React](https://github.com/auth0/auth0-react)—Auth0 SDK for React Single Page Applications (SPA).
+- [AntDesign](https://ant.design/)—a design system for enterprise-level products.
+- [Chart.js](https://www.chartjs.org/)—a simple yet flexible JavaScript charting for designers & developers
+- [TypeScript](https://www.typescriptlang.org/)—extends JavaScript by adding types.
+- [GraphiQL](https://github.com/graphql/graphiql)—a graphical interactive in-browser GraphQL IDE
 
-<img src="public/Create-Form.gif" width="450" />
+### Back-end
 
-### Visualizations of responses
+- [Slash GraphQL](https://dgraph.io/slash-graphql)—a fully managed GraphQL backend service
+- [Auth0](https://auth0.com/)—Secure access for everyone.
 
-<img src="public/Charts.gif" width="450" />
+### Links
 
-## Code structure and usage
+- [Deploy Now](https://slash.dgraph.io/_/one-click?app=surveyo)
+- [Blog: Building a Survey Forms App with GraphQL](https://dgraph.io/blog/post/surveyo-into/)
+- [Demo](https://surveyo.one-click.cloud.dgraph.io/)
+- [Community Support](https://discuss.dgraph.io/)
 
-### Running locally
+### Screenshots
+
+#### Creating a form
+
+<img src="public/Create-Form.gif" />
+
+#### Visualizations of responses
+
+<img src="public/Charts.gif" />
+
+## Forking and running locally
 
 ### Environment variables
 
@@ -36,23 +62,7 @@ Hosted [here](https://surveyo.one-click.cloud.dgraph.io/) and create your first 
 
 - Start the frontend
 
-### Auth0 configuration
+### Auth0 Configuration
 
 We use Auth0 for authorisation. The snippets for auth0 configuration are checked in the code [here](https://github.com/rahulgurnani/surveyo/tree/master/auth0_snippets). The steps of configuring Auth0 dashboard are mentioned in the blog post [here](https://dgraph.io/blog/post/surveyo-into/).
 After configuring Auth0 dashboard, update the Auth0 config used in the code present in src/AuthConfig.json.
-
-## Contribution guidelines
-
-This is an open source project, and we welcome contributions. Please open an issue if you have a feature request or better still if you have a PR for us to review.
-
-### Issues
-
-We use GitHub issues to track bugs and requests. Please ensure your bug description is clear and has sufficient instructions to be able to reproduce the issue. For feature requests, we would try to prioritize based on popularity.
-
-### Pull Requests
-
-All active development of this project happens on GitHub. We actively welcome your [pull requests](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).
-
-## License
-
-[Apache License 2.0](LICENSE)

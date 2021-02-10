@@ -1,283 +1,44 @@
-# Todo React App powered by Dgraph
+<div style="padding-top: 5px; padding-bottom: 10px;">
+  <h1 align="center">ToDo React App</h1>
+  <h2 align="center">
+    A One-Click Deployable App with<br />
+    <a href="https://dgraph.io/slash-graphql" target="_blank">
+      <img src="https://dgraph.io/assets/images/slashgraphql-logo.svg" alt="Slash GraphQL" />
+    </a><br />
+    A fully-managed GraphQL backend service
+  </h2>
+</div>
 
-Todo React App using GraphQL powered by Dgraph.
+<h3 align="center"><a href="https://slash.dgraph.io/_/one-click?app=todo" target="_blank">Deploy Now</a> for free!</h3>
 
-### GraphQL Schema Design for Dgraph
+To-Do is a sample app that lets users manage the tasks on their personal to-do list. This app demonstrates how to use React hooks with an Apollo client to easily create, read, update, and delete to-do list items. Deploying this app on Slash GraphQL deploys both the back-end database service and a front-end React app in a single click, no credit card required. To learn more about this sample app, see: [Building a To-Do List React App with Dgraph](https://dgraph.io/blog/post/building-todo-list-react-dgraph/)
 
-At first, when we visualize the main components of Todo App, we get node as shown below:
+### Features
+- Add a new task
+- Update an existing task to mark tasks completed
+- Delete existing tasks
 
-![Todo Graph](./todo-graph.png)
+### Front-end
+- [React](https://reactjs.org/) (3.4.0)—a JavaScript library for building user interfaces.
+- [Mobx](https://mobx.js.org/README.html)— MobX is a battle tested library that makes state management simple and scalable by transparently applying functional reactive programming (TFRP).
+- [Apollo Client](https://www.npmjs.com/package/apollo-client) (2.6.8)—a comprehensive state management library for JavaScript that enables you to manage both local and remote data with GraphQL.
+- [ToDoMVC app CSS](https://github.com/tastejs/todomvc-app-css)—CSS for a ToDo App
+- [React Router](https://reactrouter.com/)—a collection of navigational components
+- [clipboard.js](https://clipboardjs.com/)—a modern approach to copy text to clipboard 
+- [history](https://github.com/ReactTraining/history)—lets you easily manage session history
 
-Equivalent GraphQL schema for the graph above would be as follow:
+### Back-end
+- [Slash GraphQL](https://dgraph.io/slash-graphql)—a fully managed GraphQL backend service
+- [Auth0](https://auth0.com/)—Secure access for everyone.
 
-```graphql
-type Task {
-    ...
-}
 
-type User {
-    ...
-}
-```
+### Links
+- [Deploy Now](https://slash.dgraph.io/_/one-click?app=todo)
+- [Blog: Build a React app with Slash GraphQL](https://dgraph.io/blog/post/todo-slash-graphql/)
+- [Demo](https://slash-graphql-todos.netlify.app/)
+- [Community Support](https://discuss.dgraph.io/)
 
-So what do you think we should have for the Task and User nodes?
-
-We have mainly a title and a status to check if the Todo was completed.
-Next up, we know User has username, a unique identifier for the user,
-and name of the user.
-
-Apart from the fields of the nodes, we also have relationships between Task and User nodes.
-
-![Todo Graph complete](./todo-graph-2.png)
-
-We represent that in the GraphQL schema shown below:
-
-```graphql
-type Task {
-    id: ID!
-    title: String!
-    completed: Boolean!
-}
-
-type User {
-    username: String!
-    name: String
-}
-```
-
-_Note: You will be required to add custom directives to support additional functionalities of Dgraph._
-
-### Set Up the Environment
-
-Before we begin, make sure that you have [Docker](https://docs.docker.com/install/)
-installed on your machine.
-
-Let's begin by starting Dgraph standalone by running the command below:
-
-```bash
-docker run --rm -it -p 8080:8080 -v ~/dgraph:/dgraph dgraph/standalone:v20.03.1
-```
-
-Save the content below as `schema.graphql`.
-
-```graphql
-type Task {
-    id: ID!
-    title: String! @search(by: [fulltext])
-    completed: Boolean! @search
-    user: User!
-}
-
-type User {
-    username: String! @id @search(by: [hash])
-    name: String
-    tasks: [Task] @hasInverse(field: user)
-}
-```
-
-Let's load up the GraphQL schema file to Dgraph:
-
-```bash
-curl -X POST localhost:8080/admin/schema --data-binary '@schema.graphql'
-```
-
-If you’ve followed the steps above correctly, there’s a GraphQL server up and running.
-You can access that GraphQL endpoint with any of the great GraphQL developer tools.
-Good choices include GraphQL Playground, Insomnia, GraphiQL and Altair.
-
-Set up any of them and point it at `http://localhost:8080/graphql`. If you know lots about GraphQL, you might want to explore the schema, queries and mutations that were generated from the input.
-
-### Mutating Data
-
-Let's add a user and some todos in our Todo App.
-
-```graphql
-mutation {
-  addUser(input: [
-    {
-      username: "alice@dgraph.io",
-      name: "Alice",
-      tasks: [
-        {
-          title: "Avoid touching your face",
-          completed: false,
-        },
-        {
-          title: "Stay safe",
-          completed: false
-        },
-        {
-          title: "Avoid crowd",
-          completed: true,
-        },
-        {
-          title: "Wash your hands often",
-          completed: true
-        }
-      ]
-    }
-  ]) {
-    user {
-      username
-      name
-      tasks {
-        id
-        title
-      }
-    }
-  }
-}
-```
-
-### Querying Data
-
-Let's fetch the todos to list in our Todo App:
-
-```graphql
-query {
-  queryTask {
-    id
-    title
-    completed
-    user {
-        username
-    }
-  }
-}
-```
-
-Running the query above should return JSON response as shown below:
-
-```json
-{
-  "data": {
-    "queryTask": [
-      {
-        "id": "0x3",
-        "title": "Avoid touching your face",
-        "completed": false,
-        "user": {
-          "username": "alice@dgraph.io"
-        }
-      },
-      {
-        "id": "0x4",
-        "title": "Stay safe",
-        "completed": false,
-        "user": {
-          "username": "alice@dgraph.io"
-        }
-      },
-      {
-        "id": "0x5",
-        "title": "Avoid crowd",
-        "completed": true,
-        "user": {
-          "username": "alice@dgraph.io"
-        }
-      },
-      {
-        "id": "0x6",
-        "title": "Wash your hands often",
-        "completed": true,
-        "user": {
-          "username": "alice@dgraph.io"
-        }
-      }
-    ]
-  }
-}
-```
-
-### Querying Data with Filters
-
-Before we get into querying data with filters, we will be required
-to define search indexes to the specific fields.
-
-Let's say we have to run a query on the _completed_ field, for which
-we add `@search` directive to the field as shown in the schema below:
-
-```graphql
-type Task {
-  id: ID!
-  title: String!
-  completed: Boolean! @search
-}
-```
-
-The `@search` directive are added to support the native search indexes of **Dgraph**.
-
-Now, let's fetch all todos which are completed :
-
-```graphql
-query {
-  queryTask(filter: {
-    complete: {
-      eq: "true"
-    }
-  }) {
-    id
-    title
-  }
-}
-```
-
-Next, let's say we have to run a query on the _title_ field, for which
-we add another `@search` directive to the field as shown in the schema below:
-
-```graph
-type Task {
-    id: ID!
-    title: String! @search(by: [fulltext])
-    completed: Boolean! @search
-}
-```
-
-The `fulltext` search index provides the advanced search capability to perform equality
-comparision as well as matching with language specific stemming and stopwords.
-
-Now, let's try to fetch todos whose title has the word _"remember"_ :
-
-```graphql
-query {
-  queryTask(filter: {
-    title: {
-      alloftext: "remember"
-    }
-  }) {
-    id
-    title
-    completed
-  }
-}
-```
-
-## Bring up ToDo App
-
-### `npm install`
-
-Install the dependencies needed to bring up the application.
-
-### `npm start`
-
-Before you start, you should [create an Auth0 single-page application](https://auth0.com/docs/dashboard/guides/applications/register-app-spa)
-and set the _auth0-domain_ and _auth0-client-id_ in `src/config.json`.
-
-Also, if you are not using Dgraph Slash, specify the GraphQL endpoint using the `REACT_APP_GRAPHQL_ENDPOINT` environment variable:
-
-```
-REACT_APP_GRAPHQL_ENDPOINT=http://localhost:8080/graphql npm start
-```
-
-For brevity, you can set this variable in a new `.env` file and then just run `npm start`.
-
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-### `npm run build`
-
-Compiles the Todo application and minifies to generate the production build.
-
-## Screenshots
+### Screenshots
 
 ![Todo App 1](./todo-1.png)
 
