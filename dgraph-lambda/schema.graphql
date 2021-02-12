@@ -1,0 +1,28 @@
+type Player {
+  id: ID!
+  name: String! @search(by: [fulltext])
+  position: String! @search
+  pace: Int!
+  shooting: Int!
+  passing: Int!
+  dribbling: Int!
+  defending: Int!
+  physical: Int!
+  overall: Int @lambda
+  club: String
+  country: String
+}
+
+type Transfer {
+  id: ID!
+  player: String!
+  currentclub: String!
+}
+
+type Query {
+  topForwardPlayers: [Player] @lambda
+}
+
+type Mutation {
+  sendTransferRequest(player: String!, currentclub: String!): ID! @lambda
+}

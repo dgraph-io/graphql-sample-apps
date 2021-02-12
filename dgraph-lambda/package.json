@@ -1,0 +1,21 @@
+{
+  "name": "dgraph-lambda",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "config": {
+    "url": "YOUR-SLASH-GRAPHQL-ENDPOINT"
+  },
+  "scripts": {
+    "slash-login": "slash-graphql login",
+    "push-schema": "slash-graphql update-schema -e $npm_package_config_url schema.graphql",
+    "slash-update-lambda": "slash-graphql update-lambda -e $npm_package_config_url -f=dist/main.js",
+    "push-lambda": "npx webpack --target=webworker && npm run slash-update-lambda",
+    "slash-drop-data": "slash-graphql drop -e $npm_package_config_url -d"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^4.1.0"
+  }
+}
