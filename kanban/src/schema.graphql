@@ -1,0 +1,117 @@
+type User {
+  username: String! @id
+  displayName: String
+  image: String
+  isAdmin: Boolean
+  tickets: [Ticket] @hasInverse(field: assignedTo)
+  authoredComments: [Comment] @hasInverse(field: author)
+}
+
+type Project
+  @withSubscription
+  @auth(
+    query: {
+      or: [
+        {
+          rule: "query ($USER: String!) { queryProject { admin(filter: {username: {eq: $USER}}) { username } } }"
+        }
+        {
+          rule: "query ($USER: String!) { queryProject { roles { assignedTo(filter: {username: {eq: $USER}}) { username } } } }"
+        }
+      ]
+    }
+  ) {
+  projID: ID!
+  name: String! @search(by: [term])
+  url: String
+  description: String
+  admin: User
+  roles: [Role]
+  columns: [Column] @hasInverse(field: inProject)
+  "A JSON array storing the order of the columns by id"
+  order: String
+}
+
+type Role {
+  id: ID!
+  permission: [Permission!]! @search
+  assignedTo: [User]
+}
+
+enum Permission {
+  VIEW
+  EDIT
+  DELETE
+}
+
+type Column
+  @withSubscription
+  @auth(
+    query: {
+      or: [
+        {
+          rule: "query ($USER: String!) { queryColumn { inProject { admin(filter: {username: {eq: $USER}}) { username } } } }"
+        }
+        {
+          rule: "query ($USER: String!) { queryColumn { inProject { roles { assignedTo(filter: {username: {eq: $USER}}) { username } } } } }"
+        }
+      ]
+    }
+  ) {
+  colID: ID!
+  inProject: Project!
+  name: String!
+  orderPreference: Int
+    @deprecated(reason: "To order columns inside projects use Project.order")
+  tickets: [Ticket] @hasInverse(field: onColumn)
+  "A JSON array storing the order of the tickets by id"
+  order: String
+}
+
+type Ticket
+  @withSubscription
+  @auth(
+    query: {
+      or: [
+        {
+          rule: "query ($USER: String!) { queryTicket { onColumn { inProject { admin(filter: {username: {eq: $USER}}) { username } } } } }"
+        }
+        {
+          rule: "query ($USER: String!) { queryTicket { onColumn { inProject { roles { assignedTo(filter: {username: {eq: $USER}}) { username } } } } } }"
+        }
+      ]
+    }
+  ) {
+  id: ID!
+  onColumn: Column!
+  title: String! @search(by: [term])
+  datetime: DateTime @search
+  description: String
+  orderPreference: Int
+    @deprecated(reason: "To order tickets inside columns use Column.order")
+  assigned: User
+  comments: [Comment] @hasInverse(field: onTicket)
+}
+
+type Comment
+  @withSubscription
+  @auth(
+    query: {
+      or: [
+        {
+          rule: "query ($USER: String!) { queryComment { onTicket { onColumn { inProject { admin(filter: {username: {eq: $USER}}) { username } } } } } }"
+        }
+        {
+          rule: "query ($USER: String!) { queryComment { onTicket { onColumn { inProject { roles { assignedTo(filter: {username: {eq: $USER}}) { username } } } } } } }"
+        }
+      ]
+    }
+  ) {
+  id: ID!
+  datetime: DateTime! @search
+  text: String!
+  onTicket: Ticket
+  author: User!
+}
+
+# Dgraph.Authorization {"Header":"X-Auth-Token","Namespace":"https://dgraph.io/jwt/claims","Algo":"RS256","Audience":["Q1nC2kLsN6KQTX1UPdiBS6AhXRx9KwKl"],"VerificationKey":"-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAp/qw/KXH23bpOuhXzsDp\ndo9bGNqjd/OkH2LkCT0PKFx5i/lmvFXdd04fhJD0Z0K3pUe7xHcRn1pIbZWlhwOR\n7siaCh9L729OQjnrxU/aPOKwsD19YmLWwTeVpE7vhDejhnRaJ7Pz8GImX/z/Xo50\nPFSYdX28Fb3kssfo+cMBz2+7h1prKeLZyDk30ItK9MMj9S5y+UKHDwfLV/ZHSd8m\nVVEYRXUNNzLsxD2XaEC5ym2gCjEP1QTgago0iw3Bm2rNAMBePgo4OMgYjH9wOOuS\nVnyvHhZdwiZAd1XtJSehORzpErgDuV2ym3mw1G9mrDXDzX9vr5l5CuBc3BjnvcFC\nFwIDAQAB\n-----END PUBLIC KEY-----"}
