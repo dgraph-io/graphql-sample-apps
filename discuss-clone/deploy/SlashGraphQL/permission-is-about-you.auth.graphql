@@ -1,0 +1,7 @@
+query permissionIsAboutYou($username: String!) {
+  queryPermission {
+    user(filter: { username: { eq: $username } }) {
+      username
+    }
+  }
+}

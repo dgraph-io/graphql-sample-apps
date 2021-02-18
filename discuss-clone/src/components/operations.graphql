@@ -1,0 +1,166 @@
+fragment postData on Post {
+  id
+  title
+  text
+  tags
+  datePublished
+  likes
+  category {
+    id
+    name
+  }
+  author {
+    username
+    displayName
+    avatarImg
+  }
+  comments {
+    id
+    text
+    commentsOn {
+      comments {
+        id
+        text
+        author {
+          username
+          displayName
+          avatarImg
+        }
+      }
+    }
+    author {
+      username
+      displayName
+      avatarImg
+    }
+  }
+}
+
+query allPosts {
+  queryPost(order: { desc: datePublished }) {
+    ...postData
+  }
+}
+
+query queryPermission {
+  queryPermission(filter: { role: { eq: ADMINISTRATOR } }) {
+    user {
+      username
+    }
+    role
+  }
+}
+
+query filterPosts($filter: PostFilter, $categoryID: [ID!]) {
+  queryPost(filter: $filter) @cascade {
+    id
+    title
+    text
+    tags
+    datePublished
+    likes
+    category(filter: { id: $categoryID }) {
+      id
+      name
+    }
+    author {
+      username
+      displayName
+      avatarImg
+    }
+    comments {
+      id
+      text
+      commentsOn {
+        comments {
+          id
+          text
+          author {
+            username
+            displayName
+            avatarImg
+          }
+        }
+      }
+      author {
+        username
+        displayName
+        avatarImg
+      }
+    }
+  }
+}
+
+query getPost($id: ID!) {
+  getPost(id: $id) {
+    ...postData
+  }
+}
+
+query getUser($username: String!) {
+  getUser(username: $username) {
+    username
+    displayName
+    avatarImg
+  }
+}
+
+query categories($username: String!) {
+  all: queryCategory {
+    id
+    name
+  }
+
+  writable: queryCategory @cascade {
+    id
+    name
+    permissions(filter: { role: { eq: WRITER } }) {
+      user(filter: { username: { eq: $username } }) {
+        username
+      }
+    }
+  }
+  
+  public: queryCategory(filter: { isPublic: true }) {
+    id
+    name
+  }
+}
+
+mutation addPost($post: AddPostInput!) {
+  addPost(input: [$post]) {
+    post {
+      id
+    }
+  }
+}
+
+mutation addComment($comment: AddCommentInput!) {
+  addComment(input: [$comment]) {
+    comment {
+      id
+      text
+      author {
+        username
+        displayName
+      }
+    }
+  }
+}
+
+mutation updateUser($username: String!, $user: UserPatch) {
+  updateUser(input: {filter: {username: {eq: $username}}, set: $user}) {
+    user {
+      displayName
+      avatarImg
+    }
+  }
+}
+
+mutation updatePost($id: ID!, $post: PostPatch) {
+  updatePost(input: { filter: { id: [$id] }, set: $post }) {
+    post {
+      ...postData
+    }
+  }
+}

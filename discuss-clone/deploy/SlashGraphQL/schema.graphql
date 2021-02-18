@@ -1,0 +1,159 @@
+type User
+@auth(
+  # query : anyone can query
+  add: {
+    or: [
+      { rule: "{$role: {eq: \"Auth0\"}}" }
+      { rule: "{$role: {eq: \"Admin\"}}" }
+    ]
+  }
+  update: { rule: "<<is-your-account>>" }
+  delete: { rule: "{$role: {eq: \"Admin\"}}" }
+) {
+  username: String! @id
+  displayName: String
+  avatarImg: String
+  posts: [Post] @hasInverse(field: author)
+  roles: [Permission] @hasInverse(field: user)
+}
+
+type Permission
+@auth(
+  query: {
+    or: [
+      { rule: "<<permission-is-about-you>>" }
+      { rule: "<<you-admin-the-permission-category>>" }
+      { rule: "{$role: {eq: \"Admin\"}}" }
+      { rule: "{$role: {eq: \"Auth0\"}}" }
+    ]
+  }
+  add: {
+    or: [
+      { rule: "<<you-admin-the-permission-category>>" }
+      { rule: "{$role: {eq: \"Admin\"}}" }
+    ]
+  }
+  update: { rule: "{$role: {eq: \"Admin\"}}" }
+  delete: {
+    or: [
+      { rule: "<<you-admin-the-permission-category>>" }
+      { rule: "{$role: {eq: \"Admin\"}}" }
+    ]
+  }
+) {
+  user: User!
+  role: Role! @search
+  forCategory: Category
+}
+
+enum Role {
+  READER
+  WRITER
+  ADMINISTRATOR
+}
+
+type Post
+@auth(
+  query: {
+    or: [
+      { rule: "<<you-have-any-permission-for-posts-category>>" }
+      { rule: "<<post-in-public-category>>" }
+    ]
+  }
+  add: {
+    and: [
+      { rule: "<<its-your-post>>" }
+      {
+        or: [
+          { rule: "<<you-have-write-permission-to-posts-category>>" }
+          {
+            and: [
+              {
+                or: [
+                  { rule: "{$role: {eq: \"Admin\"}}" }
+                  { rule: "{$role: {eq: \"User\"}}" }
+                ]
+              }
+              { rule: "<<post-in-public-category>>" }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+  update: { rule: "<<its-your-post>>" }
+  delete: { rule: "<<you-have-admin-permission-to-posts-category>>" }
+) {
+  id: ID!
+  title: String! @search(by: [term])
+  text: String! @search(by: [fulltext])
+  datePublished: DateTime
+  likes: Int
+  author: User!
+  tags: String @search(by: [term])
+  category: Category! @hasInverse(field: posts)
+  comments: [Comment!]!
+}
+
+type Comment
+@auth(
+  query: {
+    or: [
+      { rule: "<<you-have-any-permission-for-comments-category>>" }
+      { rule: "<<comment-on-post-in-public-category>>" }
+    ]
+  }
+  add: {
+    and: [
+      { rule: "<<its-your-comment>>" }
+      {
+        or: [
+          { rule: "<<you-have-write-permission-for-comments-category>>" }
+          {
+            and: [
+              { rule: "<<comment-on-post-in-public-category>>" }
+              {
+                or: [
+                  { rule: "{$role: {eq: \"Admin\"}}" }
+                  { rule: "{$role: {eq: \"User\"}}" }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+  update: { rule: "<<its-your-comment>>" }
+  delete: { rule: "<<you-have-admin-permission-to-comments-category>>" }
+) {
+  id: ID!
+  text: String!
+  commentsOn: Post! @hasInverse(field: comments)
+  author: User!
+}
+
+type Category
+@auth(
+  query: {
+    or: [
+      { rule: "<<you-have-any-permission-for-category>>" }
+      { rule: "<<is-public-category>>" }
+      { rule: "{$role: {eq: \"Admin\"}}" }
+    ]
+  }
+  add: { rule: "{$role: {eq: \"Admin\"}}" }
+  update: {
+    or: [
+      { rule: "{$role: {eq: \"Admin\"}}" }
+      { rule: "<<you-have-admin-permission-for-category>>" }
+    ]
+  }
+  delete: { rule: "{$role: {eq: \"Admin\"}}" }
+) {
+  id: ID!
+  name: String! @search(by: [term])
+  posts: [Post]
+  isPublic: Boolean @search
+  permissions: [Permission] @hasInverse(field: forCategory)
+}
