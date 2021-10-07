@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 export const QUERY_LOGGED_IN_USER = gql`
- query getUserInfo($userFilter: UserFilter!) {
+ subscription getUserInfo($userFilter: UserFilter!) {
     queryUser(filter: $userFilter) {
       email
       following {
