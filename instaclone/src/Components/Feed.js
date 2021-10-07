@@ -1,4 +1,4 @@
-import { useQuery } from "@apollo/client";
+import { useSubscription } from "@apollo/client";
 import { QUERY_LOGGED_IN_USER } from "../GraphQL/Queries";
 
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
@@ -20,7 +20,7 @@ const Feed = () => {
   const { user } = useAuth0();
   const { email } = user;
 
-  const { data, loading, error } = useQuery(QUERY_LOGGED_IN_USER, {
+  const { data, loading, error } = useSubscription(QUERY_LOGGED_IN_USER, {
     variables: {
       userFilter: {
         email: {
