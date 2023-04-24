@@ -4,15 +4,19 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {createClient, Provider} from 'urql';
+
+import { Client, cacheExchange, fetchExchange, Provider } from 'urql';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-const client = createClient({
-  url: "https://green-bird.us-east-1.aws.cloud.dgraph.io/graphql"
-})
+
+const client = new Client({
+  url: 'https://green-bird.us-east-1.aws.cloud.dgraph.io/graphql',
+  exchanges: [cacheExchange, fetchExchange],
+});
+
 root.render(
   <React.StrictMode>
     <Provider value={client}>
