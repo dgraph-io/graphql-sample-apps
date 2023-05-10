@@ -40,16 +40,19 @@ Surveyo is a sample app that provides users with a survey tool that they can use
 
 ### No-Auth Version
 
-+ Inside the root folder, locate the `schema_noauth.graphql` file, copy all the content and run it in your [Graphql client](https://dgraph.io/docs/graphql/quick-start/) or via `terminal` using the command `curl -X POST localhost:8080/admin/schema --data-binary <@SCHEMA_NOAUTH.GRAPHQL>`.
-+ Inside the src folder locate the `ApolloConfig.js` file and inside the `createApolloClient` function change the value of the `GRAPHQL ENDPOINT` constant > to `http://localhost:8080/graphql`.
-+ In the root folder of the application, open a terminal and run the following commands: `npm install` and then `npm start`.
+1. Copy the entire contents of the `schema_noauth.graphql` file located in the root folder of the application.
+2. Open your `Graphql Client`, you can check some GraphQL clients [here](https://dgraph.io/docs/graphql/quick-start/#testing-your-graphql-api) or open a `terminal` and run the following command: `curl -X POST localhost:8080/admin/schema --data-binary <@SCHEMA_NOAUTH.GRAPHQL>`, which contains the code copied in step 1.
+3. Locate the `ApolloConfig.js` file in the application`src` folder and locate the `createApolloClient` function. Change the value of the constant `GRAPHQL ENDPOINT` to `http://localhost:8080/graphql`.
+4. In the root folder of the application, open a terminal and run the following commands: `npm install` followed by `npm start`.
 
 ### Auth Version
 
-+ Inside the root folder, locate the `schema.graphql` file, copy all the content and run it in your [Graphql client](https://dgraph.io/docs/graphql/quick-start/) or via `terminal` using the command `curl -X POST localhost:8080/admin/schema --data-binary <@SCHEMA.GRAPHQL>`.
-+ Create an authentication service account in: [Auth0](https://auth0.com/).
-+ After create your auth0 account follow this steps: [Using Auth0](https://dgraph.io/docs/learn/developer/todo-app-tutorial/todo-auth0-jwt/)-how to use auth0.
-+ In the root folder of the application, open a terminal and run the following commands: `npm install` and then `npm start`.
+1. Copy the entire contents of the `schema_auth.graphql` file located in the root folder of the application.
+2. Open your `Graphql Client`, you can check some GraphQL clients [here](https://dgraph.io/docs/graphql/quick-start/#testing-your-graphql-api) or open a `terminal` and run the following command: `curl -X POST localhost:8080/admin/schema --data-binary <@SCHEMA_NOAUTH.GRAPHQL>`, which contains the code copied in step 1.
++ Inside the root folder, locate the `schema.graphql` file, copy all the content and run it in your `Graphql client` you can check some GraphQL clients [here](https://dgraph.io/docs/graphql/quick-start/#testing-your-graphql-api) or via `terminal` using the command `curl -X POST localhost:8080/admin/schema --data-binary <@SCHEMA.GRAPHQL>`.
+3. Create an authentication service account on: [Auth0](https://auth0.com/).
+4. After creating your Auth0 account, follow the instructions provided [here](https://dgraph.io/docs/learn/developer/todo-app-tutorial/todo-auth0-jwt/) to set up Auth0 authentication. 
+5. In the root folder of the application, open a terminal and run the following commands: `npm install` followed by `npm start`.
 
 ### Links
 
