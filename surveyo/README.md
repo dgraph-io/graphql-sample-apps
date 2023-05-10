@@ -33,7 +33,7 @@ Surveyo is a sample app that provides users with a survey tool that they can use
 ### Back-end
 
 - [Slash GraphQL](https://dgraph.io/slash-graphql)—a fully managed GraphQL backend service.
-- [Using Auth0](https://dgraph.io/docs/learn/developer/todo-app-tutorial/todo-auth0-jwt/)-how to use auth0. 
+- [Using Auth0](https://dgraph.io/docs/learn/developer/todo-app-tutorial/todo-auth0-jwt/)—how to use auth0. 
 - [Auth0](https://auth0.com/)—Secure access for everyone.
 
 ## Getting started
@@ -49,7 +49,6 @@ Surveyo is a sample app that provides users with a survey tool that they can use
 
 1. Copy the entire contents of the `schema_auth.graphql` file located in the root folder of the application.
 2. Open your `Graphql Client`, you can check some GraphQL clients [here](https://dgraph.io/docs/graphql/quick-start/#testing-your-graphql-api) or open a `terminal` and run the following command: `curl -X POST localhost:8080/admin/schema --data-binary <@SCHEMA_NOAUTH.GRAPHQL>`, which contains the code copied in step 1.
-+ Inside the root folder, locate the `schema.graphql` file, copy all the content and run it in your `Graphql client` you can check some GraphQL clients [here](https://dgraph.io/docs/graphql/quick-start/#testing-your-graphql-api) or via `terminal` using the command `curl -X POST localhost:8080/admin/schema --data-binary <@SCHEMA.GRAPHQL>`.
 3. Create an authentication service account on: [Auth0](https://auth0.com/).
 4. After creating your Auth0 account, follow the instructions provided [here](https://dgraph.io/docs/learn/developer/todo-app-tutorial/todo-auth0-jwt/) to set up Auth0 authentication. 
 5. In the root folder of the application, open a terminal and run the following commands: `npm install` followed by `npm start`.
