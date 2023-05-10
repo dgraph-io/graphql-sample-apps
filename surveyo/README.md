@@ -39,9 +39,9 @@ Surveyo is a sample app that provides users with a survey tool that they can use
 
 ### NoAuth Version
 
-+ Inside the root folder, locate the schema_noauth.graphql file, copy all the content and run it in your graphql client or via terminal using the command (curl -X POST localhost:8080/admin/schema --data-binary '<@YOUR-SCHEMA-NAME>')
-+ Inside the src folder locate the Apollo Config.js file and the createApolloClient function change the valor of the constant GRAPHQL ENDPOINT > To "http://localhost:8080/graphql"
-+ In the root folder of the application, open a terminal and run the following commands: npm install and then npm start;
++ Inside the root folder, locate the schema_noauth.graphql file, copy all the content and run it in your graphql client or via terminal using the command (curl -X POST localhost:8080/admin/schema --data-binary `<@YOUR-SCHEMA-NAME>`).
++ Inside the src folder locate the Apollo Config.js file and the createApolloClient function change the valor of the constant GRAPHQL ENDPOINT > To `http://localhost:8080/graphql`.
++ In the root folder of the application, open a terminal and run the following commands: npm install and then npm start.
 
 ### Links
 
