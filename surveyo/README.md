@@ -9,7 +9,7 @@
   </h2>
 </div>
 
-<h3 align="center"><a href="https://slash.dgraph.io/_/one-click?app=surveyo" target="_blank">Deploy Now</a> for free!</h3>
+<h3 align="center"><a href="https://dgraph.io/docs/learn/developer/todo-app-tutorial/todo-deploy/" target="_blank">Deploy Now</a> for free!</h3>
 
 Surveyo is a sample app that provides users with a survey tool that they can use to quickly create and respond to surveys. Advanced users can use Surveyo’s GraphQL endpoint to run complex queries on survey results. This app demonstrates how to use React hooks with Apollo client to create surveys, collect responses, visualize responses with charts, export responses into CSV, and delete surveys. Deploying this app on Slash GraphQL deploys both the back-end database service and a front-end React app in a single click, no credit card required. To learn about this sample app, see: [Building a Survey Forms App with GraphQL](https://dgraph.io/blog/post/surveyo-into/).
 
