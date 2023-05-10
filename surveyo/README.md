@@ -53,9 +53,10 @@ Surveyo is a sample app that provides users with a survey tool that they can use
 
 ### Links
 
-- [Deploy Now](https://slash.dgraph.io/_/one-click?app=surveyo)
+<!-- - [Deploy Now](https://slash.dgraph.io/_/one-click?app=surveyo) -->
+- [Deploy Now](https://dgraph.io/docs/learn/developer/todo-app-tutorial/todo-deploy/)
 - [Blog: Building a Survey Forms App with GraphQL](https://dgraph.io/blog/post/surveyo-into/)
-- [Demo](https://surveyo.one-click.cloud.dgraph.io/)
+<!-- - [Demo](https://surveyo.one-click.cloud.dgraph.io/) -->
 - [Community Support](https://discuss.dgraph.io/)
 
 ### Screenshots
