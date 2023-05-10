@@ -40,8 +40,15 @@ Surveyo is a sample app that provides users with a survey tool that they can use
 
 ### No-Auth Version
 
-+ Inside the root folder, locate the schema_noauth.graphql file, copy all the content and run it in your `Graphql client` or via `terminal` using the command `curl -X POST localhost:8080/admin/schema --data-binary <@SCHEMA_NOAUTH.GRAPHQL>`.
++ Inside the root folder, locate the `schema_noauth.graphql` file, copy all the content and run it in your `Graphql client` or via `terminal` using the command `curl -X POST localhost:8080/admin/schema --data-binary <@SCHEMA_NOAUTH.GRAPHQL>`.
 + Inside the src folder locate the `ApolloConfig.js` file and inside the `createApolloClient` function change the value of the `GRAPHQL ENDPOINT` constant > to `http://localhost:8080/graphql`.
++ In the root folder of the application, open a terminal and run the following commands: `npm install` and then `npm start`.
+
+### Auth Version
+
++ Inside the root folder, locate the `schema.graphql` file, copy all the content and run it in your `Graphql client` or via `terminal` using the command `curl -X POST localhost:8080/admin/schema --data-binary <@SCHEMA.GRAPHQL>`.
++ Create an authentication service account in: [Auth0](https://auth0.com/).
++ After create your auth0 account follow this steps: [Using Auth0](https://dgraph.io/docs/learn/developer/todo-app-tutorial/todo-auth0-jwt/)-how to use auth0.
 + In the root folder of the application, open a terminal and run the following commands: `npm install` and then `npm start`.
 
 ### Links
