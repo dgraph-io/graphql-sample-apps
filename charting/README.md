@@ -33,6 +33,7 @@ Charts is a sample app that lets users build online charts using metrics that th
 
 1. Copy the entire contents of the `schema.graphql` file located in the root folder of the application.
 2. Open your `Graphql Client`, you can check some GraphQL clients [here](https://dgraph.io/docs/graphql/quick-start/#testing-your-graphql-api) or open a `terminal` and run the following command: `curl -X POST localhost:8080/admin/schema --data-binary <@SCHEMA.GRAPHQL>`, which contains the code copied in step 1.
+4. To run the application locally go to the `src` folder and find the `apollo-client.js` file and replace `uri: process.env.REACT_APP_GRAPHQL_ENDPOINT || "<API-ENDPOINT>"` by `uri: process.env.REACT_APP_GRAPHQL_ENDPOINT || "http://localhost:8080/graphql"`.
 3. In the root folder of the application, open a terminal and run the following commands: `npm install` followed by `npm start`.
 
 ### Auth Version
@@ -40,8 +41,9 @@ Charts is a sample app that lets users build online charts using metrics that th
 1. Create an authentication service account on: [Auth0](https://auth0.com/).
 2. After creating your Auth0 account, follow the instructions provided [here](https://dgraph.io/docs/learn/developer/todo-app-tutorial/todo-auth0-jwt/) to set up Auth0 authentication.
 3. Open the `schema.graphql` file located in the root folder and apply the `rules` as described in step 2.
-4. Then open your `Graphql Client`, you can check some GraphQL clients [here](https://dgraph.io/docs/graphql/quick-start/#testing-your-graphql-api) or open a ` terminal ` and run the following command: `curl -X POST localhost:8080/admin/schema --data-binary <@SCHEMA.GRAPHQL>`
-5. In the root folder of the application, open a terminal and run the following commands: `npm install` followed by `npm start`.
+4. Then open your `Graphql Client`, you can check some GraphQL clients [here](https://dgraph.io/docs/graphql/quick-start/#testing-your-graphql-api) or open a ` terminal ` and run the following command: `curl -X POST localhost:8080/admin/schema --data-binary <@SCHEMA.GRAPHQL>`.
+5. To run the application locally go to the `src` folder and find the `apollo-client.js` file and replace `uri: process.env.REACT_APP_GRAPHQL_ENDPOINT || "<API-ENDPOINT>"` by `uri: process.env.REACT_APP_GRAPHQL_ENDPOINT || "http://localhost:8080/graphql"`.
+6. In the root folder of the application, open a terminal and run the following commands: `npm install` followed by `npm start`.
 
 
 ### Links
