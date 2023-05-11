@@ -42,7 +42,7 @@ Surveyo is a sample app that provides users with a survey tool that they can use
 
 1. Copy the entire contents of the `schema_noauth.graphql` file located in the root folder of the application.
 2. Open your `Graphql Client`, you can check some GraphQL clients [here](https://dgraph.io/docs/graphql/quick-start/#testing-your-graphql-api) or open a `terminal` and run the following command: `curl -X POST localhost:8080/admin/schema --data-binary <@SCHEMA_NOAUTH.GRAPHQL>`, which contains the code copied in step 1.
-3. Locate the `ApolloConfig.js` file in the application`src` folder and locate the `createApolloClient` function. Change the value of the constant `GRAPHQL ENDPOINT` to `http://localhost:8080/graphql`.
+3. To run the application locally, locate the `ApolloConfig.js` file in the application`src` folder and locate the `createApolloClient` function. Change the value of the constant `GRAPHQL ENDPOINT` to `http://localhost:8080/graphql`.
 4. In the root folder of the application, open a terminal and run the following commands: `npm install` followed by `npm start`.
 
 ### Auth Version
