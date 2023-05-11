@@ -9,7 +9,7 @@
   </h2>
 </div>
 
-<h3 align="center"><a href="https://slash.dgraph.io/_/one-click?app=charting" target="_blank">Deploy Now</a> for free!</h3>
+<h3 align="center"><a href="https://dgraph.io/docs/learn/developer/todo-app-tutorial/todo-deploy/" target="_blank">Deploy Now</a> for free!</h3>
 
 Charts is a sample app that lets users build online charts using metrics that they provide. For example, you could provide this app with data from an e-commerce site and use it to track site statistics such as the number of page views and revenue. This app demonstrates how to use React hooks with Apollo client to add and read related data. Deploying this app on Slash GraphQL deploys both the back-end database service and a front-end React app in a single click, no credit card required. To learn more about this sample app, see the [Charting Sample App on GitHub](https://github.com/dgraph-io/graphql-sample-apps/tree/master/charting).
 
@@ -29,7 +29,7 @@ Charts is a sample app that lets users build online charts using metrics that th
 
 
 ### Links
-- [Deploy Now](https://slash.dgraph.io/_/one-click?app=charting)
+- [Deploy Now](https://dgraph.io/docs/learn/developer/todo-app-tutorial/todo-deploy/)
 - [Community Support](https://discuss.dgraph.io/)
 
 ### Screenshots
