@@ -32,7 +32,7 @@ Surveyo is a sample app that provides users with a survey tool that they can use
 
 ### Back-end
 
-- [Slash GraphQL](https://dgraph.io/slash-graphql)—a fully managed GraphQL backend service.
+- [Dgraph Cloud](https://cloud.dgraph.io/)—a fully managed GraphQL backend service.
 - [Using Auth0](https://dgraph.io/docs/learn/developer/todo-app-tutorial/todo-auth0-jwt/)—how to use auth0. 
 - [Auth0](https://auth0.com/)—Secure access for everyone.
 
