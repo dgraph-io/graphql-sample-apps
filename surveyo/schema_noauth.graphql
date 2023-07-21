@@ -57,5 +57,3 @@ type Entry {
     singleChoice: FieldOption
     text: String
 }
-
-
