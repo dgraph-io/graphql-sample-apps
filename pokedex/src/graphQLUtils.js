@@ -38,7 +38,7 @@ function fetchAllPokemon() {
 // Fetch Pokemon by Type
 const fetchPokemonOfCertainTypeOperationsDoc = (pokemonType) => `
   query fetchPokemonOfCertainType {
-    queryPokemon(filter: { pokemonTypes: { eq: [${pokemonType}] } }) {
+    queryPokemon(filter: { pokemonTypes: { eq: ${pokemonType} } }) {
       id
       name
       captured
@@ -83,7 +83,7 @@ const fetchPokemonOfCertainTypeAndByCapturedStatusOperationsDoc = ({
   isCaptured,
 }) => `
   query fetchPokemonOfCertainTypeAndByCapturedStatus {
-    queryPokemon(filter: { captured: ${isCaptured}, pokemonTypes: { eq: [${pokemonType}] } }) {
+    queryPokemon(filter: { captured: ${isCaptured}, pokemonTypes: { eq: ${pokemonType} } }) {
       id
       name
       captured
