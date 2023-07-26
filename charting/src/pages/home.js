@@ -13,7 +13,7 @@ query QueryMetrics($timestampGE: DateTime!, $timestampLT: DateTime!){
     name
     readings @cascade {
       value
-      collection(filter: {timestamp: {ge: $timestampGE lt: $timestampLT}}) {
+      collection(filter: {timestamp: {ge: $timestampGE}, and: {timestamp: {lt: $timestampLT}}}) {
         timestamp
       }
     }
