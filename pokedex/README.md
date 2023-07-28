@@ -2,14 +2,14 @@
   <h1 align="center">Pokedex</h1>
   <h2 align="center">
     A One-Click Deployable App with<br />
-    <a href="https://dgraph.io/slash-graphql" target="_blank">
+    <a href="https://dgraph.io/docs/graphql" target="_blank">
       <img src="https://dgraph.io/assets/images/slashgraphql-logo.svg" alt="Slash GraphQL" />
     </a><br />
     A fully-managed GraphQL backend service
   </h2>
 </div>
 
-<h3 align="center"><a href="https://slash.dgraph.io/_/one-click?app=pokedex" target="_blank">Deploy Now</a> for free!</h3>
+<h3 align="center"><a href="https://cloud.dgraph.io/_/one-click?app=pokedex" target="_blank">Deploy Now</a> for free!</h3>
 
 Pokedex is a sample app inspired by the [Pokedex](https://www.pokemon.com/us/pokedex/) website. This sample app lets users search for Pokemon by type, weakness, ability, and more! This app demonstrates how to filter Pokemon by tags and update a captured status. Deploying this app on Slash GraphQL deploys both the back-end database service and a front-end React app in a single click, no credit card required. To learn more, see [Pokedex on GitHub](https://github.com/dgraph-io/graphql-sample-apps/tree/master/pokedex).
 
@@ -25,11 +25,11 @@ Pokedex is a sample app inspired by the [Pokedex](https://www.pokemon.com/us/pok
 
 
 ### Back-end
-- [Slash GraphQL](https://dgraph.io/slash-graphql)—a fully managed GraphQL backend service
+- [Dgraph Cloud](https://cloud.dgraph.io/slash-graphql)—a fully managed GraphQL backend service
 
 
 ### Links
-- [Deploy Now](https://slash.dgraph.io/_/one-click?app=pokedex)
+- [Deploy Now](https://cloud.dgraph.io/_/one-click?app=pokedex)
 - [External Blog: How to Build a Pokeacutedex React App with a Slash](https://dzone.com/articles/how-to-build-a-pokeacutedex-react-app-with-a-slash)
 - [Demo](http://tylerhawkins.info/pokedex-slash-graphql/build/)
 - [Community Support](https://discuss.dgraph.io/)
