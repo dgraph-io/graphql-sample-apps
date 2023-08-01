@@ -1,0 +1,11 @@
+query youHaveAnyPostPermission($username: String!) {
+  queryPost {
+    category {
+      permissions {
+        user(filter: { username: { eq: $username } }) {
+          username
+        }
+      }
+    }
+  }
+}

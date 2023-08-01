@@ -1,0 +1,9 @@
+query hasCategoryAdmin($username: String!) {
+  queryCategory {
+    permissions(filter: { role: { eq: ADMINISTRATOR } }) {
+      user(filter: { username: { eq: $username } }) {
+        username
+      }
+    }
+  }
+}
