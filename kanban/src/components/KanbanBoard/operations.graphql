@@ -1,0 +1,282 @@
+fragment projectName on Project {
+  projID
+  name
+}
+
+fragment projectOrder on Project {
+  projID
+  order
+}
+
+fragment projectAllDetails on Project {
+  projID
+  name
+  url
+  description
+  order
+}
+
+fragment projectWithColumns on Project {
+  projID
+  columns {
+    colID
+  }
+}
+
+fragment columnDetails on Column {
+  colID
+  name
+}
+
+fragment columnOrder on Column {
+  colID
+  order
+}
+
+fragment columnWithTickets on Column {
+  colID
+  name
+  tickets {
+    ...ticketDetailsWithComments
+  }
+  order
+}
+
+fragment columnWithProjectColumns on Column {
+  colID
+  name
+  inProject {
+    ...projectWithColumns
+  }
+}
+
+fragment userNames on User {
+  username
+  displayName
+  image
+}
+
+fragment ticketDetails on Ticket {
+  id
+  title
+  description
+  assigned {
+    ...userNames
+  }
+}
+
+fragment ticketDetailsWithComments on Ticket {
+  id
+  title
+  description
+  assigned {
+    ...userNames
+  }
+  comments(order: { desc: datetime }) {
+    ...commentDetails
+  }
+}
+
+fragment ticketWithColumn on Ticket {
+  ...ticketDetails
+  onColumn {
+    ...columnDetails
+  }
+}
+
+fragment ticketWithColumnWithTickets on Ticket {
+  ...ticketDetails
+  onColumn {
+    ...columnWithTickets
+  }
+}
+
+fragment roleDetails on Role {
+  id
+  permission
+  assignedTo {
+    ...userNames
+  }
+}
+
+fragment commentDetails on Comment {
+  id
+  text
+  datetime
+  author {
+    ...userNames
+  }
+}
+
+# -----
+# Query
+# -----
+
+query getProject($projectID: ID!) {
+  getProject(projID: $projectID) {
+    ...projectAllDetails
+    admin {
+      ...userNames
+    }
+    roles {
+      ...roleDetails
+    }
+    columns {
+      ...columnWithTickets
+    }
+  }
+}
+
+query getTicket($ticketID: ID!) {
+  getTicket(id: $ticketID) {
+    ...ticketWithColumn
+  }
+}
+
+# --------
+# Mutation
+# --------
+
+mutation addTicket($ticket: AddTicketInput!) {
+  addTicket(input: [$ticket]) {
+    ticket {
+      ...ticketWithColumnWithTickets
+    }
+  }
+}
+
+mutation updateTicket($ticketID: ID!, $ticket: TicketPatch, $remove: TicketPatch) {
+  updateTicket(input: { filter: { id: [$ticketID] }, set: $ticket, remove: $remove }) {
+    ticket {
+      ...ticketWithColumn
+    }
+  }
+}
+
+mutation deleteTicket($ticketID: ID!) {
+  deleteTicket(filter: { id: [$ticketID] }) {
+    ticket {
+      id
+    }
+  }
+}
+
+mutation addColumn($column: AddColumnInput!) {
+  addColumn(input: [$column]) {
+    column {
+      ...columnWithProjectColumns
+    }
+  }
+}
+
+mutation updateColumn($colID: ID!, $ticketID: ID!) {
+  updateColumn(
+    input: {
+      filter: { colID: [$colID] }
+      set: { tickets: [{ id: $ticketID }] }
+    }
+  ) {
+    column {
+      ...columnDetails
+    }
+  }
+}
+
+mutation setColumnOrder($projID: ID!, $order: String!) {
+  updateProject(
+    input: {
+      filter: { projID: [$projID] }
+      set: { order: $order }
+    }
+  ) {
+    project {
+      ...projectOrder
+    }
+  }
+}
+
+mutation deleteColumn($colID: ID!) {
+  deleteColumn(filter: { colID: [$colID] }) {
+    column {
+      colID
+    }
+  }
+}
+
+mutation setTicketOrder($colID: ID!, $order: String!) {
+  updateColumn(
+    input: {
+      filter: { colID: [$colID] }
+      set: { order: $order }
+    }
+  ) {
+    column {
+      ...columnOrder
+    }
+  }
+}
+
+mutation moveTicket($id: ID!, $colID: ID!, $order: String!) {
+  updateTicket(input: { 
+    filter: { id: [$id] }
+    set: { onColumn: { colID: $colID } }
+  }) {
+    ticket {
+      ...ticketWithColumn
+    }
+  }
+  updateColumn(input: {
+    filter: { colID: [$colID] }
+    set: { order: $order }
+  }) {
+    column {
+      ...columnOrder
+    }
+  }
+}
+
+mutation updateColumnName($colID: ID!, $name: String!) {
+  updateColumn(
+    input: {
+      filter: { colID: [$colID] }
+      set: { name: $name }
+    }
+  ) {
+    column {
+      ...columnDetails
+    }
+  }
+}
+
+mutation addComment($comment: AddCommentInput!) {
+  addComment(input: [$comment]) {
+    comment {
+      id
+      onTicket {
+        id
+        comments(order: {desc: datetime}) {
+          ...commentDetails
+        }
+      }
+    }
+  }
+}
+
+mutation updateComment($commentID: ID! $commentPatch: CommentPatch!) {
+  updateComment(input: {
+    filter: { id: [$commentID] }
+    set: $commentPatch
+  }) {
+    comment {
+      ...commentDetails
+    }
+  }
+}
+
+mutation deleteComment($commentID: ID!) {
+  deleteComment(filter: { id: [$commentID] }) {
+    comment {
+      id
+    }
+  }
+}

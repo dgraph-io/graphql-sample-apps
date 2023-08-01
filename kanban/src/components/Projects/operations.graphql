@@ -1,0 +1,65 @@
+fragment userNames on User {
+  username
+  displayName
+  image
+}
+
+fragment projectDetails on Project {
+  projID
+  name
+  description
+  url
+  admin {
+    ...userNames
+  }
+}
+
+# -----
+# Query
+# -----
+
+query allProjectsDetails {
+  queryProject {
+    ...projectDetails
+  }
+}
+
+query getProjectDetails($projID: ID!) {
+  getProject(projID: $projID) {
+    ...projectDetails
+  }
+}
+
+query allUsers {
+  queryUser(order: { desc: displayName }) {
+    ...userNames
+  }
+}
+
+# --------
+# Mutation
+# --------
+
+mutation addProject($proj: AddProjectInput!) {
+  addProject(input: [$proj]) {
+    project {
+      ...projectDetails
+    }
+  }
+}
+
+mutation updateProjectDetails($id: ID!, $details: ProjectPatch) {
+  updateProject(input: { filter: { projID: [$id] }, set: $details }) {
+    project {
+      ...projectDetails
+    }
+  }
+}
+
+mutation deleteProject($projID: ID!) {
+  deleteProject(filter: { projID: [$projID] }) {
+    project {
+      projID
+    }
+  }
+}
