@@ -12,7 +12,7 @@ Currently, two official plugins are available:
   <h1 align="center">ToDo React App</h1>
   <h2 align="center">
     <a href="https://dgraph.io/docs/graphql" target="_blank">
-      <img src="/dgraph_color_icon.png" alt="GraphQL API" />
+      <img src="/new-todo-app-react/public/dgraph_color_icon.png" width=25 height=25 alt="GraphQL API" />
     </a><br />
     A fully-managed GraphQL backend service
   </h2>
