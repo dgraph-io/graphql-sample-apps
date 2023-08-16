@@ -26,3 +26,5 @@ dist-ssr
 # auth file
 src/auth_template.json
 .env
+package.json
+yarn.lock

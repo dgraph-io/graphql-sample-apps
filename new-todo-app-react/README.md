@@ -1,4 +1,4 @@
-# React + Vite
+### React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
@@ -12,7 +12,7 @@ Currently, two official plugins are available:
   <h1 align="center">ToDo React App</h1>
   <h2 align="center">
     <a href="https://dgraph.io/docs/graphql" target="_blank">
-      <img src="https://dgraph.io/assets/images/slashgraphql-logo.svg" alt="GraphQL API" />
+      <img src="/dgraph_color_icon.png" alt="GraphQL API" />
     </a><br />
     A fully-managed GraphQL backend service
   </h2>
@@ -30,7 +30,7 @@ To-Do is a sample app that lets users manage the tasks on their personal to-do l
 
 ### Front-end
 - [React](https://reactjs.org/) (3.4.0)—a JavaScript library for building user interfaces.
-- [Vite](https://vitejs.dev/guide/)— Vite is an amazing tool to speed up your frontend development workflow. Try it now and experience faster and more efficient development.
+- [Vite](https://vitejs.dev/guide/)— vite is an amazing tool to speed up your frontend development workflow. Try it now and experience faster and more efficient development.
 - [Apollo Client](https://www.npmjs.com/package/@apollo/client) (3.x)—a comprehensive state management library for JavaScript that enables you to manage both local and remote data with GraphQL.
 <!-- - [ToDoMVC app CSS](https://github.com/tastejs/todomvc-app-css)—CSS for a ToDo App -->
 <!-- - [React Router](https://reactrouter.com/)—a collection of navigational components -->
@@ -45,7 +45,6 @@ To-Do is a sample app that lets users manage the tasks on their personal to-do l
 ### Links
 - [Deploy Now](https://dgraph.io/docs/learn/developer/todo-app-tutorial/todo-deploy/)
 - [Blog: Build a React app with Slash GraphQL](https://dgraph.io/blog/post/todo-slash-graphql/) Old Version
-<!-- - [Demo](https://slash-graphql-todos.netlify.app/) -->
 - [Community Support](https://discuss.dgraph.io/)
 
 ### Screenshots
