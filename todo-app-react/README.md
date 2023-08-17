@@ -46,7 +46,7 @@ To-Do is a sample app that lets users manage the tasks on their personal to-do l
 1. Copy the entire contents of the `schema_noauth.graphql` file located in the root folder of the application.
 2. Open your `Graphql Client`, you can check some GraphQL clients [here](https://dgraph.io/docs/graphql/quick-start/#testing-your-graphql-api) or open a `terminal` and run the following command: `curl -X POST localhost:8080/admin/schema --data-binary <@SCHEMA_NOAUTH.GRAPHQL>`, which contains the code copied in step 1.
 3. To run the application locally locate the `main.jsx` file in the application `src` folder and then locate the constant called `GRAPHQL_ENDPOINT` and change the value to `http://localhost:8080/graphql`.
-4. Comment or delete import 
+4. Comment out or delete
 ```js
 import config from "./auth_template.json"
 ```
