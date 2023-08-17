@@ -35,8 +35,26 @@ To-Do is a sample app that lets users manage the tasks on their personal to-do l
 - [React-Toastify](https://fkhadra.github.io/react-toastify/introduction) Toastify React, a handy library for displaying attractive and customizable toast notifications in your React applications.
 
 ### Back-end
-- [GraphQL API](https://dgraph.io/docs/graphql)—a fully managed GraphQL backend service
+- [Dgraph Cloud](https://cloud.dgraph.io/)—a fully managed GraphQL backend service.
+- [Using Auth0](https://dgraph.io/docs/learn/developer/todo-app-tutorial/todo-auth0-jwt/)—how to use auth0. 
 - [Auth0](https://auth0.com/)—Secure access for everyone.
+
+## Getting started
+
+### No-Auth Version
+
+1. Copy the entire contents of the `schema_noauth.graphql` file located in the root folder of the application.
+2. Open your `Graphql Client`, you can check some GraphQL clients [here](https://dgraph.io/docs/graphql/quick-start/#testing-your-graphql-api) or open a `terminal` and run the following command: `curl -X POST localhost:8080/admin/schema --data-binary <@SCHEMA_NOAUTH.GRAPHQL>`, which contains the code copied in step 1.
+3. To run the application locally locate the `main.jsx` file in the application `src` folder and then locate the constant called GRAPHQL_ENDPOINT and change the value  to `http://localhost:8080/graphql`.
+4. In the root folder of the application, open a terminal and run the following commands: `yarn` followed by `yarn dev`.
+
+### Auth Version
+
+1. Copy the entire contents of the `schema.graphql` file located in the root folder of the application.
+2. Open your `Graphql Client`, you can check some GraphQL clients [here](https://dgraph.io/docs/graphql/quick-start/#testing-your-graphql-api) or open a `terminal` and run the following command: `curl -X POST localhost:8080/admin/schema --data-binary <@SCHEMA.GRAPHQL>`, which contains the code copied in step 1.
+3. Create an authentication service account on: [Auth0](https://auth0.com/).
+4. After creating your Auth0 account, follow the instructions provided [here](https://dgraph.io/docs/learn/developer/todo-app-tutorial/todo-auth0-jwt/) to set up Auth0 authentication. 
+5. In the root folder of the application, open a terminal and run the following commands: `yarn` followed by `yarn dev`.
 
 
 ### Links
