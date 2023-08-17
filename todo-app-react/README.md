@@ -33,6 +33,7 @@ To-Do is a sample app that lets users manage the tasks on their personal to-do l
 - [Vite](https://vitejs.dev/guide/)— vite is an amazing tool to speed up your frontend development workflow. Try it now and experience faster and more efficient development.
 - [Apollo Client](https://www.npmjs.com/package/@apollo/client) (3.x)—a comprehensive state management library for JavaScript that enables you to manage both local and remote data with GraphQL.
 - [React-Toastify](https://fkhadra.github.io/react-toastify/introduction) Toastify React, a handy library for displaying attractive and customizable toast notifications in your React applications.
+- [Styled-components](https://styled-components.com/) An advanced CSS-in-JS library enabling seamless style creation and management within your React components.
 
 ### Back-end
 - [Dgraph Cloud](https://cloud.dgraph.io/)—a fully managed GraphQL backend service.
