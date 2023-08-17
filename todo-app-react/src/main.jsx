@@ -12,7 +12,7 @@ import { setContext } from "@apollo/client/link/context"
 import { Auth0Provider, useAuth0 } from "@auth0/auth0-react"
 import config from "./auth_template.json"
 
-const GRAPHQL_ENDPOINT = "http://localhost:8080/graphql"
+const GRAPHQL_ENDPOINT = "<<Dgraph Cloud-GraphQL-URL>> or <<localhost-URL>>"
 
 const AuthorizedApolloProvider = ({ children }) => {
   const { isAuthenticated, getIdTokenClaims } = useAuth0();
