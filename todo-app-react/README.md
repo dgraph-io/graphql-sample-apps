@@ -12,7 +12,7 @@ Currently, two official plugins are available:
   <h1 align="center">ToDo React App</h1>
   <h2 align="center">
     <a href="https://dgraph.io/docs/graphql" target="_blank">
-      <img src="/new-todo-app-react/public/dgraph_color_icon.png" width=25 height=25 alt="GraphQL API" />
+      <img src="/todo-app-react/public/dgraph_color_icon.png" width=25 height=25 alt="GraphQL API" />
     </a><br />
     A fully-managed GraphQL backend service
   </h2>
@@ -32,7 +32,7 @@ To-Do is a sample app that lets users manage the tasks on their personal to-do l
 - [React](https://reactjs.org/) (3.4.0)—a JavaScript library for building user interfaces.
 - [Vite](https://vitejs.dev/guide/)— vite is an amazing tool to speed up your frontend development workflow. Try it now and experience faster and more efficient development.
 - [Apollo Client](https://www.npmjs.com/package/@apollo/client) (3.x)—a comprehensive state management library for JavaScript that enables you to manage both local and remote data with GraphQL.
-- [React-Toastify] (https://fkhadra.github.io/react-toastify/introduction) Toastify React, a handy library for displaying attractive and customizable toast notifications in your React applications.
+- [React-Toastify](https://fkhadra.github.io/react-toastify/introduction) Toastify React, a handy library for displaying attractive and customizable toast notifications in your React applications.
 
 ### Back-end
 - [GraphQL API](https://dgraph.io/docs/graphql)—a fully managed GraphQL backend service
