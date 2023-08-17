@@ -45,7 +45,7 @@ To-Do is a sample app that lets users manage the tasks on their personal to-do l
 
 1. Copy the entire contents of the `schema_noauth.graphql` file located in the root folder of the application.
 2. Open your `Graphql Client`, you can check some GraphQL clients [here](https://dgraph.io/docs/graphql/quick-start/#testing-your-graphql-api) or open a `terminal` and run the following command: `curl -X POST localhost:8080/admin/schema --data-binary <@SCHEMA_NOAUTH.GRAPHQL>`, which contains the code copied in step 1.
-3. To run the application locally locate the `main.jsx` file in the application `src` folder and then locate the constant called GRAPHQL_ENDPOINT and change the value  to `http://localhost:8080/graphql`.
+3. To run the application locally locate the `main.jsx` file in the application `src` folder and then locate the constant called `GRAPHQL_ENDPOINT` and change the value to `http://localhost:8080/graphql`.
 4. In the root folder of the application, open a terminal and run the following commands: `yarn` followed by `yarn dev`.
 
 ### Auth Version
@@ -56,6 +56,14 @@ To-Do is a sample app that lets users manage the tasks on their personal to-do l
 4. After creating your Auth0 account, follow the instructions provided [here](https://dgraph.io/docs/learn/developer/todo-app-tutorial/todo-auth0-jwt/) to set up Auth0 authentication. 
 5. In the root folder of the application, open a terminal and run the following commands: `yarn` followed by `yarn dev`.
 
+### Note
+To run the application after cloning the repository, you must create a file called `auth_template.json` inside the `src` folder and place your auth0 credentials in the file as shown in the following image:
+
+![Src folder](src/screenshots/img_1.png)
+
+The file should look like this:
+
+![Auth file](src/screenshots/img_2.png)
 
 ### Links
 - [Deploy Now](https://dgraph.io/docs/learn/developer/todo-app-tutorial/todo-deploy/)
