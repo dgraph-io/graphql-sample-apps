@@ -2,7 +2,7 @@ import { Button, Container, Flex, Input, Item, Spacer, Title, Paragraph, Card, L
 import { useState } from "react";
 import { useQuery, useMutation } from "@apollo/client";
 import { useAuth0 } from '@auth0/auth0-react';
-import { GET_TODOS, ADD_TODO, DELETE_TODO, UPDATE_TODO, CLEAR_COMPLETED_TODOS, TOGGLE_COMPLETED, TOGGLE_TODO, UPDATE } from "./GraphQLData";
+import { GET_TODOS, ADD_TODO, DELETE_TODO, CLEAR_COMPLETED_TODOS, TOGGLE_TODO, UPDATE } from "./GraphQLData";
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -10,33 +10,21 @@ import 'react-toastify/dist/ReactToastify.css';
 import MyModal from './components/modal'
 import React from 'react';
 
-const ENTER_KEY = 13
-
 const App = () => {
-  const [todos, setTodos] = useState([
-    { id: 1, text: "Learn React", completed: false },
-    { id: 2, text: "Build a to-do app", completed: false },
-    { id: 3, text: "Celebrate!", completed: false },
-  ]);
- 
+
   const [input, setInput] = useState("");
-  const [getEditing, setEditing] = useState(null);
-  const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
-
   const[editTask, setEditTask] = useState(false)
-  const [taskTitle, setTaskTitle] = useState('');
-  const [selectedTaskId, setSelectedTaskId] = useState('');
-
   const [selectedTodo, setSelectedTodo] = useState(null);
+  
+  const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
 
   const { loading, error, data } = useQuery(GET_TODOS)
 
   const [add] = useMutation(ADD_TODO)
   const [del] = useMutation(DELETE_TODO)
-  const [upd] = useMutation(UPDATE_TODO)
   const [clear] = useMutation(CLEAR_COMPLETED_TODOS)
   const [toggleTodo] = useMutation(TOGGLE_TODO)
-  const [up] = useMutation(UPDATE)
+  const [upd] = useMutation(UPDATE)
   
   if (loading) return <p>Loading</p>
   if (error) {
@@ -75,7 +63,7 @@ const App = () => {
   const updateTaskModal = selectedTodo => {
     const newText = selectedTodo.value;
 
-    up({
+    upd({
       variables: {
         taskID: selectedTodo.id,
         title: newText
@@ -107,12 +95,6 @@ const App = () => {
       });
     }
   };
- 
-  const editTodo = (id, newText) => {
-    setTodos(
-      todos.map((todo) => (todo.id === id ? {...todo, text: newText } : todo))
-    );
-  };
 
   const toggle = todoToToggle => {
     toggleTodo({
@@ -136,7 +118,17 @@ const App = () => {
       }]
     })
 
-  // Count tasks
+  const openModal = (todo) => {
+    console.log(todo.value);
+    setSelectedTodo(todo);
+    setEditTask(true);
+  }
+
+  const closeModal = () => {
+    setSelectedTodo(null);
+    setEditTask(false);
+  }
+
   const activeTodoCount = data.queryTodo.reduce(function (accum, todo) {
     return todo.completed ? accum : accum + 1
   }, 0)
@@ -161,7 +153,6 @@ const App = () => {
         >
           Log out
         </Link>{" "}
-        {/* once you are finished, {user.email}. */}
       </Button>
       <Paragraph >
         <h4><i class='bx bxs-user-circle'></i> {user.email}</h4>
@@ -169,18 +160,6 @@ const App = () => {
       </Flex>
     </>
   );
-
-  const openModal = (todo) => {
-    console.log(todo.value);
-    setSelectedTodo(todo);
-    setEditTask(true);
-  }
-
-  const closeModal = () => {
-    setSelectedTodo(null);
-    setEditTask(false);
-  }
-
 
   return (
     <Container text-align="center">
