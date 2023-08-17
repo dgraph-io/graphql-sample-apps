@@ -1,14 +1,3 @@
-// import React from 'react'
-// import ReactDOM from 'react-dom/client'
-// import App from './App.jsx'
-// import { GlobalStyle } from './Styles'
-
-// ReactDOM.createRoot(document.getElementById('root')).render(
-//   <React.StrictMode>
-//     <App />
-//     <GlobalStyle />
-//   </React.StrictMode>,
-// )
 
 import React from "react"
 import ReactDOM from "react-dom"
@@ -22,9 +11,6 @@ import {
 import { setContext } from "@apollo/client/link/context"
 import { Auth0Provider, useAuth0 } from "@auth0/auth0-react"
 import config from "./auth_template.json"
-
-// require('dotenv').config()
-
 
 const GRAPHQL_ENDPOINT = "http://localhost:8080/graphql"
 
