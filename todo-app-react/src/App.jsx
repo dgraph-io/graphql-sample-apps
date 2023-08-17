@@ -6,12 +6,8 @@ import { GET_TODOS, ADD_TODO, DELETE_TODO, UPDATE_TODO, CLEAR_COMPLETED_TODOS, T
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-// minified version is also included
-// import 'react-toastify/dist/ReactToastify.min.css';
 
-// import { Modal, Form } from 'semantic-ui-react';
 import MyModal from './components/modal'
-// import Modal from 'react-modal';
 import React from 'react';
 
 const ENTER_KEY = 13
@@ -31,7 +27,6 @@ const App = () => {
   const [taskTitle, setTaskTitle] = useState('');
   const [selectedTaskId, setSelectedTaskId] = useState('');
 
-  {/* Logic for render to-do out of map todo */}
   const [selectedTodo, setSelectedTodo] = useState(null);
 
   const { loading, error, data } = useQuery(GET_TODOS)
@@ -77,36 +72,8 @@ const App = () => {
     setInput("");
   };
 
-  const updateTaskPrompt = todo => {
-    const newValue = prompt("Edit your to-do", todo.value);
-    const taskIDToUpdate = todo.id;
-
-    // const updatedTaskData = {
-    //   id: taskIDToUpdate,
-    //   value: newValue,
-    //   completed: false,
-    // };
-
-    up({
-      variables: {
-        taskID: todo.id,
-        title: newValue
-      },
-      refetchQueries: [{
-        query: GET_TODOS
-      }]
-    })
-  }
-
   const updateTaskModal = selectedTodo => {
     const newText = selectedTodo.value;
-    // const taskIDToUpdate = selectedTodo.id;
-
-    // const updatedTaskData = {
-    //   id: taskIDToUpdate,
-    //   value: newValue,
-    //   completed: false,
-    // };
 
     up({
       variables: {
@@ -141,29 +108,11 @@ const App = () => {
     }
   };
  
-  // const addTodo = () => {
-  //   if (input.trim()) {
-  //     setTodos([...todos, { id: Math.random(), text: input.trim(), completed: false }]);
-  //     setInput("");
-  //   }
-  // };
- 
-  // const deleteTodo = (id) => {
-  //   setTodos(todos.filter((todo) => todo.id !== id));
-  // };
- 
   const editTodo = (id, newText) => {
     setTodos(
       todos.map((todo) => (todo.id === id ? {...todo, text: newText } : todo))
     );
   };
-
-  // const toogleChecked = (id, completed) => {
-  //   const index = todos.findIndex(todo => todo.id === id);
-  //   const newList = todos;
-  //   newList[index].completed = !completed;
-  //   setTodos([...newList]);
-  // };
 
   const toggle = todoToToggle => {
     toggleTodo({
@@ -221,17 +170,13 @@ const App = () => {
     </>
   );
 
-  // Função que abre a modal
   const openModal = (todo) => {
     console.log(todo.value);
-    {/* Logic for render to-do out of map todo */}
     setSelectedTodo(todo);
     setEditTask(true);
   }
 
-  // Função que fecha a modal
   const closeModal = () => {
-    {/* Logic for render to-do out of map todo */}
     setSelectedTodo(null);
     setEditTask(false);
   }
@@ -243,7 +188,6 @@ const App = () => {
       <Title>
         Todo List <Img src="/dgraph_color_icon.png"></Img>
       </Title>
-      {/* <Spacer/> */}
       
       <Flex direction="row">
         <Input placeholder='New Task'
@@ -252,7 +196,6 @@ const App = () => {
                id="input1"/>
         <Button onClick={addNewTodo}>Add</Button>
         <Button onClick={clearCompleted}>Clear</Button>
-        {/* <Button onClick={notify}>Notify !</Button> */}
       </Flex>
         <ToastContainer theme="dark"/>
       <Spacer margin="6px" />
@@ -278,9 +221,6 @@ const App = () => {
                 <button onClick={() => toggle(todo)}>
                   <i className='bx bx-check'></i>
                 </button>
-                {/* <button onClick={() => {updateTaskPrompt(todo)}}>
-                  <i className='bx bxs-edit-alt' ></i>
-                </button> */}
                 <button onClick={() => openModal(todo)}>
                   <i className='bx bxs-edit-alt' ></i>
                 </button>
@@ -294,7 +234,6 @@ const App = () => {
           </>
           )
         )}
-        {/* Logic for render to-do out of map todo */}
         <MyModal isOpen={editTask} todo={selectedTodo}>
         {selectedTodo && (
           <>
