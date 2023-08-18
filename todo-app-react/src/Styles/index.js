@@ -67,6 +67,7 @@ export const Link = styled.a`
 `;
 
 export const Input = styled.input`
+    margin-top: 12px;
     padding: 8px 24px;
     width: ${(props) => props.width || "224px"};
     height: 34px;
