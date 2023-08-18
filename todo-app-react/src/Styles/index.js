@@ -34,6 +34,7 @@ export const Container = styled.div`
 `;
 
 export const Title = styled.h1`
+    margin: 12px;
     font-weight: 100;
     font-size: 45px;
     line-height: 24px;
@@ -61,13 +62,14 @@ export const Paragraph = styled.p`
 `;
 
 export const Link = styled.a`
+    color: #ffffff;
     &:hover {
         color: #ffffff;
     }
 `;
 
 export const Input = styled.input`
-    margin-top: 12px;
+    margin-top: 0px;
     padding: 8px 24px;
     width: ${(props) => props.width || "224px"};
     height: 34px;
@@ -98,6 +100,7 @@ export const Flex = styled.div`
     align-items: ${(props) => props.align || "center"};
     gap: ${(props) => props.gap || "16px"};
     height: ${(props) => props.height || "62px"};
+    margin: ${(props) => props.margin || "12px"};
 `;
 
 export const Spacer = styled.div`
@@ -116,7 +119,6 @@ export const Card = styled.div`
 `;
 
 export const Button = styled.button`
-    margin-top: 12px;
     width: ${(props) => props.width || "90px"};
     height: ${(props) => props.height || "50px"};
     background: #EF255A;
@@ -149,7 +151,7 @@ export const List = styled.ul`
 export const Item = styled.li`
     padding: 12px;
     width: 600px;
-    min-height: 50px;
+    height: 56px;
     background: ${(props) => props.checked ? "#ef255a" : "#ffffff"};
     box-shadow: 0px; 4px; 4px; rgba(0,0,0,0.25);
     border-radius: 6px;
