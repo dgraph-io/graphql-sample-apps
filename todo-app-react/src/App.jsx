@@ -138,25 +138,25 @@ const App = () => {
   const logInOut = !isAuthenticated ? (
     <Flex direction="row">
       <Button width="100px" >
-        <a href="#" onClick={loginWithRedirect}>Log in</a>
+        <Link href="#" onClick={loginWithRedirect}>Log in</Link>
       </Button>
     </Flex>
   ) : (
     <>
-    <Flex direction="row">
-      <Button width="100px">
-        <Link
-          href="#"
-          onClick={() => {
-            logout({ returnTo: window.location.origin });
-          } }
-        >
-          Log out
-        </Link>{" "}
-      </Button>
-      <Paragraph >
-        <h4><i class='bx bxs-user-circle'></i> {user.email}</h4>
-      </Paragraph>
+      <Flex direction="row" margin="6px">
+        <Button width="100px">
+          <Link
+            href="#"
+            onClick={() => {
+              logout({ returnTo: window.location.origin });
+            } }
+          >
+            Log out
+          </Link>{" "}
+        </Button>
+        <Paragraph>
+          <strong><i class='bx bxs-user-circle'></i> {user.email}</strong>
+        </Paragraph>
       </Flex>
     </>
   );
@@ -168,7 +168,7 @@ const App = () => {
         Todo List <Img src="/dgraph_color_icon.png"></Img>
       </Title>
       
-      <Flex direction="row">
+      <Flex direction="row" margin="6px">
         <Input placeholder='New Task'
                value={input}
                onChange={(e) => handleInputChange(e, "input1")}
@@ -177,7 +177,7 @@ const App = () => {
         <Button onClick={clearCompleted}>Clear</Button>
       </Flex>
         <ToastContainer theme="dark"/>
-      <Spacer margin="6px" />
+      {/* <Spacer margin="6px" /> */}
       
       <Flex direction="row">
         <Card>
