@@ -1,0 +1,100 @@
+# testing subscription
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>GraphQL over WebSocket</title>
+    <script
+      type="text/javascript"
+      src="https://unpkg.com/graphql-ws/umd/graphql-ws.min.js"
+    ></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+      var query = `subscription subscribeCategory {
+    queryCategory(first:100) {
+        id
+        name
+        }
+}`
+      const GQL = {
+        CONNECTION_INIT: 'connection_init',
+        CONNECTION_ACK: 'connection_ack',
+        CONNECTION_ERROR: 'connection_error',
+        CONNECTION_KEEP_ALIVE: 'ka',
+        START: 'start',
+        STOP: 'stop',
+        CONNECTION_TERMINATE: 'connection_terminate',
+        DATA: 'data',
+        ERROR: 'error',
+        COMPLETE: 'complete'
+        }  
+      //const webSocket = new WebSocket("wss://blue-surf-830002.us-east-1.aws.cloud.dgraph.io/graphql", "graphql-ws")
+      const webSocket = new WebSocket("ws://localhost:8080/graphql", "graphql-transport-ws")
+      webSocket.onmessage = event => {
+        const data = JSON.parse(event.data)
+        console.log('event '+data.type)
+            switch (data.type) {
+                case GQL.CONNECTION_ACK: {
+                console.log('success')
+                webSocket.send(JSON.stringify({
+                    type: GQL.START,
+                    id: "MY_QUERY",
+                    payload: { query: query  } // ,variables, operationName
+                    })) 
+                break
+                }
+                case GQL.CONNECTION_ERROR: {
+                console.error(data.payload)
+                break
+                }
+                case GQL.CONNECTION_KEEP_ALIVE: {
+                break
+                }
+                case GQL.DATA: {
+                console.log(data.id, data.payload.errors, data.payload.data)
+                
+                console.log(JSON.stringify(data.payload.data,null,2))
+                
+                break
+                }
+                case GQL.COMPLETE: {
+                console.log('completed', data.id)
+                break
+                }
+        }
+      }
+      webSocket.onopen = event => {
+        console.log('onopen')
+       
+       
+        webSocket.send(JSON.stringify({
+                    type: GQL.CONNECTION_INIT,
+                    payload: { } 
+                    })) 
+  /*
+                    webSocket.send(JSON.stringify({
+                    type: CONNECTION_INIT,
+                    id: "MY_QUERY",
+                    payload: { query: query  } // ,variables, operationName
+                    })) 
+                    */
+                    
+       }
+       
+      
+      
+      
+      //const client = graphqlWs.createClient({
+      //  url: 'ws://blue-surf-830002.us-east-1.aws.cloud.dgraph.io/graphql',
+      //});
+      //const query = client.subscribe({
+      //  query: ,
+      // });
+      // client.on(graphqlWs.MessageType.next, (e)=>console.log(e))
+    
+ 
+      // consider other recipes for usage inspiration
+    </script>
+  </body>
+</html>

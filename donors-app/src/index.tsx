@@ -5,7 +5,18 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import { Client, cacheExchange, fetchExchange, Provider } from 'urql';
+import { Client, cacheExchange, fetchExchange, Provider, subscriptionExchange } from 'urql';
+// import { createClient as createWSClient, SubscribePayload } from 'graphql-ws';
+import { SubscriptionClient } from 'subscriptions-transport-ws';
+
+/*
+const wsClient = ()=>createWSClient({
+  url: 'wss://blue-surf-830002.us-east-1.aws.cloud.dgraph.io/graphql',
+  connectionParams : {}
+});
+*/
+const subscriptionClient = new SubscriptionClient('wss://green-bird.us-east-1.aws.cloud.dgraph.io/graphql', { reconnect: true });
+
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -13,8 +24,27 @@ const root = ReactDOM.createRoot(
 
 
 const client = new Client({
+ // url: 'https://green-bird.us-east-1.aws.cloud.dgraph.io/graphql',
   url: 'https://green-bird.us-east-1.aws.cloud.dgraph.io/graphql',
-  exchanges: [cacheExchange, fetchExchange],
+  exchanges: [
+    cacheExchange, 
+    fetchExchange,
+    subscriptionExchange({
+      forwardSubscription: request => subscriptionClient.request(request),
+      /*
+      forwardSubscription(operation) {
+        //const input = { ...request, query: request.query || '' };
+        
+        return {
+          subscribe(sink) {
+            const unsubscribe = wsClient().subscribe(operation as SubscribePayload, sink);
+              return { unsubscribe };
+         },
+       };
+     },
+     */
+   })
+]
 });
 
 root.render(

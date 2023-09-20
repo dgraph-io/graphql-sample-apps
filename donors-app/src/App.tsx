@@ -1,10 +1,11 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { Container, Navbar } from 'react-bootstrap';
-import { useQuery } from 'urql';
-import { SchoolItemFragment } from './gql/graphql';
+import { Container, Navbar, Tab, Tabs } from 'react-bootstrap';
 import Schools from './components/Schools';
+import SemProjects from './components/Projects';
+import Categories from './components/Categories';
+import Message from './components/Message';
 
 function App() {
   /* 
@@ -33,8 +34,25 @@ function App() {
         </Navbar.Brand>
       </Container>
       </Navbar>
-
-      <Schools />
+      <Tabs
+      defaultActiveKey="profile"
+      id="uncontrolled-tab-example"
+      className="mb-3"
+    >
+      <Tab eventKey="schools" title="Schools">
+          <Schools />
+      </Tab>
+      <Tab eventKey="sem-schools" title="Semantic Search">
+          <SemProjects />
+      </Tab>
+      <Tab eventKey="category" title="Categories">
+        <Categories />
+      </Tab>
+      <Tab eventKey="subscription" title="Subscription">
+        <Message />
+      </Tab>
+    </Tabs>
+      
      
     </div>
   );

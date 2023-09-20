@@ -101,6 +101,24 @@ export type AddDonorPayloadDonorArgs = {
   order?: InputMaybe<DonorOrder>;
 };
 
+export type AddPrincipalInput = {
+  name: Scalars['String'];
+};
+
+export type AddPrincipalPayload = {
+  __typename?: 'AddPrincipalPayload';
+  numUids?: Maybe<Scalars['Int']>;
+  principal?: Maybe<Array<Maybe<Principal>>>;
+};
+
+
+export type AddPrincipalPayloadPrincipalArgs = {
+  filter?: InputMaybe<PrincipalFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<PrincipalOrder>;
+};
+
 export type AddProjectInput = {
   category?: InputMaybe<CategoryRef>;
   donations?: InputMaybe<Array<InputMaybe<DonationRef>>>;
@@ -143,6 +161,24 @@ export type AddSchoolPayloadSchoolArgs = {
   first?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<SchoolOrder>;
+};
+
+export type AddSensorInput = {
+  name: Scalars['String'];
+};
+
+export type AddSensorPayload = {
+  __typename?: 'AddSensorPayload';
+  numUids?: Maybe<Scalars['Int']>;
+  sensor?: Maybe<Array<Maybe<Sensor>>>;
+};
+
+
+export type AddSensorPayloadSensorArgs = {
+  filter?: InputMaybe<SensorFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<SensorOrder>;
 };
 
 export type AddStateInput = {
@@ -356,6 +392,21 @@ export type DeleteDonorPayloadDonorArgs = {
   order?: InputMaybe<DonorOrder>;
 };
 
+export type DeletePrincipalPayload = {
+  __typename?: 'DeletePrincipalPayload';
+  msg?: Maybe<Scalars['String']>;
+  numUids?: Maybe<Scalars['Int']>;
+  principal?: Maybe<Array<Maybe<Principal>>>;
+};
+
+
+export type DeletePrincipalPayloadPrincipalArgs = {
+  filter?: InputMaybe<PrincipalFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<PrincipalOrder>;
+};
+
 export type DeleteProjectPayload = {
   __typename?: 'DeleteProjectPayload';
   msg?: Maybe<Scalars['String']>;
@@ -384,6 +435,21 @@ export type DeleteSchoolPayloadSchoolArgs = {
   first?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<SchoolOrder>;
+};
+
+export type DeleteSensorPayload = {
+  __typename?: 'DeleteSensorPayload';
+  msg?: Maybe<Scalars['String']>;
+  numUids?: Maybe<Scalars['Int']>;
+  sensor?: Maybe<Array<Maybe<Sensor>>>;
+};
+
+
+export type DeleteSensorPayloadSensorArgs = {
+  filter?: InputMaybe<SensorFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<SensorOrder>;
 };
 
 export type DeleteStatePayload = {
@@ -447,6 +513,7 @@ export type DonationAggregateResult = {
 };
 
 export type DonationFilter = {
+  amount?: InputMaybe<FloatFilter>;
   and?: InputMaybe<Array<InputMaybe<DonationFilter>>>;
   has?: InputMaybe<Array<InputMaybe<DonationHasFilter>>>;
   id?: InputMaybe<Array<Scalars['ID']>>;
@@ -646,15 +713,19 @@ export type Mutation = {
   addCity?: Maybe<AddCityPayload>;
   addDonation?: Maybe<AddDonationPayload>;
   addDonor?: Maybe<AddDonorPayload>;
+  addPrincipal?: Maybe<AddPrincipalPayload>;
   addProject?: Maybe<AddProjectPayload>;
   addSchool?: Maybe<AddSchoolPayload>;
+  addSensor?: Maybe<AddSensorPayload>;
   addState?: Maybe<AddStatePayload>;
   deleteCategory?: Maybe<DeleteCategoryPayload>;
   deleteCity?: Maybe<DeleteCityPayload>;
   deleteDonation?: Maybe<DeleteDonationPayload>;
   deleteDonor?: Maybe<DeleteDonorPayload>;
+  deletePrincipal?: Maybe<DeletePrincipalPayload>;
   deleteProject?: Maybe<DeleteProjectPayload>;
   deleteSchool?: Maybe<DeleteSchoolPayload>;
+  deleteSensor?: Maybe<DeleteSensorPayload>;
   deleteState?: Maybe<DeleteStatePayload>;
   updateCategory?: Maybe<UpdateCategoryPayload>;
   updateCity?: Maybe<UpdateCityPayload>;
@@ -686,6 +757,12 @@ export type MutationAddDonorArgs = {
 };
 
 
+export type MutationAddPrincipalArgs = {
+  input: Array<AddPrincipalInput>;
+  upsert?: InputMaybe<Scalars['Boolean']>;
+};
+
+
 export type MutationAddProjectArgs = {
   input: Array<AddProjectInput>;
 };
@@ -693,6 +770,12 @@ export type MutationAddProjectArgs = {
 
 export type MutationAddSchoolArgs = {
   input: Array<AddSchoolInput>;
+};
+
+
+export type MutationAddSensorArgs = {
+  input: Array<AddSensorInput>;
+  upsert?: InputMaybe<Scalars['Boolean']>;
 };
 
 
@@ -722,6 +805,11 @@ export type MutationDeleteDonorArgs = {
 };
 
 
+export type MutationDeletePrincipalArgs = {
+  filter: PrincipalFilter;
+};
+
+
 export type MutationDeleteProjectArgs = {
   filter: ProjectFilter;
 };
@@ -729,6 +817,11 @@ export type MutationDeleteProjectArgs = {
 
 export type MutationDeleteSchoolArgs = {
   filter: SchoolFilter;
+};
+
+
+export type MutationDeleteSensorArgs = {
+  filter: SensorFilter;
 };
 
 
@@ -810,6 +903,44 @@ export type PolygonGeoFilter = {
 
 export type PolygonRef = {
   coordinates: Array<PointListRef>;
+};
+
+export type Principal = {
+  __typename?: 'Principal';
+  name: Scalars['String'];
+};
+
+export type PrincipalAggregateResult = {
+  __typename?: 'PrincipalAggregateResult';
+  count?: Maybe<Scalars['Int']>;
+  nameMax?: Maybe<Scalars['String']>;
+  nameMin?: Maybe<Scalars['String']>;
+};
+
+export type PrincipalFilter = {
+  and?: InputMaybe<Array<InputMaybe<PrincipalFilter>>>;
+  has?: InputMaybe<Array<InputMaybe<PrincipalHasFilter>>>;
+  name?: InputMaybe<StringHashFilter>;
+  not?: InputMaybe<PrincipalFilter>;
+  or?: InputMaybe<Array<InputMaybe<PrincipalFilter>>>;
+};
+
+export enum PrincipalHasFilter {
+  Name = 'name'
+}
+
+export type PrincipalOrder = {
+  asc?: InputMaybe<PrincipalOrderable>;
+  desc?: InputMaybe<PrincipalOrderable>;
+  then?: InputMaybe<PrincipalOrder>;
+};
+
+export enum PrincipalOrderable {
+  Name = 'name'
+}
+
+export type PrincipalRef = {
+  name: Scalars['String'];
 };
 
 export type Project = {
@@ -907,23 +1038,30 @@ export type Query = {
   aggregateCity?: Maybe<CityAggregateResult>;
   aggregateDonation?: Maybe<DonationAggregateResult>;
   aggregateDonor?: Maybe<DonorAggregateResult>;
+  aggregatePrincipal?: Maybe<PrincipalAggregateResult>;
   aggregateProject?: Maybe<ProjectAggregateResult>;
   aggregateSchool?: Maybe<SchoolAggregateResult>;
+  aggregateSensor?: Maybe<SensorAggregateResult>;
   aggregateState?: Maybe<StateAggregateResult>;
   getCategory?: Maybe<Category>;
   getCity?: Maybe<City>;
   getDonation?: Maybe<Donation>;
   getDonor?: Maybe<Donor>;
+  getPrincipal?: Maybe<Principal>;
   getProject?: Maybe<Project>;
   getSchool?: Maybe<School>;
+  getSensor?: Maybe<Sensor>;
   getState?: Maybe<State>;
   queryCategory?: Maybe<Array<Maybe<Category>>>;
   queryCity?: Maybe<Array<Maybe<City>>>;
   queryDonation?: Maybe<Array<Maybe<Donation>>>;
   queryDonor?: Maybe<Array<Maybe<Donor>>>;
+  queryPrincipal?: Maybe<Array<Maybe<Principal>>>;
   queryProject?: Maybe<Array<Maybe<Project>>>;
   querySchool?: Maybe<Array<Maybe<School>>>;
+  querySensor?: Maybe<Array<Maybe<Sensor>>>;
   queryState?: Maybe<Array<Maybe<State>>>;
+  semSearchProjects?: Maybe<Array<Maybe<Project>>>;
 };
 
 
@@ -947,6 +1085,11 @@ export type QueryAggregateDonorArgs = {
 };
 
 
+export type QueryAggregatePrincipalArgs = {
+  filter?: InputMaybe<PrincipalFilter>;
+};
+
+
 export type QueryAggregateProjectArgs = {
   filter?: InputMaybe<ProjectFilter>;
 };
@@ -954,6 +1097,11 @@ export type QueryAggregateProjectArgs = {
 
 export type QueryAggregateSchoolArgs = {
   filter?: InputMaybe<SchoolFilter>;
+};
+
+
+export type QueryAggregateSensorArgs = {
+  filter?: InputMaybe<SensorFilter>;
 };
 
 
@@ -982,6 +1130,11 @@ export type QueryGetDonorArgs = {
 };
 
 
+export type QueryGetPrincipalArgs = {
+  name: Scalars['String'];
+};
+
+
 export type QueryGetProjectArgs = {
   id: Scalars['ID'];
 };
@@ -989,6 +1142,11 @@ export type QueryGetProjectArgs = {
 
 export type QueryGetSchoolArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QueryGetSensorArgs = {
+  name: Scalars['String'];
 };
 
 
@@ -1029,6 +1187,14 @@ export type QueryQueryDonorArgs = {
 };
 
 
+export type QueryQueryPrincipalArgs = {
+  filter?: InputMaybe<PrincipalFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<PrincipalOrder>;
+};
+
+
 export type QueryQueryProjectArgs = {
   filter?: InputMaybe<ProjectFilter>;
   first?: InputMaybe<Scalars['Int']>;
@@ -1045,11 +1211,25 @@ export type QueryQuerySchoolArgs = {
 };
 
 
+export type QueryQuerySensorArgs = {
+  filter?: InputMaybe<SensorFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<SensorOrder>;
+};
+
+
 export type QueryQueryStateArgs = {
   filter?: InputMaybe<StateFilter>;
   first?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<StateOrder>;
+};
+
+
+export type QuerySemSearchProjectsArgs = {
+  first: Scalars['Int'];
+  title: Scalars['String'];
 };
 
 export type School = {
@@ -1134,6 +1314,44 @@ export type SchoolRef = {
   name?: InputMaybe<Scalars['String']>;
   projects?: InputMaybe<Array<InputMaybe<ProjectRef>>>;
   type?: InputMaybe<Scalars['String']>;
+};
+
+export type Sensor = {
+  __typename?: 'Sensor';
+  name: Scalars['String'];
+};
+
+export type SensorAggregateResult = {
+  __typename?: 'SensorAggregateResult';
+  count?: Maybe<Scalars['Int']>;
+  nameMax?: Maybe<Scalars['String']>;
+  nameMin?: Maybe<Scalars['String']>;
+};
+
+export type SensorFilter = {
+  and?: InputMaybe<Array<InputMaybe<SensorFilter>>>;
+  has?: InputMaybe<Array<InputMaybe<SensorHasFilter>>>;
+  name?: InputMaybe<StringHashFilter>;
+  not?: InputMaybe<SensorFilter>;
+  or?: InputMaybe<Array<InputMaybe<SensorFilter>>>;
+};
+
+export enum SensorHasFilter {
+  Name = 'name'
+}
+
+export type SensorOrder = {
+  asc?: InputMaybe<SensorOrderable>;
+  desc?: InputMaybe<SensorOrderable>;
+  then?: InputMaybe<SensorOrder>;
+};
+
+export enum SensorOrderable {
+  Name = 'name'
+}
+
+export type SensorRef = {
+  name: Scalars['String'];
 };
 
 export type State = {
@@ -1334,6 +1552,8 @@ export type WithinFilter = {
 
 export type SchoolItemFragment = { __typename?: 'School', id: string, name: string, type: string, projects?: Array<{ __typename?: 'Project', title: string } | null> | null };
 
+export type ProjectItemFragment = { __typename?: 'Project', id: string, title: string, grade?: string | null, school?: { __typename?: 'School', name: string, geoloc?: { __typename?: 'Point', latitude: number, longitude: number } | null } | null };
+
 export type SchoolsByTermQueryVariables = Exact<{
   term: Scalars['String'];
 }>;
@@ -1341,5 +1561,28 @@ export type SchoolsByTermQueryVariables = Exact<{
 
 export type SchoolsByTermQuery = { __typename?: 'Query', querySchool?: Array<{ __typename?: 'School', id: string, name: string, type: string, projects?: Array<{ __typename?: 'Project', title: string } | null> | null } | null> | null };
 
+export type ProjectsBySemanticQueryVariables = Exact<{
+  term: Scalars['String'];
+}>;
+
+
+export type ProjectsBySemanticQuery = { __typename?: 'Query', semSearchProjects?: Array<{ __typename?: 'Project', id: string, title: string, grade?: string | null, school?: { __typename?: 'School', name: string, geoloc?: { __typename?: 'Point', latitude: number, longitude: number } | null } | null } | null> | null };
+
+export type AllCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllCategoriesQuery = { __typename?: 'Query', queryCategory?: Array<{ __typename?: 'Category', name: string } | null> | null };
+
+export type AddCategoryMutationVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+
+export type AddCategoryMutation = { __typename?: 'Mutation', addCategory?: { __typename?: 'AddCategoryPayload', numUids?: number | null } | null };
+
 export const SchoolItemFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"SchoolItem"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"School"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"projects"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}}]}}]}}]} as unknown as DocumentNode<SchoolItemFragment, unknown>;
+export const ProjectItemFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ProjectItem"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Project"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"school"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"geoloc"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"latitude"}},{"kind":"Field","name":{"kind":"Name","value":"longitude"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"grade"}}]}}]} as unknown as DocumentNode<ProjectItemFragment, unknown>;
 export const SchoolsByTermDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"schoolsByTerm"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"term"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"querySchool"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"filter"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"name"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"allofterms"},"value":{"kind":"Variable","name":{"kind":"Name","value":"term"}}}]}}]}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"10"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"SchoolItem"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"SchoolItem"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"School"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"projects"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}}]}}]}}]} as unknown as DocumentNode<SchoolsByTermQuery, SchoolsByTermQueryVariables>;
+export const ProjectsBySemanticDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"projectsBySemantic"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"term"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"semSearchProjects"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"3"}},{"kind":"Argument","name":{"kind":"Name","value":"title"},"value":{"kind":"Variable","name":{"kind":"Name","value":"term"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"school"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"geoloc"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"latitude"}},{"kind":"Field","name":{"kind":"Name","value":"longitude"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"grade"}}]}}]}}]} as unknown as DocumentNode<ProjectsBySemanticQuery, ProjectsBySemanticQueryVariables>;
+export const AllCategoriesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"allCategories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"queryCategory"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"order"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"asc"},"value":{"kind":"EnumValue","value":"name"}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<AllCategoriesQuery, AllCategoriesQueryVariables>;
+export const AddCategoryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"addCategory"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"name"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addCategory"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"name"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"numUids"}}]}}]}}]} as unknown as DocumentNode<AddCategoryMutation, AddCategoryMutationVariables>;

@@ -1,0 +1,50 @@
+# testing subscription
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>GraphQL over WebSocket</title>
+    <script
+      type="text/javascript"
+      src="https://unpkg.com/graphql-ws/umd/graphql-ws.js"
+    ></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+      var query = `subscription subscribeCategory {
+    queryCategory(first:100) {
+        id
+        name
+        }
+}`
+      
+      
+      const client = graphqlWs.createClient({
+       // url: 'wss://blue-surf-830002.us-east-1.aws.cloud.dgraph.io/graphql',
+        url: 'ws://localhost:8080/graphql',
+        on: {
+        opened: (socket) => { console.log('opened')},
+        closed: (err) => { console.log('closed '+err)},
+        connected: () => { console.log('connected')},
+        error: (err) => { console.log('Error '+err)},
+        message: (msg) => { console.log('Message '+msg)}
+        }
+      });
+
+      client.subscribe({
+
+          query
+
+      },
+         {
+          next: ({ data }) => console.log("next"),
+                error: (err) => console.log("error sub"+err),
+                complete: () => console.log("complete")
+         }
+      )
+    
+ 
+      // consider other recipes for usage inspiration
+    </script>
+  </body>
+</html>

@@ -1,15 +1,11 @@
 import { SchoolItemFragment,SchoolsByTermDocument } from "../gql/graphql";
 import { Accordion, Button, Container, Form, ListGroup } from "react-bootstrap";
 import React, {useState, useEffect} from "react";
-import { useQuery } from "urql";
-
-interface SchoolsProps {
-    //data: SchoolItemFragment[];
-}
+import { useQuery, useSubscription } from "urql";
 
 
 
-const Schools = (props:SchoolsProps) => {
+const Schools = () => {
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [schools, setSchools] = useState<SchoolItemFragment[]>([]);
     //
@@ -20,7 +16,7 @@ const Schools = (props:SchoolsProps) => {
         variables: {
           term: searchTerm
         }
-      })
+    })
     // 
     // uddate Schools array when we have new data
     //
@@ -30,21 +26,13 @@ const Schools = (props:SchoolsProps) => {
        data?.querySchool?.map((e,i) => e && schools.push(e));
        setSchools(schools)
     }, [data])
-
-    const searchSchool =  (e: React.MouseEvent<HTMLElement>): void =>  {
-        e.preventDefault();
-        console.log(`search ${searchTerm}`);
-        
-       // this.state.data = []
-       // data?.querySchool?.map((e,i) => e && this.state.data.push(e));
-    }
-    //
-    // Search form without Search button : we seach as user type
-    //
     
+    // Search form     
+    console.log(`render with $category.data?`)
     return(
             <>
             <Container> <br></br>
+
             <Form className="d-flex">
                 <Form.Control
                   type="search"
@@ -68,8 +56,9 @@ const Schools = (props:SchoolsProps) => {
             </Accordion>
             </Container>
             </>
-        )
+    )
     
 }
+
 
 export default Schools
